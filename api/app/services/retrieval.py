@@ -58,7 +58,6 @@ def _build_or_tsquery(query_text: str) -> str:
     
     Extracts meaningful terms and joins them with OR for broader matching.
     """
-    # Remove common stop words and extract terms
     stop_words = {'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been',
                   'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
                   'would', 'could', 'should', 'may', 'might', 'must', 'shall',
@@ -75,16 +74,12 @@ def _build_or_tsquery(query_text: str) -> str:
                   'me', 'we', 'our', 'you', 'your', 'he', 'she', 'him',
                   'his', 'her', 'they', 'them', 'their', 'what', 'which'}
     
-    # Extract words (alphanumeric)
     words = re.findall(r'[a-zA-Z]+', query_text.lower())
-    # Filter out stop words and short words
     terms = [w for w in words if w not in stop_words and len(w) > 2]
     
     if not terms:
-        # Fallback: use all words
         terms = [w for w in words if len(w) > 1]
     
-    # Join with OR for broader matching
     return ' | '.join(terms)
 
 
@@ -92,21 +87,23 @@ def fts_search(db: Session, matter_id: str, query_text: str, top_k: int = 20) ->
     """Full-text search over chunks in a matter."""
     _ensure_fts_index(db)
     
-    # Build OR-based tsquery for broader matching
     tsquery = _build_or_tsquery(query_text)
     
     if not tsquery:
         return []
 
+    # Use DISTINCT ON to deduplicate by sha256 - only get best chunk per source document
     sql = text("""
-        SELECT c.id, c.text, c.document_id, c.page_id, c.start_offset, c.end_offset,
+        SELECT DISTINCT ON (d.sha256) 
+               c.id, c.text, c.document_id, c.page_id, c.start_offset, c.end_offset,
                c.parser_version, c.content_hash, d.sha256,
                ts_rank(to_tsvector('english', c.text), to_tsquery('english', :query)) AS rank
         FROM chunks c
         JOIN documents d ON c.document_id = d.id
         WHERE c.matter_id = :matter_id
           AND to_tsvector('english', c.text) @@ to_tsquery('english', :query)
-        ORDER BY rank DESC
+          AND d.is_duplicate = false
+        ORDER BY d.sha256, rank DESC
         LIMIT :top_k
     """)
 
@@ -115,6 +112,9 @@ def fts_search(db: Session, matter_id: str, query_text: str, top_k: int = 20) ->
         "query": tsquery,
         "top_k": top_k,
     }).fetchall()
+
+    # Re-rank after dedup
+    results = sorted(results, key=lambda r: float(r[9]), reverse=True)
 
     return [
         {
@@ -137,12 +137,14 @@ def vector_search(db: Session, matter_id: str, query_text: str, top_k: int = 20)
     """Vector similarity search over chunks in a matter (computed in Python)."""
     query_embedding = get_embedding(query_text)
 
+    # Only search non-duplicate documents
     rows = db.query(Chunk, ChunkEmbedding, Document).join(
         ChunkEmbedding, Chunk.id == ChunkEmbedding.chunk_id
     ).join(
         Document, Chunk.document_id == Document.id
     ).filter(
-        Chunk.matter_id == matter_id
+        Chunk.matter_id == matter_id,
+        Document.is_duplicate == False,
     ).all()
 
     if not rows:
@@ -223,17 +225,18 @@ def rerank(
     return fused_results[:top_k]
 
 
-def deduplicate_by_document(results: List[dict], top_k: int = 5) -> List[dict]:
+def deduplicate_by_sha256(results: List[dict], top_k: int = 5) -> List[dict]:
     """
-    Deduplicate results by document.
-    Returns top_k results from distinct documents.
+    Deduplicate results by sha256.
+    Multiple document records may share the same SHA256 (duplicates from repeated test runs).
+    This ensures we only return one result per unique source document.
     """
-    seen_docs = set()
+    seen_sha = set()
     deduped = []
     for r in results:
-        doc_id = r["document_id"]
-        if doc_id not in seen_docs:
-            seen_docs.add(doc_id)
+        sha = r["sha256"]
+        if sha not in seen_sha:
+            seen_sha.add(sha)
             deduped.append(r)
             if len(deduped) >= top_k:
                 break
@@ -249,7 +252,7 @@ def retrieve(
     """
     Main retrieval function.
     FTS + vector fusion with reranking.
-    Returns ranked citations with document-level deduplication.
+    Returns ranked citations with SHA256-level deduplication.
     """
     fts_results = fts_search(db, matter_id, query_text, top_k=30)
     vector_results = vector_search(db, matter_id, query_text, top_k=30)
@@ -262,8 +265,8 @@ def retrieve(
     fused = reciprocal_rank_fusion(fts_results, vector_results)
     ranked = rerank(db, query_text, fused, top_k=top_k * 4)  # Get more results for dedup
 
-    # Deduplicate by document to ensure diversity in top results
-    deduped = deduplicate_by_document(ranked, top_k=top_k)
+    # Deduplicate by SHA256 to avoid returning duplicate documents
+    deduped = deduplicate_by_sha256(ranked, top_k=top_k)
 
     citations = []
     for r in deduped:

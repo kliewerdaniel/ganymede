@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-11T17:37:17",
-  "recall_at_5": 41.66666666666667,
-  "found": 10,
+  "timestamp": "2026-09-11T17:50:29",
+  "recall_at_5": 58.333333333333336,
+  "found": 14,
   "total": 24,
   "pass": false,
   "misses": [
@@ -10,15 +10,6 @@
       "question": "On what date did the first breach notice arrive?",
       "expected": [
         "DOC-014-Chronology.pdf"
-      ],
-      "found": false,
-      "citations_count": 5
-    },
-    {
-      "q_id": "Q07",
-      "question": "What is the stated jurisdiction for dispute resolution?",
-      "expected": [
-        "DOC-003-MSA.docx"
       ],
       "found": false,
       "citations_count": 5
@@ -43,15 +34,6 @@
       "citations_count": 5
     },
     {
-      "q_id": "Q12",
-      "question": "Which paragraph describes the scope of the non-disclosure obligation?",
-      "expected": [
-        "DOC-003-MSA.docx"
-      ],
-      "found": false,
-      "citations_count": 5
-    },
-    {
       "q_id": "Q13",
       "question": "What is the stated interest rate on the unpaid balance in the demand letter?",
       "expected": [
@@ -70,29 +52,11 @@
       "citations_count": 5
     },
     {
-      "q_id": "Q17",
-      "question": "What is the effective date of the most recent amendment?",
-      "expected": [
-        "DOC-004-Amendment-No-1.docx"
-      ],
-      "found": false,
-      "citations_count": 5
-    },
-    {
       "q_id": "Q25",
       "question": "Which documents establish that the defendant received notice before filing?",
       "expected": [
         "DOC-009-Notice-of-Default.pdf",
         "DOC-010-Response-Letter.pdf"
-      ],
-      "found": false,
-      "citations_count": 5
-    },
-    {
-      "q_id": "Q32",
-      "question": "On what date did the contract transition from draft to executed?",
-      "expected": [
-        "DOC-003-MSA.docx"
       ],
       "found": false,
       "citations_count": 5
@@ -141,5 +105,5 @@
     "total": 6,
     "pass": false
   },
-  "query_time_total_s": 11.065684080123901
+  "query_time_total_s": 1.9325268268585205
 }
