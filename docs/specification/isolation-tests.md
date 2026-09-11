@@ -21,7 +21,7 @@ Define the cross-matter attack battery that verifies matter isolation: a user sc
 | Corpus | Matter | Dispute type | Parties |
 |--------|--------|--------------|---------|
 | corpus-v0.1 | Matter A | Breach of contract | Meridian Logistics Solutions, LLC v. Cascade Retail Group, Inc. |
-| corpus-v0.1-matter-b | Matter B | Employment non-compete | Accme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield |
+| corpus-v0.1-matter-b | Matter B | Employment non-compete | Acme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield |
 
 The two corpora have zero entity overlap: different parties, different counsel, different cause numbers, different dates, different amounts, different document ID schemes (DOC-001..DOC-022 vs. DOC-B001..DOC-B012).
 

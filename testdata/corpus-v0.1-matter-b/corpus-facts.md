@@ -1,5 +1,5 @@
 # Ganymede — Corpus Facts Ledger (corpus-v0.1-matter-b)
-**Matter:** Accme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield (Cause No. D-2026-00187, Travis County District Court)
+**Matter:** Acme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield (Cause No. D-2026-00187, Travis County District Court)
 **Version:** v0.1-matter-b
 **Provenance:** Synthetic. All fictional.
 **Purpose:** Single source of truth for every entity, date, and amount in Matter B, and which document(s) assert each. Used to verify internal consistency and to confirm cross-matter isolation from Matter A.
@@ -9,7 +9,7 @@
 
 | Fact | Value | Sources |
 |------|-------|---------|
-| Plaintiff name | Accme Healthcare Solutions, Inc. | DOC-B001 |
+| Plaintiff name | Acme Healthcare Solutions, Inc. | DOC-B001 |
 | Plaintiff entity | Texas corporation; principal place of business Austin, Texas | DOC-B001 |
 | Defendant name | Dr. Sarah J. Whitfield | DOC-B001 |
 | Defendant entity | Individual residing in Travis County, Texas | DOC-B001 |
@@ -90,7 +90,7 @@
 
 | Check | Result |
 |-------|--------|
-| No overlapping party names | PASS — Meridian/Cascade vs. Accme/Whitfield |
+| No overlapping party names | PASS — Meridian/Cascade vs. Acme/Whitfield |
 | No overlapping counsel | PASS — Hensley/Duvall vs. Morrison/Park |
 | No overlapping courts | PASS — Same court, different cause numbers |
 | No overlapping document IDs | PASS — DOC-001..DOC-022 vs. DOC-B001..DOC-B012 |

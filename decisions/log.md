@@ -209,7 +209,7 @@
 
 ### 2026-09-11 — Matter B built: employment non-compete case
 
-**Decision:** Built testdata/corpus-v0.1-matter-b/ with 12 synthetic documents for a second matter: Accme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield (Cause No. D-2026-00187, Travis County District Court). Employment non-compete dispute. Different parties, counsel, dates, amounts, and document ID scheme from Matter A. Zero entity overlap.
+**Decision:** Built testdata/corpus-v0.1-matter-b/ with 12 synthetic documents for a second matter: Acme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield (Cause No. D-2026-00187, Travis County District Court). Employment non-compete dispute. Different parties, counsel, dates, amounts, and document ID scheme from Matter A. Zero entity overlap.
 
 **Why:** Rule 4 requires two matter corpora for cross-matter isolation tests. Matter B satisfies this.
 

@@ -93,11 +93,11 @@ Cause No. D-2026-00187
 
 PLAINTIFF'S ORIGINAL PETITION
 
-Plaintiff Accme Healthcare Solutions, Inc. files this petition against
+Plaintiff Acme Healthcare Solutions, Inc. files this petition against
 Dr. Sarah J. Whitfield and respectfully shows the Court as follows:
 
 I. PARTIES
-1. Plaintiff Accme Healthcare Solutions, Inc. is a Texas corporation
+1. Plaintiff Acme Healthcare Solutions, Inc. is a Texas corporation
 with its principal place of business in Austin, Texas.
 2. Defendant Dr. Sarah J. Whitfield is an individual residing in
 Travis County, Texas.
@@ -126,7 +126,7 @@ print("DOC-B001 created")
 # Document 2: Employment Agreement
 agreement = """EMPLOYMENT AGREEMENT
 
-This Employment Agreement is entered into as of June 1, 2022, by and between Accme Healthcare Solutions, Inc., a Texas corporation, and Dr. Sarah J. Whitfield.
+This Employment Agreement is entered into as of June 1, 2022, by and between Acme Healthcare Solutions, Inc., a Texas corporation, and Dr. Sarah J. Whitfield.
 
 1. EMPLOYMENT. Company employs Employee as Senior Clinical Research Director.
 2. COMPENSATION. Annual base salary of $185,000.00, plus performance bonus up to 20%.
@@ -148,7 +148,7 @@ print("DOC-B002 created")
 # Document 3: Non-Compete Covenant Details
 noncompete = """NON-COMPETE COVENANT - SECTION 8.2
 
-This Non-Covenant is part of the Employment Agreement dated June 1, 2022 between Accme Healthcare Solutions, Inc. and Dr. Sarah J. Whitfield.
+This Non-Covenant is part of the Employment Agreement dated June 1, 2022 between Acme Healthcare Solutions, Inc. and Dr. Sarah J. Whitfield.
 
 8.1 RESTRICTED ACTIVITIES. During the Restricted Period, Employee shall not:
 (a) Engage in any business that competes with Company's business;
@@ -175,7 +175,7 @@ resignation = """RESIGNATION LETTER
 
 March 15, 2026
 
-To: Accme Healthcare Solutions, Inc.
+To: Acme Healthcare Solutions, Inc.
 From: Dr. Sarah J. Whitfield
 
 Dear Robert,
@@ -184,7 +184,7 @@ Please accept this letter as formal notice of my resignation from my position as
 
 I have accepted a position with Mercy Hill Medical Group and will be transitioning my responsibilities over the next two weeks.
 
-I want to thank you for the opportunities I have had during my four years with Accme Healthcare Solutions.
+I want to thank you for the opportunities I have had during my four years with Acme Healthcare Solutions.
 
 Sincerely,
 Dr. Sarah J. Whitfield"""
@@ -206,7 +206,7 @@ On behalf of Mercy Hill Medical Group, I am pleased to offer you the position of
 
 START DATE: April 1, 2026
 COMPENSATION: $210,000.00 annual base salary, plus 25% performance bonus
-LOCATION: 4500 Medical Parkway, Austin, TX 78731 (12 miles from Accme Healthcare Solutions)
+LOCATION: 4500 Medical Parkway, Austin, TX 78731 (12 miles from Acme Healthcare Solutions)
 
 This offer is contingent upon:
 1. Successful completion of background check
@@ -233,11 +233,11 @@ VIA CERTIFIED MAIL AND EMAIL
 Dr. Sarah J. Whitfield
 Austin, TX 78701
 
-Re: Breach of Non-Compete Covenant - Accme Healthcare Solutions, Inc. v. Whitfield
+Re: Breach of Non-Compete Covenant - Acme Healthcare Solutions, Inc. v. Whitfield
 
 Dear Dr. Whitfield:
 
-We represent Accme Healthcare Solutions, Inc. in connection with your breach of the Non-Compete Covenant contained in Section 8.2 of your Employment Agreement dated June 1, 2022.
+We represent Acme Healthcare Solutions, Inc. in connection with your breach of the Non-Compete Covenant contained in Section 8.2 of your Employment Agreement dated June 1, 2022.
 
 Our records indicate that you resigned on March 15, 2026 and immediately joined Mercy Hill Medical Group, a direct competitor located 12 miles from our principal office. This constitutes a clear breach of the Non-Compete Covenant.
 
@@ -245,12 +245,12 @@ DEMAND: We demand that you immediately cease all employment with Mercy Hill Medi
 
 FAILURE TO COMPLY: If you fail to comply within 10 days, we will file suit seeking injunctive relief, actual damages of $340,000.00, liquidated damages of $50,000.00, and attorneys' fees.
 
-This letter is without prejudice to any rights or remedies available to Accme Healthcare Solutions.
+This letter is without prejudice to any rights or remedies available to Acme Healthcare Solutions.
 
 Sincerely,
 James R. Morrison, Esq.
 Morrison & Associates, PLLC
-Attorneys for Accme Healthcare Solutions, Inc."""
+Attorneys for Acme Healthcare Solutions, Inc."""
 
 create_pdf("DOC-B006-Cease-and-Desist.pdf", "CEASE AND DESIST LETTER", cease)
 print("DOC-B006 created")
@@ -337,17 +337,17 @@ BEFORE ME, the undersigned authority, personally appeared Dr. Sarah J. Whitfield
 
 1. I am the Defendant in the above-styled cause. I make this affidavit based on my personal knowledge.
 
-2. I was employed by Accme Healthcare Solutions, Inc. from June 1, 2022 to March 15, 2026.
+2. I was employed by Acme Healthcare Solutions, Inc. from June 1, 2022 to March 15, 2026.
 
 3. I resigned because I was not paid my earned performance bonus of $37,000.00 for calendar year 2025.
 
 4. I joined Mercy Hill Medical Group on April 1, 2026 as Director of Clinical Research.
 
-5. My new position does not involve confidential information from Accme Healthcare Solutions.
+5. My new position does not involve confidential information from Acme Healthcare Solutions.
 
 6. The 50-mile restriction in the Non-Compete Covenant is overly broad and prevents me from working in the entire Austin metropolitan area.
 
-7. I have not solicited any employees or clients of Accme Healthcare Solutions.
+7. I have not solicited any employees or clients of Acme Healthcare Solutions.
 
 FURTHER AFFIANT SAYETH NOT.
 
@@ -398,22 +398,22 @@ print("DOC-B010 created")
 # Document 11: Discovery Requests
 discovery = """DISCOVERY REQUESTS
 
-Plaintiff Accme Healthcare Solutions, Inc. serves the following discovery requests on Defendant Dr. Sarah J. Whitfield:
+Plaintiff Acme Healthcare Solutions, Inc. serves the following discovery requests on Defendant Dr. Sarah J. Whitfield:
 
 INTERROGATORIES:
 1. State all facts supporting your claim that the Non-Compete Covenant is unenforceable.
-2. Identify all confidential information you claim to have accessed at Accme Healthcare Solutions.
+2. Identify all confidential information you claim to have accessed at Acme Healthcare Solutions.
 3. State the amount of your 2025 performance bonus and when it was due.
 
 REQUESTS FOR PRODUCTION:
 1. Produce your complete employment file from Mercy Hill Medical Group.
 2. Produce all communications with Mercy Hill Medical Group regarding your employment.
-3. Produce all documents relating to your 2025 performance bonus from Accme Healthcare Solutions.
+3. Produce all documents relating to your 2025 performance bonus from Acme Healthcare Solutions.
 
 REQUESTS FOR ADMISSION:
 1. Admit that you signed the Employment Agreement dated June 1, 2022.
 2. Admit that the Non-Compete Covenant prohibits employment within 50 miles of Austin, Texas.
-3. Admit that Mercy Hill Medical Group is located 12 miles from Accme Healthcare Solutions."""
+3. Admit that Mercy Hill Medical Group is located 12 miles from Acme Healthcare Solutions."""
 
 create_pdf("DOC-B011-Discovery-Requests.pdf", "DISCOVERY REQUESTS", discovery)
 print("DOC-B011 created")
@@ -423,7 +423,7 @@ mediation = """MEDIATION STATEMENT
 
 April 20, 2026
 
-RE: Accme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield
+RE: Acme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield
 Cause No. D-2026-00187
 
 MEDIATION STATEMENT OF DEFENDANT
@@ -439,7 +439,7 @@ Defendant Dr. Sarah J. Whitfield submits this mediation statement:
 
 3. Defendant is willing to settle for:
    a. Mutual release of all claims;
-   b. Defendant agrees not to solicit Accme employees for 12 months;
+   b. Defendant agrees not to solicit Acme employees for 12 months;
    c. Each party bears its own attorneys' fees.
 
 4. Defendant will not agree to:
@@ -459,7 +459,7 @@ manifest_lines = []
 manifest_lines.append("# Ganymede — Synthetic Test Corpus v0.1 Matter B")
 manifest_lines.append("**Status:** Draft (candidate for freeze)")
 manifest_lines.append("**Version:** v0.1-matter-b")
-manifest_lines.append("**Matter:** Accme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield (Cause No. D-2026-00187, Travis County District Court)")
+manifest_lines.append("**Matter:** Acme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield (Cause No. D-2026-00187, Travis County District Court)")
 manifest_lines.append("**Provenance:** Synthetic, generated for evaluation. No real client, party, firm, attorney, judge, court reporter, or document. All names, entities, addresses, dates, and amounts are fictional.")
 manifest_lines.append("**Label:** Every file in this corpus is labeled SYNTHETIC.")
 manifest_lines.append("")
@@ -487,7 +487,7 @@ manifest_lines.append("This corpus is Matter B. Combined with corpus-v0.1 (Matte
 manifest_lines.append("")
 manifest_lines.append("## Entity overlap check")
 manifest_lines.append("- Matter A: Meridian Logistics Solutions, LLC v. Cascade Retail Group, Inc.")
-manifest_lines.append("- Matter B: Accme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield")
+manifest_lines.append("- Matter B: Acme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield")
 manifest_lines.append("- No overlapping parties, counsel, courts, or document IDs.")
 manifest_lines.append("")
 manifest_lines.append("## Test corpus rules compliance summary")
