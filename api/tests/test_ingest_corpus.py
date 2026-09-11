@@ -154,22 +154,27 @@ def main():
             db.add(tenant)
             db.commit()
 
-        # Create matters for each corpus
-        matter_a = Matter(
-            id="00000000-0000-0000-0000-000000000011",
-            tenant_id=tenant.id,
-            name="Matter A - Meridian v. Cascade",
-            cause_number="D-2025-00418",
-            court="Travis County District Court",
-        )
-        matter_b = Matter(
-            id="00000000-0000-0000-0000-000000000012",
-            tenant_id=tenant.id,
-            name="Matter B - Acme v. Whitfield",
-            cause_number="D-2026-00187",
-            court="Travis County District Court",
-        )
-        db.add_all([matter_a, matter_b])
+        # Create matters for each corpus (idempotent)
+        matter_a = db.query(Matter).filter(Matter.id == "00000000-0000-0000-0000-000000000011").first()
+        if not matter_a:
+            matter_a = Matter(
+                id="00000000-0000-0000-0000-000000000011",
+                tenant_id=tenant.id,
+                name="Matter A - Meridian v. Cascade",
+                cause_number="D-2025-00418",
+                court="Travis County District Court",
+            )
+            db.add(matter_a)
+        matter_b = db.query(Matter).filter(Matter.id == "00000000-0000-0000-0000-000000000012").first()
+        if not matter_b:
+            matter_b = Matter(
+                id="00000000-0000-0000-0000-000000000012",
+                tenant_id=tenant.id,
+                name="Matter B - Acme v. Whitfield",
+                cause_number="D-2026-00187",
+                court="Travis County District Court",
+            )
+            db.add(matter_b)
         db.commit()
 
         # Ingest corpora

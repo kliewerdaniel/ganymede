@@ -11,9 +11,11 @@ from app.schemas import (
     MatterCreate, MatterResponse,
     UserCreate, UserResponse,
     DocumentResponse, PageResponse, IngestionStatusResponse,
-    UploadResponse,
+    UploadResponse, QueryRequest, QueryResponse, CitationResponse,
 )
 from app.services.ingestion import ingest_document, get_ingestion_status
+from app.services.antivirus import scan_file
+from app.services.retrieval import retrieve
 from app.models import Matter, User, Document, Page
 
 router = APIRouter()
@@ -26,7 +28,7 @@ def create_matter(matter: MatterCreate, db: Session = Depends(get_db)):
     """Create a new matter."""
     db_matter = Matter(
         id=uuid.uuid4(),
-        tenant_id=uuid.UUID("00000000-0000-0000-0000-000000000001"),  # Default tenant for now
+        tenant_id=uuid.UUID("00000000-0000-0000-0000-000000000001"),
         name=matter.name,
         description=matter.description,
         cause_number=matter.cause_number,
@@ -142,4 +144,51 @@ def get_document_status(document_id: str, db: Session = Depends(get_db)):
         error_message=doc.ingestion_error,
         page_count=doc.page_count,
         parser_version=doc.parser_version,
+    )
+
+
+# --- Retrieval Routes ---
+
+@router.post("/matters/{matter_id}/query", response_model=QueryResponse)
+def query_matter(
+    matter_id: str,
+    request: QueryRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Query a matter's documents.
+    Returns ranked citations (evidence before prose).
+    """
+    # Verify matter exists
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+
+    # Retrieve citations
+    citations = retrieve(
+        db=db,
+        matter_id=matter_id,
+        query_text=request.query_text,
+        top_k=request.top_k or 10,
+    )
+
+    return QueryResponse(
+        matter_id=matter_id,
+        query_text=request.query_text,
+        citations=[
+            CitationResponse(
+                document_id=c.document_id,
+                sha256=c.sha256,
+                page=c.page,
+                start_offset=c.start_offset,
+                end_offset=c.end_offset,
+                quoted_text=c.quoted_text,
+                parser_version=c.parser_version,
+                retrieval_scores=c.retrieval_scores,
+                access_scope=c.access_scope,
+                model_version=c.model_version,
+            )
+            for c in citations
+        ],
+        result_count=len(citations),
     )

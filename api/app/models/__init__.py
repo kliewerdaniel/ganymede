@@ -5,7 +5,7 @@
 import uuid
 from datetime import datetime
 from sqlalchemy import (
-    Column, String, Integer, DateTime, Boolean, Text, ForeignKey, UniqueConstraint, Index
+    Column, String, Integer, DateTime, Boolean, Text, ForeignKey, UniqueConstraint, Index, Float, ARRAY
 )
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship, declarative_base
@@ -35,7 +35,7 @@ class User(Base):
     tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False)
     email = Column(String(255), nullable=False)
     name = Column(String(255), nullable=False)
-    role = Column(String(50), nullable=False, default="attorney")  # administrator, attorney, paralegal, reviewer, it_operator
+    role = Column(String(50), nullable=False, default="attorney")
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -75,7 +75,7 @@ class MatterMembership(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     matter_id = Column(UUID(as_uuid=True), ForeignKey("matters.id"), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    role = Column(String(50), nullable=False)  # administrator, attorney, paralegal, reviewer
+    role = Column(String(50), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     # Relationships
@@ -100,7 +100,7 @@ class Document(Base):
     sha256 = Column(String(64), nullable=False, index=True)
     page_count = Column(Integer, nullable=True)
     parser_version = Column(String(50), nullable=True)
-    ingestion_status = Column(String(50), nullable=False, default="pending")  # pending, processing, completed, failed
+    ingestion_status = Column(String(50), nullable=False, default="pending")
     ingestion_error = Column(Text, nullable=True)
     is_duplicate = Column(Boolean, default=False, nullable=False)
     duplicate_of_id = Column(UUID(as_uuid=True), ForeignKey("documents.id"), nullable=True)
@@ -132,6 +132,7 @@ class Page(Base):
 
     # Relationships
     document = relationship("Document", back_populates="pages")
+    chunks = relationship("Chunk", back_populates="page")
 
     __table_args__ = (
         UniqueConstraint("document_id", "page_number", name="uq_pages_document_page"),
@@ -144,8 +145,8 @@ class IngestionJob(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id"), nullable=False)
-    status = Column(String(50), nullable=False, default="pending")  # pending, processing, completed, failed
-    stage = Column(String(50), nullable=True)  # upload, parse, ocr, fingerprint, index
+    status = Column(String(50), nullable=False, default="pending")
+    stage = Column(String(50), nullable=True)
     error_message = Column(Text, nullable=True)
     started_at = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
@@ -156,4 +157,54 @@ class IngestionJob(Base):
 
     __table_args__ = (
         Index("idx_ingestion_jobs_document", "document_id"),
+    )
+
+
+class Chunk(Base):
+    """A chunk of text from a page, with provenance."""
+    __tablename__ = "chunks"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    page_id = Column(UUID(as_uuid=True), ForeignKey("pages.id"), nullable=False)
+    document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id"), nullable=False)
+    matter_id = Column(UUID(as_uuid=True), ForeignKey("matters.id"), nullable=False)
+    chunk_index = Column(Integer, nullable=False)
+    text = Column(Text, nullable=False)
+    start_offset = Column(Integer, nullable=False)
+    end_offset = Column(Integer, nullable=False)
+    content_hash = Column(String(64), nullable=False, index=True)
+    parser_version = Column(String(50), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    page = relationship("Page", back_populates="chunks")
+    document = relationship("Document")
+    matter = relationship("Matter")
+    embedding = relationship("ChunkEmbedding", back_populates="chunk", uselist=False)
+
+    __table_args__ = (
+        UniqueConstraint("page_id", "chunk_index", name="uq_chunks_page_index"),
+        Index("idx_chunks_matter", "matter_id"),
+        Index("idx_chunks_content_hash", "content_hash"),
+    )
+
+
+class ChunkEmbedding(Base):
+    """Embedding vector for a chunk."""
+    __tablename__ = "chunk_embeddings"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    chunk_id = Column(UUID(as_uuid=True), ForeignKey("chunks.id"), nullable=False, unique=True)
+    vector = Column(ARRAY(Float), nullable=False)  # Store as double precision[]
+    model_name = Column(String(100), nullable=False)
+    model_version = Column(String(100), nullable=False)
+    content_hash = Column(String(64), nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    chunk = relationship("Chunk", back_populates="embedding")
+
+    __table_args__ = (
+        Index("idx_chunk_embeddings_chunk", "chunk_id"),
+        Index("idx_chunk_embeddings_model", "model_name", "model_version"),
     )

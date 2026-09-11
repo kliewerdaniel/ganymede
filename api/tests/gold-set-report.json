@@ -1,0 +1,145 @@
+{
+  "timestamp": "2026-09-11T17:37:17",
+  "recall_at_5": 41.66666666666667,
+  "found": 10,
+  "total": 24,
+  "pass": false,
+  "misses": [
+    {
+      "q_id": "Q05",
+      "question": "On what date did the first breach notice arrive?",
+      "expected": [
+        "DOC-014-Chronology.pdf"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q07",
+      "question": "What is the stated jurisdiction for dispute resolution?",
+      "expected": [
+        "DOC-003-MSA.docx"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q09",
+      "question": "What is the contract price stated in the invoice that matches the dispute?",
+      "expected": [
+        "DOC-007-Invoice-1044.docx",
+        "DOC-008-Invoice-1045.docx"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q11",
+      "question": "What date does the deposition notice set for the first deposition?",
+      "expected": [
+        "DOC-013-Deposition-Notice.pdf"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q12",
+      "question": "Which paragraph describes the scope of the non-disclosure obligation?",
+      "expected": [
+        "DOC-003-MSA.docx"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q13",
+      "question": "What is the stated interest rate on the unpaid balance in the demand letter?",
+      "expected": [
+        "DOC-011-Demand-Letter.pdf"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q14",
+      "question": "Who is the court reporter named in the deposition scheduling order?",
+      "expected": [
+        "DOC-013-Deposition-Notice.pdf"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q17",
+      "question": "What is the effective date of the most recent amendment?",
+      "expected": [
+        "DOC-004-Amendment-No-1.docx"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q25",
+      "question": "Which documents establish that the defendant received notice before filing?",
+      "expected": [
+        "DOC-009-Notice-of-Default.pdf",
+        "DOC-010-Response-Letter.pdf"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q32",
+      "question": "On what date did the contract transition from draft to executed?",
+      "expected": [
+        "DOC-003-MSA.docx"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q33",
+      "question": "Who sent the first breach notice and on what date?",
+      "expected": [
+        "DOC-009-Notice-of-Default.pdf"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q36",
+      "question": "List the filing dates for each document in the court docket excerpt",
+      "expected": [
+        "DOC-020-Docket.pdf"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q46",
+      "question": "Two documents give different dates for the same event. Which is better supported?",
+      "expected": [
+        "DOC-013-Deposition-Notice.pdf",
+        "DOC-019-Deposition-Transcript.pdf"
+      ],
+      "found": false,
+      "citations_count": 5
+    },
+    {
+      "q_id": "Q49",
+      "question": "The same fact appears in two documents with different quoted wording. Which is the primary source?",
+      "expected": [
+        "DOC-009-Notice-of-Default.pdf",
+        "DOC-017-Notice-Email.pdf"
+      ],
+      "found": false,
+      "citations_count": 5
+    }
+  ],
+  "answer_absent": {
+    "clean": 0,
+    "total": 6,
+    "pass": false
+  },
+  "query_time_total_s": 11.065684080123901
+}

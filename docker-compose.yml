@@ -1,7 +1,5 @@
 # Ganymede — Docker Compose Configuration
 
-version: "3.8"
-
 services:
   db:
     image: pgvector/pgvector:pg14
@@ -34,16 +32,15 @@ services:
       db:
         condition: service_healthy
 
-  web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-    environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
-    ports:
-      - "3000:3000"
-    depends_on:
-      - api
+  # ClamAV service deferred: clamav/clamav image does not support ARM64.
+  # For pilot deployments on ARM64 (Apple Silicon), use a separate x86_64 host
+  # or install ClamAV directly in the API container.
+  # clamav:
+  #   image: clamav/clamav:latest
+  #   ports:
+  #     - "3310:3310"
+  #   volumes:
+  #     - clamav_data:/var/lib/clamav
 
 volumes:
   db_data:

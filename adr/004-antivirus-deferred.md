@@ -1,4 +1,4 @@
-# ADR 004: Antivirus — deferred with documented reason
+# ADR 004: Antivirus — implemented with ClamAV sidecar
 
 **Status:** Accepted
 **Date:** September 2026
@@ -9,47 +9,39 @@
 
 ## Context
 
-The Week 3 upload API needs antivirus (AV) scanning per the development plan. The options are:
-1. ClamAV sidecar (Docker container, freshclam signatures, scan on upload).
-2. Deferred AV with a documented reason and a migration path.
-
-The question is whether to include ClamAV in the Week 3 build or defer it.
+The Week 3 upload API deferred antivirus scanning (see original ADR 004). Week 4 implements it.
 
 ---
 
 ## Decision
 
-**Defer antivirus scanning to Week 4 or later, with this documented reason:**
+**Implement antivirus scanning via a ClamAV sidecar in Docker Compose.**
 
-1. The Week 3 build ingests only the frozen synthetic corpus and synthetic adversarial fixtures. No real client data is involved. The threat model (malicious file upload) is real but the attack surface is synthetic-only in Week 3.
-2. ClamAV adds operational complexity: a separate Docker container, signature updates (freshclam), and a scan timeout that can fail closed (blocking legitimate uploads) or fail open (scanning async, which defers the very protection AV provides).
-3. The upload pipeline already validates MIME type, file size, and SHA-256 content hash. These are the first-line defenses. AV is a second-line defense for a threat that is not realized in Week 3's synthetic-only ingestion.
-
-**Migration path:** Add a ClamAV sidecar to `docker-compose.yml` in Week 4, with a scan step between upload and parsing. The `ingestion_jobs` table already has a `stage` column that can track `av_scan` as a distinct stage.
+- Add `clamav/clamav:latest` as a service in `docker-compose.yml`.
+- Scan on upload: after the file is received but before parsing, scan with `clamdscan`.
+- If the scan detects a virus, reject the upload and return an error.
+- If the scan times out or the scanner is unavailable, fail closed (reject the upload).
 
 ---
 
 ## Consequences
 
 **Enables:**
-- Week 3 stays focused on ingestion, provenance, and failure visibility — the core Week 3 deliverables.
-- No operational burden of maintaining AV signatures during the synthetic-only test phase.
+- Virus scanning before parsing (no malicious file enters the ingestion pipeline).
+- Fail-closed behavior: scanner unavailable = upload rejected.
 
 **Costs:**
-- Week 3 uploads are not AV-scanned. This is acceptable because the data is synthetic.
-- When real client data arrives (pilot), AV must be in place before any upload.
+- ClamAV container adds memory and startup time.
+- Signature updates (freshclam) run automatically on container start.
+- Scan timeout (60s) adds latency to large file uploads.
 
 **Hardens:**
-- The `ingestion_jobs.stage` column is designed to accommodate `av_scan` as a future stage.
-- The failure-behavior rule (visible failure, not silent empty doc) applies equally to AV failures.
+- The `ingestion_jobs.stage` column tracks `av_scan` as a distinct stage.
+- The failure-behavior rule (visible failure, not silent empty doc) applies to AV failures.
 
 ---
 
 ## Alternatives considered
-
-### ClamAV sidecar in Week 3
-
-Rejected. Adds operational complexity (container, signatures, scan timeouts) for a threat that is not realized in Week 3's synthetic-only ingestion. The cost/benefit does not justify inclusion in Week 3.
 
 ### Cloud AV API (VirusTotal, etc.)
 
@@ -64,10 +56,10 @@ Rejected. The client is a web browser; it cannot reliably scan files before uplo
 ## References
 
 - ADR 001 (single-tenant deployment, deny-by-default egress)
+- ADR 003 (ingestion pipeline — AV scan added as a stage)
 - DEVELOPMENT.md (trust boundary 3: Egress)
-- plans/development-plan.md (Week 3 — File upload API with MIME validation, antivirus, size limits)
-- docs/security/threat-model.md (threat 8: Malicious or malformed file)
+- plans/development-plan.md (Week 4 — Antivirus)
 
 ---
 
-*This ADR documents the deferral. It does not remove the requirement. AV scanning must be implemented before any pilot with live client data.*
+*This ADR documents the implementation. The original ADR 004 deferred it; this follows through.*

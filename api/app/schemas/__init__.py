@@ -154,3 +154,30 @@ class IngestionStatusResponse(BaseModel):
     error_message: Optional[str]
     page_count: Optional[int]
     parser_version: Optional[str]
+
+
+# --- Retrieval Schemas ---
+
+class QueryRequest(BaseModel):
+    query_text: str = Field(..., min_length=1, max_length=10000)
+    top_k: int = Field(default=10, ge=1, le=100)
+
+
+class CitationResponse(BaseModel):
+    document_id: uuid.UUID
+    sha256: str
+    page: int
+    start_offset: int
+    end_offset: int
+    quoted_text: str
+    parser_version: str
+    retrieval_scores: dict
+    access_scope: str
+    model_version: str
+
+
+class QueryResponse(BaseModel):
+    matter_id: uuid.UUID
+    query_text: str
+    citations: List[CitationResponse]
+    result_count: int

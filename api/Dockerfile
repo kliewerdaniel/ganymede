@@ -2,10 +2,12 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies for PyMuPDF and Tesseract
+# Install system dependencies for PyMuPDF, Tesseract, and ClamAV
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
-    libgl1-mesa-glx \
+    libgl1 \
+    clamav \
+    clamav-daemon \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -16,4 +18,5 @@ COPY . .
 # Create storage directory
 RUN mkdir -p /data/storage
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0", "--port", "8000"]
+# Start API (ClamAV available but not required for startup)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
