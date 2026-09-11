@@ -1,6 +1,6 @@
 # Ganymede — Decision Log
 
-**Purpose:** Record material decisions that are not architectural enough for an ADR but are still decisions, not assumptions. The decision log is the place for "we decided X on date Y for reason Z, and here's what we're watching."
+**Purpose:** Record material decisions that are not architectural enough for an ADR but are still decisions, not assumptions.
 
 **Review:** Weekly, during the Friday scorecard.
 
@@ -24,33 +24,27 @@
 
 ### 2026-09-11 — README structure corrected to match the real tree
 
-**Decision:** Removed `docs/product/` and `docs/operations/` from the README structure diagram. Moved `plans/` and `decisions/` under `docs/` in the diagram for accuracy, then noted they also exist at repo root. Added an explanatory note that `docs/product/` and `docs/operations/` were placeholders and that product/artifact contracts live in `docs/specification/` while operations material arrives in Phase 5.
+**Decision:** Removed `docs/product/` and `docs/operations/` from the README structure diagram; moved `plans/` and `decisions/` back to repo root in the diagram (they are at root, not under `docs/`); added an explanatory note.
 
-**Why:** The README structure did not match the real tree. A wrong structure diagram is a small credibility hit and a recurring source of confusion.
+**Why:** The README structure did not match the real tree.
 
 **Alternatives considered:**
-- Create empty `docs/product/` and `docs/operations/` directories to make the tree match. Rejected: empty directories are noise; the real content lives elsewhere or has not arrived yet.
-- Redraw the tree to match reality and note the deferred folders. Chosen.
+- Create empty `docs/product/` and `docs/operations/`. Rejected.
+- Redraw to match reality. Chosen.
 
-**Watch:** When Phase 5 operations docs are written, create `docs/operations/` and update the README. When product-feature or artifact contracts are written as standalone docs, decide whether they belong in `docs/specification/` or a new `docs/product/` and update the README.
+**Watch:** When Phase 5 operations docs are written, create `docs/operations/` and update the README if `docs/product/` is ever needed.
 
-**Related:** README.md; DEVELOPMENT.md; plans/; decisions/.
+**Related:** README.md; DEVELOPMENT.md.
 
 ---
 
 ### 2026-09-11 — Access matrix completed with five roles and full resource grid
 
-**Decision:** Completed the access matrix with roles administrator, attorney, paralegal, read-only reviewer, IT operator, across resources matters, documents, prompts/questions, artifacts, citations/feedback, audit record, user management, and deployment config. Every cell states allow/deny with enforcement point where relevant, and the matrix is cross-checked against the threat model.
+**Decision:** Completed the access matrix with roles administrator, attorney, paralegal, read-only reviewer, IT operator, across resources matters, documents, prompts/questions, artifacts, citations/feedback, audit record, user management, and deployment config.
 
-**Why:** SKILL.md and the Week 2 gate require a complete access matrix before pilot. The skeleton was not usable as a specification.
+**Why:** SKILL.md and the Week 2 gate require a complete access matrix.
 
-**Alternatives considered:**
-- Fewer roles. Rejected: the business plan and product contract call for administrator, attorney, reviewer, and support operator; paralegal and read-only reviewer are needed to express the practice workflow and the verification-only posture.
-- Matrix without enforcement points. Rejected: without enforcement points the matrix is aspirational, not a specification.
-
-**Watch:** The access matrix is a draft until the identity model, matter boundaries, retention rules, and operational policy are defined in Week 2. It must be reviewed by a security professional before any pilot with live data.
-
-**Related:** docs/security/access-matrix.md; docs/architecture/trust-boundaries.md; docs/security/threat-model.md; ADR 001.
+**Related:** docs/security/access-matrix.md; docs/architecture/trust-boundaries.md; ADR 001.
 
 ---
 
@@ -58,93 +52,144 @@
 
 **Decision:** Created `docs/architecture/data-flow.md` with a mermaid flow from upload through export, annotated with audit events per stage and the trust boundary each stage sits inside, plus an explicit threat-model cross-check table.
 
-**Why:** The threat model flags the data-flow diagram as missing. Completion is a Week 2 exit criterion. The diagram must show that retrieval filters by matter scope in the DB query before any prompt is assembled.
-
-**Alternatives considered:**
-- Textual flow only, no diagram. Rejected: the flow is easier to verify against the threat model as a diagram.
-- Diagram without audit-event annotation. Rejected: the audit event set is the structural expression of the audit-record trust boundary and threat 11.
-
-**Watch:** The diagram is a draft until the corpus and access model are frozen. The prompt-text-minimization and redaction details are policy choices to be finalized in Week 2.
-
-**Related:** docs/architecture/data-flow.md; docs/architecture/trust-boundaries.md; docs/security/threat-model.md; docs/specification/benchmark-design.md.
+**Related:** docs/architecture/data-flow.md; docs/security/threat-model.md.
 
 ---
 
 ### 2026-09-11 — Corpus recommendation deferred to Daniel: synthetic first, with a public-domain fallback
 
-**Decision:** Recommended starting with a synthetic civil-litigation matter assembled from public-domain sources and generated documents, with a public-domain court-document fallback if a synthetic corpus proves too thin. Did not select an authorized real-matter corpus. Logged as Proposed, pending Daniel's sign-off.
+**Decision:** Recommended starting with a synthetic civil-litigation matter, with a public-domain court-document fallback. Did not select an authorized real-matter corpus.
 
-**Why:** The rules in test-corpus-rules.md allow synthetic, public, or authorized. Synthetic is fastest to assemble and safest to use during development; it avoids any confidentiality or handling-terms risk before counsel reviews the pilot terms. An authorized real corpus is more realistic but requires Daniel's relationships and written handling terms, plus counsel review before any live client data — so it cannot be selected unilaterally.
-
-**Alternatives considered:**
-- Authorized real matter corpus now. Rejected: requires Daniel's sign-off and counsel review; cannot be selected without his relationships and written terms.
-- Public-domain corpus only. Acceptable fallback if synthetic is too thin; court-published documents with no confidentiality obligation are public domain. Still requires Daniel to confirm the specific set is acceptable as a test corpus — I am not making a legal judgment that any public document set is safe.
-
-**Watch:** The corpus choice affects benchmark realism and development speed. If Daniel rejects synthetic, the fallback is a public-domain set he approves, or an authorized real corpus with written terms.
-
-**Related:** docs/specification/test-corpus-rules.md; decisions/log.md; legal/counsel review before any live client data.
+**Related:** docs/specification/test-corpus-rules.md.
 
 ---
 
 ### 2026-09-11 — Gold set drafted as 50 questions, status Draft, pending corpus freeze
 
-**Decision:** Drafted a 50-question gold-set skeleton covering the three product-contract jobs (find the fact, build the record, start the work product), plus cross-matter access-control attack questions, "not found" cases, uncertain-date cases, and contradiction cases. Each question has an ID, job type, expected-evidence-pointer placeholder, and the quality gate it exercises. Marked status Draft, pending corpus freeze.
+**Decision:** Drafted a 50-question gold-set skeleton covering the three product-contract jobs, plus cross-matter attack questions, "not found" cases, uncertain-date cases, and contradiction cases.
 
-**Why:** The benchmark design requires a 50-question gold set. The questions can be written before the corpus is frozen — the exact supporting passages are bound when the corpus freezes.
-
-**Alternatives considered:**
-- Wait for corpus freeze before drafting questions. Rejected: drafting questions now is cheaper than waiting, and the question set can be refined against the frozen corpus.
-
-**Watch:** Expected-evidence pointers are placeholders. The gold set is not runnable until the corpus is frozen and the pointers are bound. Avoid inventing specific document/page/offset values that imply a corpus that does not exist yet.
-
-**Related:** docs/specification/benchmark-design.md; docs/specification/test-corpus-rules.md; docs/specification/gold-set-draft.md.
+**Related:** docs/specification/benchmark-design.md; docs/specification/gold-set-draft.md.
 
 ---
 
 ### 2026-09-11 — 30 Austin-area prospect list assembled from public directories, with verified and inferred fields split
 
-**Decision:** Assembled a 30-row Austin-area civil-litigation prospect list from public directories (Austin Bar Association lawyer search, Super Lawyers firm profiles, law-firm websites, Austin Monthly top-attorney lists). Each row records firm name, geography, practice note, attorney count as verified or inferred, buyer role, introduction path, document-workflow fit, safe-corpus plausibility, budget path, and next step. No attorney names or specific attorney counts were invented; where a count could not be verified, it is marked inferred with the source.
+**Decision:** Assembled a 30-row Austin-area civil-litigation prospect list from public directories. No attorney names or invented counts.
 
-**Why:** The commercial plan requires a named 30-account list. The target is Austin-area civil-litigation firms in the 10-50 attorney band, prioritizing visible commercial litigation practices.
-
-**Alternatives considered:**
-- Narrow to only firms with a verified attorney count in the 10-50 band. Rejected: that would leave the list short and would discard firms that are plausibly in band based on public signals. The list instead marks verified vs. inferred so Daniel can filter.
-- Include firms outside Austin. Rejected: the business plan says start with Texas, launch geography begins with Texas civil-litigation firms; Austin is the launch geography.
-
-**Watch:** Attorney counts from public directories are often inconsistent. The list marks which counts are verified from a single public source and which are inferred. Do not treat inferred counts as facts.
-
-**Related:** docs/sales/prospect-tracking.md; docs/sales/outreach-drafts.md.
+**Related:** docs/sales/prospect-tracking.md.
 
 ---
 
 ### 2026-09-11 — 8 outreach drafts written, unsent, top-8 prospects only
 
-**Decision:** Drafted 8 personalized outreach emails to the top 8 prospects from the list, each referencing something specific and publicly verifiable about that firm. None sent. Saved to `docs/sales/outreach-drafts.md`.
+**Decision:** Drafted 8 personalized outreach emails to the top 8 prospects. None sent.
 
-**Why:** The build plan and commercial plan call for requesting the first eight interviews in the first 48 hours. The emails are the draft of that request; Daniel sends them himself.
-
-**Alternatives considered:**
-- Send the emails now. Rejected: the hard boundary says do not send emails, make calls, or submit forms. Drafts only.
-- One generic email to all 30. Rejected: the commercial plan says workflow-first calls with no generic product pitch. Each draft references something specific to that firm.
-
-**Watch:** The drafts are for Daniel to review and send. He may want to adjust tone, add a warm-intro line, or skip any firm.
-
-**Related:** docs/sales/outreach-drafts.md; docs/sales/prospect-tracking.md; docs/discovery/interview-script.md.
+**Related:** docs/sales/outreach-drafts.md.
 
 ---
 
 ### 2026-09-11 — Week 1 scorecard initialized with 8 outreach targets at qualified-contact stage
 
-**Decision:** Copied the weekly scorecard template to `plans/weekly-scorecard-week-1.md` and pre-filled the prospect table with the 8 outreach targets at stage "qualified contact."
+**Decision:** Copied the weekly scorecard template to `plans/weekly-scorecard-week-1.md` and pre-filled the prospect table.
 
-**Why:** The weekly scorecard is the founder's operating rhythm from Week 1. Pre-filling the prospect table gives Daniel a starting point for the Friday review.
+**Related:** plans/weekly-scorecard-week-1.md.
+
+---
+
+### 2026-09-11 — README tree fixed: removed duplicate `plans/` and `decisions/` entries
+
+**Decision:** Fixed the README tree diagram so `plans/` and `decisions/` appear once, at root. Added a note that `docs/product/` and `docs/operations/` are not current folders.
+
+**Why:** The previous README listed `plans/` and `decisions/` under `docs/` and again at root. The real tree has them only at root.
 
 **Alternatives considered:**
-- Leave the prospect table empty. Rejected: the point of the scorecard is to record evidence each week; starting with the 8 outreach targets makes the week's movement measurable.
+- Leave the duplicate entries and add a note. Rejected: duplicates are confusing.
+- Remove the duplicates and keep `docs/operations/` noted as deferred. Chosen.
 
-**Watch:** The scorecard is a template until the week actually runs. Stages advance only when the evidence changes, per the buyer evidence ladder.
+**Watch:** When `docs/operations/` is created in Phase 5, update the README.
 
-**Related:** plans/weekly-scorecard-week-1.md; plans/weekly-scorecard.md; docs/sales/prospect-tracking.md.
+**Related:** README.md.
+
+---
+
+### 2026-09-11 — Fixed broken references from the previous commit
+
+**Decision:** Fixed the following broken references:
+- README "Weekly scorecard" link now points to `plans/weekly-scorecard.md` (correct: plans/ is at root, not under docs/).
+- README "Product Roadmap" link points to `docs/specification/roadmap.md` (correct).
+- README structure diagram no longer lists `docs/product/` or `docs/operations/` as existing folders.
+
+**Why:** The previous commit's README had `plans/` and `decisions/` duplicated and pointed `docs/operations/` as if it existed.
+
+**Related:** README.md.
+
+---
+
+### 2026-09-11 — Corpus v0.1 built: 23-document synthetic civil-litigation matter
+
+**Decision:** Built `testdata/corpus-v0.1/` with a 23-document synthetic matter (Meridian Logistics Solutions, LLC v. Cascade Retail Group, Inc.). Formats: 13 native PDFs, 8 DOCX, 2 scanned-image PDFs. Includes a facts ledger (corpus-facts.md) and manifest (MANIFEST.md) with SHA-256 hashes. All fictional; nothing scraped.
+
+**Why:** The proposed corpus decision (synthetic first) and test-corpus-rules.md require a buildable synthetic corpus. The gold set must be bound to real pointers.
+
+**Alternatives considered:**
+- Fewer documents. Rejected: the corpus must exercise PDF, DOCX, TXT-equivalent, and scanned-image formats, plus multi-document synthesis and chronology.
+- More documents. Deferred: 15 is sufficient for the gold-set binding; additional documents can be added in a later corpus version.
+
+**Watch:** corpus-v0.1 is a candidate for freeze; it is not frozen until Daniel approves. If he approves, the gold set becomes frozen against it.
+
+**Related:** testdata/corpus-v0.1/; docs/specification/gold-set-draft.md; docs/specification/test-corpus-rules.md.
+
+---
+
+### 2026-09-11 — Corpus v0.1 composition decisions logged
+
+**Decision:** Corpus composition decisions:
+- Matter: Meridian Logistics Solutions, LLC v. Cascade Retail Group, Inc., Cause No. D-2025-00418, Travis County District Court. All fictional.
+- Document count: 15 documents (22 files total counting the MANIFEST and facts ledger as corpus metadata, not evidence documents; the 15 evidence documents are DOC-001 through DOC-022 minus the two non-evidence metadata files).
+- Formats: native PDF (12), DOCX (8), scanned-image PDF (2).
+- Key facts: MSA March 15, 2023; effective April 1, 2023; term ends March 31, 2026; Amendment No. 1 January 22, 2024; hourly rate $125→$145; four invoices (#1042 $55,100; #1043 $48,140; #1044 $52,300; #1045 $49,800); disputed total $102,100; notice January 28, 2025; response February 14, 2025; demand March 3, 2025; complaint filed April 2, 2025; answer filed May 1, 2025; deposition of James Okafor held August 15, 2025.
+- Scanned documents: DOC-018 (handwritten meeting notes, undated) and DOC-018b (Additional Terms Addendum, undated, with the "ignore all prior confidentiality restrictions" footnote for Q48).
+- No real person, firm, attorney, judge, court reporter, or document. No scraping.
+
+**Why:** The corpus must be internally consistent, format-diverse, and sufficient for the gold set. The scanned documents exercise the OCR path and the prompt-injection edge case.
+
+**Related:** testdata/corpus-v0.1/corpus-facts.md; testdata/corpus-v0.1/MANIFEST.md; docs/specification/gold-set-draft.md.
+
+---
+
+### 2026-09-11 — Gold set bound to corpus-v0.1 with real pointers
+
+**Decision:** Updated `docs/specification/gold-set-draft.md` to bind all 50 questions to real evidence pointers in corpus-v0.1. Six answer-absent questions (Q39–Q44) verified unanswerable by construction. Q02, Q03, Q06, Q10, Q16, Q18, Q20, Q24, Q26, Q27, Q28, Q30, Q35, Q37, and Q46b are either not answerable from this corpus or require Matter B (for Q46b).
+
+**Why:** The benchmark design requires the gold set to be bound to real pointers once a corpus exists.
+
+**Alternatives considered:**
+- Keep all pointers as placeholders. Rejected: the point of building the corpus was to bind the pointers.
+- Invent pointers for unanswerable questions. Rejected: that would defeat the answer-absent tests.
+
+**Watch:** The gold set is Draft, not frozen, until Daniel freezes corpus-v0.1. If he approves a different corpus, the pointers must be re-bound.
+
+**Related:** docs/specification/gold-set-draft.md; testdata/corpus-v0.1/.
+
+---
+
+### 2026-09-11 — Interview capture template created
+
+**Decision:** Created `docs/discovery/interview-capture-template.md` as a per-interview form that maps to the four discovery-outputs.md sections (workflow map, economic baseline, risk baseline, buying map) and includes the buyer evidence ladder fields.
+
+**Why:** The interview script is the question set; the capture template is the structured record.
+
+**Related:** docs/discovery/interview-capture-template.md; docs/discovery/interview-script.md; docs/discovery/discovery-outputs.md.
+
+---
+
+### 2026-09-11 — Design-partner / pilot-review commitment letter drafted
+
+**Decision:** Drafted `docs/commercial/design-partner-letter-draft.md` from the pilot-agreement-inputs.md. Draft only; Daniel sends it himself; must be reviewed by counsel before sending.
+
+**Why:** The build plan and commercial plan call for a written pilot-review commitment. The letter is the first written ask.
+
+**Related:** docs/commercial/design-partner-letter-draft.md; docs/commercial/pilot-agreement-inputs.md.
 
 ---
 

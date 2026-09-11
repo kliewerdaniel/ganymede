@@ -45,14 +45,14 @@ ganymede/
 │   ├── commercial/            # pricing, proposal, sales narrative, pilot scorecard
 │   ├── sales/                 # discovery script, one-pager, prospect tracking
 │   ├── security/              # threat model, access matrix, incident path
-│   ├── pilot/                 # pilot agreement, readiness packet
-│   ├── plans/                 # implementation plans and weekly scorecards
-│   └── decisions/             # decision log
-├── plans/                     # weekly scorecards (also referenced from docs/)
-└── decisions/                 # decision log (also referenced from docs/)
+│   └── pilot/                 # pilot agreement, readiness packet
+├── plans/                     # implementation plans and weekly scorecards
+├── decisions/                 # decision log
+└── testdata/
+    └── corpus-v0.1/           # synthetic test corpus (23 docs + manifest + facts ledger)
 ```
 
-`docs/product/` and `docs/operations/` in earlier drafts were placeholders. The product-feature and artifact contracts live in `docs/specification/`; the deployment, runbook, and operations material will arrive in Phase 5 (Weeks 9-10) as `docs/operations/` grows. Nothing in those two folders exists yet because the corresponding work has not been reached.
+`docs/product/` was a placeholder in an earlier draft. Product-feature and artifact contracts live in `docs/specification/`. `docs/operations/` is deferred to Phase 5 (Weeks 9-10) and does not exist yet.
 
 ---
 
