@@ -54,10 +54,7 @@ def cosine_similarity(a: List[float], b: List[float]) -> float:
 
 
 def _build_or_tsquery(query_text: str) -> str:
-    """Build an OR-based tsquery from query text.
-    
-    Extracts meaningful terms and joins them with OR for broader matching.
-    """
+    """Build an OR-based tsquery from query text."""
     stop_words = {'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been',
                   'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
                   'would', 'could', 'should', 'may', 'might', 'must', 'shall',
@@ -92,7 +89,6 @@ def fts_search(db: Session, matter_id: str, query_text: str, top_k: int = 20) ->
     if not tsquery:
         return []
 
-    # Use DISTINCT ON to deduplicate by sha256 - only get best chunk per source document
     sql = text("""
         SELECT DISTINCT ON (d.sha256) 
                c.id, c.text, c.document_id, c.page_id, c.start_offset, c.end_offset,
@@ -137,7 +133,6 @@ def vector_search(db: Session, matter_id: str, query_text: str, top_k: int = 20)
     """Vector similarity search over chunks in a matter (computed in Python)."""
     query_embedding = get_embedding(query_text)
 
-    # Only search non-duplicate documents
     rows = db.query(Chunk, ChunkEmbedding, Document).join(
         ChunkEmbedding, Chunk.id == ChunkEmbedding.chunk_id
     ).join(
@@ -184,11 +179,7 @@ def reciprocal_rank_fusion(
     fts_weight: float = 0.6,
     vector_weight: float = 0.4,
 ) -> List[dict]:
-    """Fuse FTS and vector results using Reciprocal Rank Fusion.
-    
-    FTS gets higher weight because exact term matches are stronger signals
-    for this type of legal document retrieval.
-    """
+    """Fuse FTS and vector results using Reciprocal Rank Fusion."""
     scores = {}
 
     for rank, r in enumerate(fts_results):
@@ -226,11 +217,7 @@ def rerank(
 
 
 def deduplicate_by_sha256(results: List[dict], top_k: int = 5) -> List[dict]:
-    """
-    Deduplicate results by sha256.
-    Multiple document records may share the same SHA256 (duplicates from repeated test runs).
-    This ensures we only return one result per unique source document.
-    """
+    """Deduplicate results by sha256."""
     seen_sha = set()
     deduped = []
     for r in results:
@@ -249,23 +236,17 @@ def retrieve(
     query_text: str,
     top_k: int = 10,
 ) -> List[Citation]:
-    """
-    Main retrieval function.
-    FTS + vector fusion with reranking.
-    Returns ranked citations with SHA256-level deduplication.
-    """
+    """Main retrieval function."""
     fts_results = fts_search(db, matter_id, query_text, top_k=30)
     vector_results = vector_search(db, matter_id, query_text, top_k=30)
 
-    # Check if we have any good matches
     best_vector_sim = vector_results[0]["vector_similarity"] if vector_results else 0
     if not fts_results and best_vector_sim < MIN_VECTOR_SIMILARITY:
         return []
 
     fused = reciprocal_rank_fusion(fts_results, vector_results)
-    ranked = rerank(db, query_text, fused, top_k=top_k * 4)  # Get more results for dedup
+    ranked = rerank(db, query_text, fused, top_k=top_k * 4)
 
-    # Deduplicate by SHA256 to avoid returning duplicate documents
     deduped = deduplicate_by_sha256(ranked, top_k=top_k)
 
     citations = []
