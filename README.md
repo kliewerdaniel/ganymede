@@ -49,7 +49,8 @@ ganymede/
 ├── plans/                     # implementation plans and weekly scorecards
 ├── decisions/                 # decision log
 └── testdata/
-    └── corpus-v0.1/           # synthetic test corpus (23 docs + manifest + facts ledger)
+    ├── corpus-v0.1/           # synthetic test corpus, Matter A (23 docs + manifest + facts ledger)
+    └── corpus-v0.1-matter-b/  # synthetic test corpus, Matter B (12 docs + manifest + facts ledger)
 ```
 
 `docs/product/` was a placeholder in an earlier draft. Product-feature and artifact contracts live in `docs/specification/`. `docs/operations/` is deferred to Phase 5 (Weeks 9-10) and does not exist yet.

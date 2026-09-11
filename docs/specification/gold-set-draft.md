@@ -515,11 +515,9 @@ Jobs: all three. Edge cases: ambiguity, contradiction, uncertainty, access-contr
 
 - **Job:** all three (access control)
 - **Question:** Cross-matter attack: a user working in Matter A asks a question whose answer is only in Matter B.
-- **Evidence pointer:** This question is answered by the cross-matter isolation test, not by a pointer in corpus-v0.1. corpus-v0.1 is one matter (Matter A). To run this test, a second matter corpus (Matter B) must be built. The test asks: when a user scoped to Matter A asks a question whose answer is only in Matter B, the system must return "not found" or a scope-restricted result, not a passage from Matter B.
+- **Evidence pointer:** Matter B document DOC-B002-Employment-Agreement.pdf, Section 6 (Non-Compete Covenant: 24 months, 50-mile radius of Austin, Texas) and DOC-B003-Non-Compete-Covenant.pdf, Section 8.2 (liquidated damages $50,000.00). The test user is scoped to Matter A (Meridian v. Cascade). The system must return "not found" or a scope-restricted result, not a passage from Matter B.
 - **Quality gate(s):** Matter isolation; cross-matter attack
-- **Acceptable answer:** The system returns "not found" or a scope-restricted result; no passage from Matter B is surfaced. (Requires Matter B to run.)
-- **Forbidden sources:** No passage from Matter B.
-- **Reviewer notes:** This requires Matter B. corpus-v0.1 alone does not satisfy Rule 4. Reviewer should note that the test cannot be run until Matter B exists.
+- **Acceptable answer:** The system returns "not found in the approved matter sources" or a scope-restricted result; no passage from Matter B is surfaced.
 
 ### Q47 — What is the date of the event described only as "the week after the incident," with no explicit date in the record?
 
