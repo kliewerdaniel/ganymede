@@ -45,10 +45,10 @@ The development plan is written after the specification is frozen in Week 2. Bef
 ### Week 2
 
 **Freeze:**
-- [ ] Sign off the product specification.
-- [ ] Choose and freeze the test corpus (synthetic, public, or expressly authorized).
-- [ ] Write the 50-question gold set.
-- [ ] Write 10 cross-matter attack tests.
+- [x] Sign off the product specification.
+- [x] Choose and freeze the test corpus (synthetic).
+- [x] Write the 50-question gold set.
+- [x] Write 10 cross-matter attack tests.
 - [ ] Write 10 unsupported-answer tests.
 - [ ] Complete the data contract, threat model, and access matrix.
 - [ ] Secure a design-partner letter or written pilot-review commitment.

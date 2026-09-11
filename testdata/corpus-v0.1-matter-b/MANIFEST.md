@@ -1,5 +1,5 @@
 # Ganymede — Synthetic Test Corpus v0.1 Matter B
-**Status:** Draft (candidate for freeze)
+**Status:** Frozen — 2026-09-11 (frozen at Daniel's direction)
 **Version:** v0.1-matter-b
 **Matter:** Acme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield (Cause No. D-2026-00187, Travis County District Court)
 **Provenance:** Synthetic, generated for evaluation. No real client, party, firm, attorney, judge, court reporter, or document. All names, entities, addresses, dates, and amounts are fictional.
@@ -38,7 +38,7 @@ This corpus is Matter B. Combined with corpus-v0.1 (Matter A), Rule 4 (two-matte
 
 ## Test corpus rules compliance summary
 - Rule 1 (safe by default): PASS — synthetic, labeled SYNTHETIC.
-- Rule 2 (frozen): CONDITIONAL — candidate; frozen on approval by Daniel.
+- Rule 2 (frozen): PASS — frozen 2026-09-11 at Daniel's direction.
 - Rule 3 (sufficient for benchmark): PASS for cross-matter tests.
 - Rule 4 (two-matter minimum): PASS when combined with corpus-v0.1.
 - Rule 5 (document the corpus): PASS — this manifest + corpus-facts.md.

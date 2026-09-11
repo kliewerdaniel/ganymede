@@ -1,6 +1,6 @@
 # Ganymede — Corpus and Gold Set Freeze Checklist
 
-**Status:** Freeze candidate — awaiting Daniel's sign-off
+**Status:** Frozen — 2026-09-11 (frozen at Daniel's direction)
 **Date:** September 2026
 **Corpus:** corpus-v0.1 (Matter A) + corpus-v0.1-matter-b (Matter B)
 **Gold set:** docs/specification/gold-set-draft.md (50 questions, bound to corpus-v0.1)
@@ -41,9 +41,9 @@ Once Daniel signs off:
 
 ## Sign-off
 
-**Daniel Kliewer:** _________________________________
+**Daniel Kliewer:** Frozen at Daniel's direction — 2026-09-11
 
-**Date:** _______________________________
+**Date:** September 11, 2026
 
 ---
 

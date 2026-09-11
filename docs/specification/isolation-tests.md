@@ -1,6 +1,6 @@
 # Ganymede — Cross-Matter Isolation Test Specification
 
-**Status:** Draft
+**Status:** Frozen — 2026-09-11 (frozen at Daniel's direction)
 **Date:** September 2026
 **Quality gate:** Matter isolation — 100% attacks blocked
 **Trust constraint:** 5 (Matter — Authorization filters retrieval before any prompt is assembled)

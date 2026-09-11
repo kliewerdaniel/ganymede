@@ -223,13 +223,19 @@
 
 ---
 
-### 2026-09-11 — Cross-matter isolation tests specified
+### 2026-09-11 — Corpus, gold set, and isolation tests frozen
 
-**Decision:** Created docs/specification/isolation-tests.md with 8 cross-matter attack variants (ATT-01 through ATT-08): direct cross-matter question, paraphrased cross-matter question, multi-matter aggregate question, metadata leakage, cross-matter entity search, cross-matter date search, cross-matter counsel search, and prompt injection attempting cross-matter access. Each attack maps to the matter-isolation quality gate and trust constraint 5.
+**Decision:** At Daniel's direction, the following are frozen as of 2026-09-11:
+1. `testdata/corpus-v0.1/` — Matter A (Meridian Logistics Solutions, LLC v. Cascade Retail Group, Inc.), 23 documents + MANIFEST.md + corpus-facts.md
+2. `testdata/corpus-v0.1-matter-b/` — Matter B (Acme Healthcare Solutions, Inc. v. Dr. Sarah J. Whitfield), 12 documents + MANIFEST.md + corpus-facts.md
+3. `docs/specification/gold-set-draft.md` — 50-question gold set bound to corpus-v0.1 (Q01-Q50, including Q46b cross-matter attack)
+4. `docs/specification/isolation-tests.md` — 8 cross-matter isolation attacks (ATT-01 through ATT-08)
 
-**Why:** The cross-matter isolation test suite is the structural expression of trust constraint 5. It must be specified before implementation.
+**"Frozen" means:** Immutable. No file in corpus-v0.1 or corpus-v0.1-matter-b may be changed, replaced, or removed without a documented reason, a version bump (corpus-v0.2), and a re-check of all cross-references. No question in the gold set may be changed, replaced, or removed without a documented reason, a version bump, and re-binding to the new corpus. The benchmark becomes the definition of "works" — every subsequent release runs against the same frozen benchmark. Improvements and regressions are attributable to the system, not to a moving target.
 
-**Related:** docs/specification/isolation-tests.md; docs/specification/gold-set-draft.md (Q46b).
+**What it unblocks:** Benchmark-first implementation. Per DEVELOPMENT.md, the benchmark is the definition of "works." Features are not done until they pass the benchmark. The quality gates become the acceptance criteria. The cross-matter isolation tests become part of the regression suite (100% of attacks must be blocked).
+
+**Related:** testdata/corpus-v0.1/MANIFEST.md, testdata/corpus-v0.1-matter-b/MANIFEST.md, docs/specification/gold-set-draft.md, docs/specification/isolation-tests.md, docs/specification/freeze-checklist.md.
 
 ---
 

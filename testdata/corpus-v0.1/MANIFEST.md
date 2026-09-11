@@ -1,5 +1,5 @@
 # Ganymede — Synthetic Test Corpus v0.1 (corpus-v0.1)
-**Status:** Draft (candidate for freeze)
+**Status:** Frozen — 2026-09-11 (frozen at Daniel's direction)
 **Version:** v0.1
 **Matter:** Meridian Logistics Solutions, LLC v. Cascade Retail Group, Inc. (Cause No. D-2025-00418, Travis County District Court)
 **Provenance:** Synthetic, generated for evaluation. No real client, party, firm, attorney, judge, court reporter, or document. All names, entities, addresses, dates, and amounts are fictional.

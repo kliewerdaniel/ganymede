@@ -1,15 +1,15 @@
 # Ganymede — Gold Set Draft (Bound to corpus-v0.1)
 
-**Status:** Draft (bound to corpus-v0.1; pending freeze)
+**Status:** Frozen — 2026-09-11 (frozen at Daniel's direction)
 **Date:** September 2026
 **Corpus:** corpus-v0.1 — Meridian Logistics Solutions, LLC v. Cascade Retail Group, Inc. (Cause No. D-2025-00418, Travis County District Court)
-**Freeze:** Pending Daniel's approval of corpus-v0.1
+**Freeze:** Frozen — 2026-09-11 (frozen at Daniel's direction)
 
 ---
 
 ## Note on status
 
-This version binds each of the 50 gold-set questions to real evidence pointers in corpus-v0.1. The acceptable answer, exact supporting passages, forbidden sources, and reviewer notes are still to be filled per question when the corpus is frozen and a reviewer signs off. **This is not frozen yet.** Status remains Draft until Daniel freezes corpus-v0.1.
+This version binds each of the 50 gold-set questions to real evidence pointers in corpus-v0.1. The acceptable answer, exact supporting passages, forbidden sources, and reviewer notes are still to be filled per question when a reviewer signs off. **Frozen 2026-09-11 at Daniel's direction.** No file in corpus-v0.1 or corpus-v0.1-matter-b may be changed, replaced, or removed without a documented reason, a version bump (corpus-v0.2), and a re-check of all cross-references.
 
 ---
 
@@ -595,7 +595,7 @@ If any document is added that answers one of these, the corresponding question m
 
 ## Status
 
-Draft, bound to corpus-v0.1. Pending freeze by Daniel.
+Frozen — 2026-09-11 (frozen at Daniel's direction). Bound to corpus-v0.1. No file in corpus-v0.1 or corpus-v0.1-matter-b may be changed, replaced, or removed without a documented reason, a version bump (corpus-v0.2), and a re-check of all cross-references.
 
 ---
 
