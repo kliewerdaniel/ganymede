@@ -36,20 +36,23 @@ ganymede/
 ├── SKILL.md                   # Hermes agent operating instructions for this repo
 ├── DEVELOPMENT.md             # engineering conventions and build rules
 ├── adr/                       # Architecture Decision Records
-│   └── 000-template.md
+│   ├── 000-template.md
+│   └── 001-single-tenant-deployment.md
 ├── docs/
 │   ├── discovery/             # Phase 1 (Weeks 1-2) discovery outputs
 │   ├── specification/         # versioned product spec, benchmark, corpus rules
 │   ├── architecture/          # stack, data flow, trust boundaries
-│   ├── product/               # features, artifacts, citation and answer contracts
 │   ├── commercial/            # pricing, proposal, sales narrative, pilot scorecard
 │   ├── sales/                 # discovery script, one-pager, prospect tracking
 │   ├── security/              # threat model, access matrix, incident path
 │   ├── pilot/                 # pilot agreement, readiness packet
-│   └── operations/            # Docker Compose, runbook, backup/restore, update policy
-├── plans/                     # implementation plans and weekly scorecards
-└── decisions/                 # decision log
+│   ├── plans/                 # implementation plans and weekly scorecards
+│   └── decisions/             # decision log
+├── plans/                     # weekly scorecards (also referenced from docs/)
+└── decisions/                 # decision log (also referenced from docs/)
 ```
+
+`docs/product/` and `docs/operations/` in earlier drafts were placeholders. The product-feature and artifact contracts live in `docs/specification/`; the deployment, runbook, and operations material will arrive in Phase 5 (Weeks 9-10) as `docs/operations/` grows. Nothing in those two folders exists yet because the corresponding work has not been reached.
 
 ---
 
