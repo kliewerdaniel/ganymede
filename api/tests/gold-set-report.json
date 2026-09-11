@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-11T17:50:29",
+  "timestamp": "2026-09-11T18:01:23",
   "recall_at_5": 58.333333333333336,
   "found": 14,
   "total": 24,
@@ -105,5 +105,5 @@
     "total": 6,
     "pass": false
   },
-  "query_time_total_s": 1.9325268268585205
+  "query_time_total_s": 2.1113431453704834
 }
