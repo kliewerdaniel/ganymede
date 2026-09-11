@@ -66,18 +66,18 @@ The development plan is written after the specification is frozen in Week 2. Bef
 ### Week 3 — Ingestion with provenance
 
 **Build:**
-- [ ] Matter creation and user assignment.
-- [ ] File upload API with MIME validation, antivirus, size limits.
-- [ ] Content hashing and duplicate detection.
-- [ ] Parser/OCR routing: PyMuPDF, DOCX, TXT, OCRmyPDF/Tesseract.
-- [ ] Page segmentation and provenance recording.
-- [ ] Ingestion status and failure visibility.
+- [x] Matter creation and user assignment.
+- [x] File upload API with MIME validation, antivirus, size limits.
+- [x] Content hashing and duplicate detection.
+- [x] Parser/OCR routing: PyMuPDF, DOCX, TXT, OCRmyPDF/Tesseract.
+- [x] Page segmentation and provenance recording.
+- [x] Ingestion status and failure visibility.
 
 **Test:**
-- [ ] Digital PDFs, scans, DOCX, TXT.
-- [ ] Tables, rotated pages.
-- [ ] Corrupt files, duplicates.
-- [ ] 95% supported-file success on frozen corpus.
+- [x] Digital PDFs, scans, DOCX, TXT.
+- [x] Tables, rotated pages.
+- [x] Corrupt files, duplicates.
+- [x] 95% supported-file success on frozen corpus.
 
 **Exit:** failures recover safely; provenance is preserved.
 

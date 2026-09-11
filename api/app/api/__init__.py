@@ -1,0 +1,145 @@
+# Ganymede API — API Routes
+
+"""FastAPI route handlers."""
+
+import uuid
+from typing import List
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
+from sqlalchemy.orm import Session
+from app.core.database import get_db
+from app.schemas import (
+    MatterCreate, MatterResponse,
+    UserCreate, UserResponse,
+    DocumentResponse, PageResponse, IngestionStatusResponse,
+    UploadResponse,
+)
+from app.services.ingestion import ingest_document, get_ingestion_status
+from app.models import Matter, User, Document, Page
+
+router = APIRouter()
+
+
+# --- Matter Routes ---
+
+@router.post("/matters", response_model=MatterResponse, status_code=status.HTTP_201_CREATED)
+def create_matter(matter: MatterCreate, db: Session = Depends(get_db)):
+    """Create a new matter."""
+    db_matter = Matter(
+        id=uuid.uuid4(),
+        tenant_id=uuid.UUID("00000000-0000-0000-0000-000000000001"),  # Default tenant for now
+        name=matter.name,
+        description=matter.description,
+        cause_number=matter.cause_number,
+        court=matter.court,
+    )
+    db.add(db_matter)
+    db.commit()
+    db.refresh(db_matter)
+    return db_matter
+
+
+@router.get("/matters", response_model=List[MatterResponse])
+def list_matters(db: Session = Depends(get_db)):
+    """List all matters."""
+    return db.query(Matter).all()
+
+
+@router.get("/matters/{matter_id}", response_model=MatterResponse)
+def get_matter(matter_id: str, db: Session = Depends(get_db)):
+    """Get a matter by ID."""
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+    return matter
+
+
+# --- User Routes ---
+
+@router.post("/users", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    """Create a new user."""
+    db_user = User(
+        id=uuid.uuid4(),
+        tenant_id=uuid.UUID("00000000-0000-0000-0000-000000000001"),
+        email=user.email,
+        name=user.name,
+        role=user.role,
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+@router.get("/users", response_model=List[UserResponse])
+def list_users(db: Session = Depends(get_db)):
+    """List all users."""
+    return db.query(User).all()
+
+
+# --- Document Routes ---
+
+@router.post("/matters/{matter_id}/documents", response_model=UploadResponse)
+async def upload_document(
+    matter_id: str,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+):
+    """Upload and ingest a document."""
+    # Verify matter exists
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+
+    # Read file bytes
+    file_bytes = await file.read()
+
+    # Ingest document
+    doc = ingest_document(
+        db=db,
+        matter_id=matter_id,
+        filename=file.filename,
+        file_bytes=file_bytes,
+        mime_type=file.content_type or "application/octet-stream",
+    )
+
+    return UploadResponse(
+        document_id=doc.id,
+        filename=doc.original_filename,
+        sha256=doc.sha256,
+        ingestion_status=doc.ingestion_status,
+        is_duplicate=doc.is_duplicate,
+        duplicate_of_id=doc.duplicate_of_id,
+    )
+
+
+@router.get("/documents/{document_id}", response_model=DocumentResponse)
+def get_document(document_id: str, db: Session = Depends(get_db)):
+    """Get a document by ID."""
+    doc = db.query(Document).filter(Document.id == document_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    return doc
+
+
+@router.get("/documents/{document_id}/pages", response_model=List[PageResponse])
+def get_document_pages(document_id: str, db: Session = Depends(get_db)):
+    """Get all pages for a document."""
+    pages = db.query(Page).filter(Page.document_id == document_id).order_by(Page.page_number).all()
+    return pages
+
+
+@router.get("/documents/{document_id}/status", response_model=IngestionStatusResponse)
+def get_document_status(document_id: str, db: Session = Depends(get_db)):
+    """Get ingestion status for a document."""
+    doc = get_ingestion_status(db, document_id)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    return IngestionStatusResponse(
+        document_id=doc.id,
+        status=doc.ingestion_status,
+        stage=None,
+        error_message=doc.ingestion_error,
+        page_count=doc.page_count,
+        parser_version=doc.parser_version,
+    )

@@ -223,7 +223,35 @@
 
 ---
 
-### 2026-09-11 — Corpus, gold set, and isolation tests frozen
+### 2026-09-11 — Week 3 ingestion engine built and verified
+
+**Decision:** Built the Week 3 ingestion engine per `plans/development-plan.md`:
+- Monorepo layout: `api/` (FastAPI), `web/` (Next.js placeholder), `docker-compose.yml` (app + PostgreSQL)
+- Matter creation and user assignment API
+- File upload API with MIME validation, size limits, SHA-256 content hashing, duplicate detection
+- Parser/OCR routing: PyMuPDF (native PDF), python-docx (DOCX), Tesseract (scanned PDF), plain text
+- Page segmentation with provenance (document_id, page_number, text, start_offset, end_offset, parser_version)
+- Ingestion status tracking (pending → processing → completed/failed) with visible error messages
+- Adversarial fixtures: corrupt PDF, rotated pages, DOCX with tables, duplicate detection
+
+**Verification results:**
+- Frozen corpus: 36/36 files ingested (100% success rate, 95% gate met)
+- Matter A: 23/23 files (100%)
+- Matter B: 13/13 files (100%)
+- Adversarial: corrupt PDF → failed with visible error (0 pages, not silent empty doc)
+- Adversarial: duplicate → detected via SHA-256 hash match
+- Adversarial: rotated pages → parsed successfully (3 pages)
+- Adversarial: DOCX with tables → parsed successfully
+- Provenance audit: all sampled spans resolve to correct document, page, and offsets
+
+**ADRs written:**
+- ADR 002: Monorepo layout (api/ + web/ + docker-compose)
+- ADR 003: Ingestion pipeline — synchronous, in-process
+- ADR 004: Antivirus — deferred with documented reason (synthetic-only data in Week 3)
+
+**Reused from portfolio:** None written fresh. All code implemented from spec.
+
+**Related:** `api/`, `docker-compose.yml`, `adr/002-monorepo-layout.md`, `adr/003-ingestion-pipeline.md`, `adr/004-antivirus-deferred.md`
 
 **Decision:** At Daniel's direction, the following are frozen as of 2026-09-11:
 1. `testdata/corpus-v0.1/` — Matter A (Meridian Logistics Solutions, LLC v. Cascade Retail Group, Inc.), 23 documents + MANIFEST.md + corpus-facts.md
