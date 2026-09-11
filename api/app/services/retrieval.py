@@ -4,6 +4,7 @@
 
 import logging
 import math
+import re
 from dataclasses import dataclass
 from typing import List, Optional
 from sqlalchemy.orm import Session
@@ -14,7 +15,6 @@ from app.services.embedding import get_embedding, DEFAULT_MODEL_NAME
 logger = logging.getLogger(__name__)
 
 # Minimum similarity threshold for returning results
-# If no result exceeds this, return empty (answer-absent detection)
 MIN_VECTOR_SIMILARITY = 0.5
 
 
@@ -53,26 +53,66 @@ def cosine_similarity(a: List[float], b: List[float]) -> float:
     return dot / (norm_a * norm_b)
 
 
+def _build_or_tsquery(query_text: str) -> str:
+    """Build an OR-based tsquery from query text.
+    
+    Extracts meaningful terms and joins them with OR for broader matching.
+    """
+    # Remove common stop words and extract terms
+    stop_words = {'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been',
+                  'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
+                  'would', 'could', 'should', 'may', 'might', 'must', 'shall',
+                  'can', 'need', 'dare', 'ought', 'used', 'to', 'of', 'in',
+                  'for', 'on', 'with', 'at', 'by', 'from', 'as', 'into',
+                  'through', 'during', 'before', 'after', 'above', 'below',
+                  'between', 'under', 'again', 'further', 'then', 'once',
+                  'here', 'there', 'when', 'where', 'why', 'how', 'all',
+                  'each', 'few', 'more', 'most', 'other', 'some', 'such',
+                  'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than',
+                  'too', 'very', 'just', 'because', 'but', 'and', 'or',
+                  'if', 'while', 'what', 'which', 'who', 'whom', 'this',
+                  'that', 'these', 'those', 'am', 'it', 'its', 'i', 'my',
+                  'me', 'we', 'our', 'you', 'your', 'he', 'she', 'him',
+                  'his', 'her', 'they', 'them', 'their', 'what', 'which'}
+    
+    # Extract words (alphanumeric)
+    words = re.findall(r'[a-zA-Z]+', query_text.lower())
+    # Filter out stop words and short words
+    terms = [w for w in words if w not in stop_words and len(w) > 2]
+    
+    if not terms:
+        # Fallback: use all words
+        terms = [w for w in words if len(w) > 1]
+    
+    # Join with OR for broader matching
+    return ' | '.join(terms)
+
+
 def fts_search(db: Session, matter_id: str, query_text: str, top_k: int = 20) -> List[dict]:
     """Full-text search over chunks in a matter."""
     _ensure_fts_index(db)
+    
+    # Build OR-based tsquery for broader matching
+    tsquery = _build_or_tsquery(query_text)
+    
+    if not tsquery:
+        return []
 
-    # Use websearch_to_tsquery for flexible matching
     sql = text("""
         SELECT c.id, c.text, c.document_id, c.page_id, c.start_offset, c.end_offset,
                c.parser_version, c.content_hash, d.sha256,
-               ts_rank(to_tsvector('english', c.text), websearch_to_tsquery('english', :query)) AS rank
+               ts_rank(to_tsvector('english', c.text), to_tsquery('english', :query)) AS rank
         FROM chunks c
         JOIN documents d ON c.document_id = d.id
         WHERE c.matter_id = :matter_id
-          AND to_tsvector('english', c.text) @@ websearch_to_tsquery('english', :query)
+          AND to_tsvector('english', c.text) @@ to_tsquery('english', :query)
         ORDER BY rank DESC
         LIMIT :top_k
     """)
 
     results = db.execute(sql, {
         "matter_id": matter_id,
-        "query": query_text,
+        "query": tsquery,
         "top_k": top_k,
     }).fetchall()
 
@@ -139,10 +179,14 @@ def reciprocal_rank_fusion(
     fts_results: List[dict],
     vector_results: List[dict],
     k: int = 60,
-    fts_weight: float = 0.5,
-    vector_weight: float = 0.5,
+    fts_weight: float = 0.6,
+    vector_weight: float = 0.4,
 ) -> List[dict]:
-    """Fuse FTS and vector results using Reciprocal Rank Fusion."""
+    """Fuse FTS and vector results using Reciprocal Rank Fusion.
+    
+    FTS gets higher weight because exact term matches are stronger signals
+    for this type of legal document retrieval.
+    """
     scores = {}
 
     for rank, r in enumerate(fts_results):
@@ -207,18 +251,16 @@ def retrieve(
     FTS + vector fusion with reranking.
     Returns ranked citations with document-level deduplication.
     """
-    fts_results = fts_search(db, matter_id, query_text, top_k=20)
-    vector_results = vector_search(db, matter_id, query_text, top_k=20)
+    fts_results = fts_search(db, matter_id, query_text, top_k=30)
+    vector_results = vector_search(db, matter_id, query_text, top_k=30)
 
     # Check if we have any good matches
-    # If FTS returned nothing and best vector similarity is below threshold,
-    # this is likely an answer-absent query
     best_vector_sim = vector_results[0]["vector_similarity"] if vector_results else 0
     if not fts_results and best_vector_sim < MIN_VECTOR_SIMILARITY:
         return []
 
     fused = reciprocal_rank_fusion(fts_results, vector_results)
-    ranked = rerank(db, query_text, fused, top_k=top_k * 3)  # Get more results for dedup
+    ranked = rerank(db, query_text, fused, top_k=top_k * 4)  # Get more results for dedup
 
     # Deduplicate by document to ensure diversity in top results
     deduped = deduplicate_by_document(ranked, top_k=top_k)
