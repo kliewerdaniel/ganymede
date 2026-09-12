@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-12T13:18:06",
-  "recall_at_5": 65.51724137931035,
-  "found": 19,
+  "timestamp": "2026-09-12T13:35:06",
+  "recall_at_5": 79.3103448275862,
+  "found": 23,
   "total_answerable": 29,
   "unanswerable_clean": 0,
   "unanswerable_total": 21,
@@ -40,48 +40,6 @@
       "top_doc": "DOC-018-Handwritten-Notes.pdf"
     },
     {
-      "q_id": "Q11",
-      "question": "What date does the deposition notice set for the first deposition?",
-      "expected": [
-        "DOC-013-Deposition-Notice.pdf"
-      ],
-      "expected_shas": [
-        "d915c545d3bd213e6ef4fb6a45890a89b9e4c79c5962c382ae9d520c5e1d48d8"
-      ],
-      "found": false,
-      "citations_count": 5,
-      "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
-      "top_doc": "DOC-014-Chronology.pdf"
-    },
-    {
-      "q_id": "Q13",
-      "question": "What is the stated interest rate on the unpaid balance in the demand letter?",
-      "expected": [
-        "DOC-011-Demand-Letter.pdf"
-      ],
-      "expected_shas": [
-        "0e9c8cd07d37d2df04b17061fa4e0969c3720e8442da87fa9b912919be1e7afa"
-      ],
-      "found": false,
-      "citations_count": 5,
-      "top_sha": "7fd3238ccea5d38ffbdb8cdd90bdd903b5f41ab56ddaa97222b38eacfbb0518d",
-      "top_doc": "DOC-001-Complaint.pdf"
-    },
-    {
-      "q_id": "Q14",
-      "question": "Who is the court reporter named in the deposition scheduling order?",
-      "expected": [
-        "DOC-013-Deposition-Notice.pdf"
-      ],
-      "expected_shas": [
-        "d915c545d3bd213e6ef4fb6a45890a89b9e4c79c5962c382ae9d520c5e1d48d8"
-      ],
-      "found": false,
-      "citations_count": 5,
-      "top_sha": "ced31546e80fc2b64eeb94a511cea96218096054500630bbf3889dccea2e695f",
-      "top_doc": "DOC-013-Deposition-Notice.pdf"
-    },
-    {
       "q_id": "Q25",
       "question": "Which documents establish that the defendant received notice before filing?",
       "expected": [
@@ -90,7 +48,7 @@
       ],
       "expected_shas": [
         "0b53b6a56768934ca72b9ca6ae81dec0cbd19796014cb21b1011bf443dd95505",
-        "07e4df163afdb08c893269e797ea15d1843bfaf29fb33d49ec001136c5bc8fed"
+        "58c57a53836ab1126c761b2ac0aa4016fafe30e8c4e80484c740f08ec8d27614"
       ],
       "found": false,
       "citations_count": 5,
@@ -104,26 +62,12 @@
         "DOC-009-Notice-of-Default.pdf"
       ],
       "expected_shas": [
-        "07e4df163afdb08c893269e797ea15d1843bfaf29fb33d49ec001136c5bc8fed"
+        "58c57a53836ab1126c761b2ac0aa4016fafe30e8c4e80484c740f08ec8d27614"
       ],
       "found": false,
       "citations_count": 5,
       "top_sha": "8c0a06cf2ea94d163422037d497f4d70b4e50140b8faa5fe89c35c80de9f9c49",
       "top_doc": "DOC-003-MSA.docx"
-    },
-    {
-      "q_id": "Q36",
-      "question": "List the filing dates for each document in the court docket excerpt",
-      "expected": [
-        "DOC-020-Docket.pdf"
-      ],
-      "expected_shas": [
-        "861b4e4a8392e9fb465d2e73a923fdf8737040d63165f656ff5cc88fb9c8b1b8"
-      ],
-      "found": false,
-      "citations_count": 5,
-      "top_sha": "424c1de39885020e653a9e8f2055198442370cd5f6df80e9d1d929b84b61114b",
-      "top_doc": "DOC-020-Docket.pdf"
     },
     {
       "q_id": "Q46",
@@ -133,7 +77,7 @@
         "DOC-019-Deposition-Transcript.pdf"
       ],
       "expected_shas": [
-        "d915c545d3bd213e6ef4fb6a45890a89b9e4c79c5962c382ae9d520c5e1d48d8",
+        "ced31546e80fc2b64eeb94a511cea96218096054500630bbf3889dccea2e695f",
         "267bccac23ca6f15fa9f52dcc91915c4a8e27d9dca9c8090e4b3397ec852ac80"
       ],
       "found": false,
@@ -149,8 +93,8 @@
         "DOC-017-Notice-Email.pdf"
       ],
       "expected_shas": [
-        "4dc8881313cb43106f03dfe3a319fd78be9419d54c2ff4c3bb2f389174a7a0a9",
-        "07e4df163afdb08c893269e797ea15d1843bfaf29fb33d49ec001136c5bc8fed"
+        "58c57a53836ab1126c761b2ac0aa4016fafe30e8c4e80484c740f08ec8d27614",
+        "4dc8881313cb43106f03dfe3a319fd78be9419d54c2ff4c3bb2f389174a7a0a9"
       ],
       "found": false,
       "citations_count": 5,
@@ -328,5 +272,5 @@
       "top_doc": "DOC-016-Technical-Report.docx"
     }
   ],
-  "query_time_total_s": 10.757081031799316
+  "query_time_total_s": 10.418604850769043
 }

@@ -2,7 +2,7 @@
 
 **Status:** Supplemental to ADR 006 (Accepted)
 **Date:** 2026-09-12
-**Trigger:** ADR 006's own revisit trigger fired — Recall@5 below 80% target on the full 28-question gold set.
+**Trigger:** ADR 006's own revisit trigger fired — Recall@5 below 80% target on the full 29-question gold set.
 
 ---
 
@@ -47,7 +47,7 @@ bge-m3 is both slower and less accurate on the frozen gold set. The 21.4 pp Reca
 - 768-dim vectors remain compatible with existing pgvector index.
 
 **Costs:**
-- Recall@5 remains below the 80% target (64.3% on full 28-question set).
+- Recall@5 remains below the 80% target (64.3% on full 28-question set for nomic alone; 79.3% with RRF fusion on 29-question set).
 - The embedding model is not the primary bottleneck — fusion and answer-absent precision are larger gaps.
 
 **Hardens:**
