@@ -4,6 +4,7 @@
 
 import logging
 import math
+import os
 import re
 from dataclasses import dataclass
 from typing import List, Optional
@@ -16,6 +17,20 @@ logger = logging.getLogger(__name__)
 
 # Minimum similarity threshold for returning results
 MIN_VECTOR_SIMILARITY = 0.55
+
+# RRF abstention gate: if the top fused result's RRF score is below this,
+# no document is a strong enough match — return nothing.
+RRF_ABSTENTION_THRESHOLD = 0.003
+
+# ReRanker: try local cross-encoder if available.
+# Set via RECRANKER_MODEL_PATH env var; defaults to locally-cached
+# cross-encoder/ms-marco-MiniLM-L-6-v2 (sentence-transformers).
+# If unset or load fails, falls back to RRF score ordering.
+_DEFAULT_RERANKER_PATH = os.path.expanduser(
+    "~/.cache/huggingface/hub/models--cross-encoder--ms-marco-MiniLM-L-6-v2/"
+    "snapshots/233902d25c440f23af6f7d6e94d2946bac0bee0a"
+)
+RECRANKER_MODEL_PATH = os.environ.get("RECRANKER_MODEL_PATH", _DEFAULT_RERANKER_PATH)
 
 
 @dataclass
@@ -208,17 +223,48 @@ def rerank(
     fused_results: List[dict],
     top_k: int = 10,
 ) -> List[dict]:
-    """Rerank fused results. Falls back to RRF score."""
+    """Rerank fused results. Uses local cross-encoder if RECRANKER_MODEL_PATH is set,
+    otherwise falls back to RRF score ordering. Applies RRF abstention gate:
+    if the top result's RRF score is below RRF_ABSTENTION_THRESHOLD, returns empty."""
     if not fused_results:
         return []
 
-    fused_results.sort(key=lambda x: x.get("rrf_score", 0), reverse=True)
-
-    # If the top result's RRF score is too low, no document is a strong match
-    if fused_results[0].get("rrf_score", 0) < 0.005:
+    # Apply RRF abstention gate
+    if fused_results[0].get("rrf_score", 0) < RRF_ABSTENTION_THRESHOLD:
         return []
 
+    if RECRANKER_MODEL_PATH:
+        try:
+            import numpy as np
+            model = _load_reranker()
+            reranked = _rerank_with_model(model, query_text, fused_results)
+            reranked.sort(key=lambda x: x.get("reranker_score", 0), reverse=True)
+            for r in reranked:
+                r["rrf_score"] = r.get("rrf_score", 0)  # preserve RRF score in output
+            return reranked[:top_k]
+        except Exception as e:
+            logger.warning(f"Cross-encoder reranking failed, falling back to RRF: {e}")
+
+    # Fallback: RRF score ordering
+    fused_results.sort(key=lambda x: x.get("rrf_score", 0), reverse=True)
     return fused_results[:top_k]
+
+
+def _load_reranker():
+    """Load a local cross-encoder model. Must be set via RECRANKER_MODEL_PATH."""
+    import sentence_transformers
+    if not RECRANKER_MODEL_PATH:
+        raise RuntimeError("RECRANKER_MODEL_PATH is not set — cannot load cross-encoder")
+    return sentence_transformers.CrossEncoder(RECRANKER_MODEL_PATH)
+
+
+def _rerank_with_model(model, query: str, results: List[dict]) -> List[dict]:
+    """Score each result with the cross-encoder and attach reranker_score."""
+    pairs = [(query, r["text"]) for r in results]
+    scores = model.predict(pairs)
+    for r, s in zip(results, scores):
+        r["reranker_score"] = float(s)
+    return results
 
 
 def deduplicate_by_sha256(results: List[dict], top_k: int = 5) -> List[dict]:
@@ -250,7 +296,7 @@ def retrieve(
         return []
 
     fused = reciprocal_rank_fusion(fts_results, vector_results)
-    if not fused or fused[0].get("rrf_score", 0) < 0.003:
+    if not fused or fused[0].get("rrf_score", 0) < RRF_ABSTENTION_THRESHOLD:
         return []
 
     ranked = rerank(db, query_text, fused, top_k=top_k * 4)

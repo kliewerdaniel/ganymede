@@ -9,12 +9,20 @@ from typing import List
 from sqlalchemy.orm import Session
 from app.models import Chunk, ChunkEmbedding
 
+import requests
+
 logger = logging.getLogger(__name__)
 
 # Model configuration
 DEFAULT_MODEL_NAME = "nomic-embed-text"
 DEFAULT_MODEL_VERSION = "latest"
 EMBEDDING_DIMENSION = 768
+
+
+class EmbeddingServiceError(Exception):
+    """Raised when embedding generation fails — never silently falls back to random vectors."""
+    pass
+
 
 # Ollama endpoints to try (in order)
 OLLAMA_ENDPOINTS_ENV = os.environ.get("OLLAMA_ENDPOINTS", "localhost:11434")
@@ -38,7 +46,13 @@ def get_embedding(text: str, model_name: str = DEFAULT_MODEL_NAME) -> List[float
                 timeout=10,
             )
             if response.status_code == 200:
-                return response.json()["embedding"]
+                result = response.json()
+                embedding = result.get("embedding")
+                if not embedding:
+                    raise EmbeddingServiceError(f"Empty embedding from Ollama at {endpoint} for model {model_name}")
+                if len(embedding) != EMBEDDING_DIMENSION:
+                    raise EmbeddingServiceError(f"Unexpected embedding dimension {len(embedding)} (expected {EMBEDDING_DIMENSION}) from {model_name}")
+                return embedding
         except Exception as e:
             logger.debug(f"Ollama endpoint {endpoint} failed: {e}")
             continue

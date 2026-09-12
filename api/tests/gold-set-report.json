@@ -1,8 +1,12 @@
 {
-  "timestamp": "2026-09-11T18:18:45",
-  "recall_at_5": 58.333333333333336,
-  "found": 14,
-  "total": 24,
+  "timestamp": "2026-09-12T13:18:06",
+  "recall_at_5": 65.51724137931035,
+  "found": 19,
+  "total_answerable": 29,
+  "unanswerable_clean": 0,
+  "unanswerable_total": 21,
+  "not_in_corpus_clean": 0,
+  "answer_absent_clean": 0,
   "pass": false,
   "misses": [
     {
@@ -11,8 +15,13 @@
       "expected": [
         "DOC-014-Chronology.pdf"
       ],
+      "expected_shas": [
+        "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+      "top_doc": "DOC-002-Answer.pdf"
     },
     {
       "q_id": "Q09",
@@ -21,8 +30,14 @@
         "DOC-007-Invoice-1044.docx",
         "DOC-008-Invoice-1045.docx"
       ],
+      "expected_shas": [
+        "4eb0e27673f43b139675ef0fd23f932ade94d0ab766610b271f713bb4a1f1906",
+        "99c7baace1b7ed68112e4581ccb9e807d369509aa7787f90e70591c2a524edc9"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "d7bde94ac76c68a49df723922a6bceb3f1b88f00d8f3f60ce7de335874a31ac7",
+      "top_doc": "DOC-018-Handwritten-Notes.pdf"
     },
     {
       "q_id": "Q11",
@@ -30,8 +45,13 @@
       "expected": [
         "DOC-013-Deposition-Notice.pdf"
       ],
+      "expected_shas": [
+        "d915c545d3bd213e6ef4fb6a45890a89b9e4c79c5962c382ae9d520c5e1d48d8"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
+      "top_doc": "DOC-014-Chronology.pdf"
     },
     {
       "q_id": "Q13",
@@ -39,8 +59,13 @@
       "expected": [
         "DOC-011-Demand-Letter.pdf"
       ],
+      "expected_shas": [
+        "0e9c8cd07d37d2df04b17061fa4e0969c3720e8442da87fa9b912919be1e7afa"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "7fd3238ccea5d38ffbdb8cdd90bdd903b5f41ab56ddaa97222b38eacfbb0518d",
+      "top_doc": "DOC-001-Complaint.pdf"
     },
     {
       "q_id": "Q14",
@@ -48,8 +73,13 @@
       "expected": [
         "DOC-013-Deposition-Notice.pdf"
       ],
+      "expected_shas": [
+        "d915c545d3bd213e6ef4fb6a45890a89b9e4c79c5962c382ae9d520c5e1d48d8"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "ced31546e80fc2b64eeb94a511cea96218096054500630bbf3889dccea2e695f",
+      "top_doc": "DOC-013-Deposition-Notice.pdf"
     },
     {
       "q_id": "Q25",
@@ -58,8 +88,14 @@
         "DOC-009-Notice-of-Default.pdf",
         "DOC-010-Response-Letter.pdf"
       ],
+      "expected_shas": [
+        "0b53b6a56768934ca72b9ca6ae81dec0cbd19796014cb21b1011bf443dd95505",
+        "07e4df163afdb08c893269e797ea15d1843bfaf29fb33d49ec001136c5bc8fed"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+      "top_doc": "DOC-002-Answer.pdf"
     },
     {
       "q_id": "Q33",
@@ -67,8 +103,13 @@
       "expected": [
         "DOC-009-Notice-of-Default.pdf"
       ],
+      "expected_shas": [
+        "07e4df163afdb08c893269e797ea15d1843bfaf29fb33d49ec001136c5bc8fed"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "8c0a06cf2ea94d163422037d497f4d70b4e50140b8faa5fe89c35c80de9f9c49",
+      "top_doc": "DOC-003-MSA.docx"
     },
     {
       "q_id": "Q36",
@@ -76,8 +117,13 @@
       "expected": [
         "DOC-020-Docket.pdf"
       ],
+      "expected_shas": [
+        "861b4e4a8392e9fb465d2e73a923fdf8737040d63165f656ff5cc88fb9c8b1b8"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "424c1de39885020e653a9e8f2055198442370cd5f6df80e9d1d929b84b61114b",
+      "top_doc": "DOC-020-Docket.pdf"
     },
     {
       "q_id": "Q46",
@@ -86,8 +132,14 @@
         "DOC-013-Deposition-Notice.pdf",
         "DOC-019-Deposition-Transcript.pdf"
       ],
+      "expected_shas": [
+        "d915c545d3bd213e6ef4fb6a45890a89b9e4c79c5962c382ae9d520c5e1d48d8",
+        "267bccac23ca6f15fa9f52dcc91915c4a8e27d9dca9c8090e4b3397ec852ac80"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "daff19c2a010d71cb35e9f9fc1244f67cffc6c8d4bc609801978cd7228e09f32",
+      "top_doc": "DOC-016-Technical-Report.docx"
     },
     {
       "q_id": "Q49",
@@ -96,14 +148,185 @@
         "DOC-009-Notice-of-Default.pdf",
         "DOC-017-Notice-Email.pdf"
       ],
+      "expected_shas": [
+        "4dc8881313cb43106f03dfe3a319fd78be9419d54c2ff4c3bb2f389174a7a0a9",
+        "07e4df163afdb08c893269e797ea15d1843bfaf29fb33d49ec001136c5bc8fed"
+      ],
       "found": false,
-      "citations_count": 5
+      "citations_count": 5,
+      "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
+      "top_doc": "DOC-014-Chronology.pdf"
     }
   ],
-  "answer_absent": {
-    "clean": 0,
-    "total": 6,
-    "pass": false
-  },
-  "query_time_total_s": 2.012409210205078
+  "leaks": [
+    {
+      "q_id": "Q02",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "7fd3238ccea5d38ffbdb8cdd90bdd903b5f41ab56ddaa97222b38eacfbb0518d",
+      "top_doc": "DOC-001-Complaint.pdf"
+    },
+    {
+      "q_id": "Q03",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "8c0a06cf2ea94d163422037d497f4d70b4e50140b8faa5fe89c35c80de9f9c49",
+      "top_doc": "DOC-003-MSA.docx"
+    },
+    {
+      "q_id": "Q06",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "589552a867d0b3cb1ad2784d453c9169303a0acbd6992a5fbd7452644331b454",
+      "top_doc": "DOC-004-Amendment-No-1.docx"
+    },
+    {
+      "q_id": "Q10",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "8c0a06cf2ea94d163422037d497f4d70b4e50140b8faa5fe89c35c80de9f9c49",
+      "top_doc": "DOC-003-MSA.docx"
+    },
+    {
+      "q_id": "Q16",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "8c0a06cf2ea94d163422037d497f4d70b4e50140b8faa5fe89c35c80de9f9c49",
+      "top_doc": "DOC-003-MSA.docx"
+    },
+    {
+      "q_id": "Q18",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "509d2b685e284f1562e2bb2472fd860c59769d1588f791f45fe3042528472c7b",
+      "top_doc": "DOC-018b-Additional-Terms.pdf"
+    },
+    {
+      "q_id": "Q20",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "589552a867d0b3cb1ad2784d453c9169303a0acbd6992a5fbd7452644331b454",
+      "top_doc": "DOC-004-Amendment-No-1.docx"
+    },
+    {
+      "q_id": "Q23",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "7fd3238ccea5d38ffbdb8cdd90bdd903b5f41ab56ddaa97222b38eacfbb0518d",
+      "top_doc": "DOC-001-Complaint.pdf"
+    },
+    {
+      "q_id": "Q24",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "8c0a06cf2ea94d163422037d497f4d70b4e50140b8faa5fe89c35c80de9f9c49",
+      "top_doc": "DOC-003-MSA.docx"
+    },
+    {
+      "q_id": "Q26",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+      "top_doc": "DOC-002-Answer.pdf"
+    },
+    {
+      "q_id": "Q27",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+      "top_doc": "DOC-002-Answer.pdf"
+    },
+    {
+      "q_id": "Q28",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "99c7baace1b7ed68112e4581ccb9e807d369509aa7787f90e70591c2a524edc9",
+      "top_doc": "DOC-007-Invoice-1044.docx"
+    },
+    {
+      "q_id": "Q30",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "589552a867d0b3cb1ad2784d453c9169303a0acbd6992a5fbd7452644331b454",
+      "top_doc": "DOC-004-Amendment-No-1.docx"
+    },
+    {
+      "q_id": "Q35",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "7fbdc675bd7a537a287d966b29a75820dca051c2c4dca1b7878cdf684b0ce434",
+      "top_doc": "DOC-012-Settlement-Email.pdf"
+    },
+    {
+      "q_id": "Q37",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
+      "top_doc": "DOC-014-Chronology.pdf"
+    },
+    {
+      "q_id": "Q39",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "d7bde94ac76c68a49df723922a6bceb3f1b88f00d8f3f60ce7de335874a31ac7",
+      "top_doc": "DOC-018-Handwritten-Notes.pdf"
+    },
+    {
+      "q_id": "Q40",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+      "top_doc": "DOC-002-Answer.pdf"
+    },
+    {
+      "q_id": "Q41",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
+      "top_doc": "DOC-014-Chronology.pdf"
+    },
+    {
+      "q_id": "Q42",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "589552a867d0b3cb1ad2784d453c9169303a0acbd6992a5fbd7452644331b454",
+      "top_doc": "DOC-004-Amendment-No-1.docx"
+    },
+    {
+      "q_id": "Q43",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "4eb0e27673f43b139675ef0fd23f932ade94d0ab766610b271f713bb4a1f1906",
+      "top_doc": "DOC-008-Invoice-1045.docx"
+    },
+    {
+      "q_id": "Q44",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "top_sha": "daff19c2a010d71cb35e9f9fc1244f67cffc6c8d4bc609801978cd7228e09f32",
+      "top_doc": "DOC-016-Technical-Report.docx"
+    }
+  ],
+  "query_time_total_s": 10.757081031799316
 }
