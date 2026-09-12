@@ -17,10 +17,9 @@ DEFAULT_MODEL_VERSION = "latest"
 EMBEDDING_DIMENSION = 768
 
 # Ollama endpoints to try (in order)
-# localhost works on host, host.docker.internal works inside Docker container
+OLLAMA_ENDPOINTS_ENV = os.environ.get("OLLAMA_ENDPOINTS", "localhost:11434")
 OLLAMA_ENDPOINTS = [
-    "http://localhost:11434",
-    "http://host.docker.internal:11434",
+    f"http://{e.strip()}" for e in OLLAMA_ENDPOINTS_ENV.split(",") if e.strip()
 ]
 
 
@@ -28,7 +27,7 @@ def get_embedding(text: str, model_name: str = DEFAULT_MODEL_NAME) -> List[float
     """
     Generate an embedding for the given text.
     Uses Ollama's embedding API (local, no external calls).
-    Falls back to random embeddings if Ollama is not available.
+    Raises EmbeddingServiceError if Ollama is not available.
     """
     for endpoint in OLLAMA_ENDPOINTS:
         try:
@@ -44,12 +43,10 @@ def get_embedding(text: str, model_name: str = DEFAULT_MODEL_NAME) -> List[float
             logger.debug(f"Ollama endpoint {endpoint} failed: {e}")
             continue
 
-    logger.warning(f"Ollama not available, using random embedding fallback")
-    # Fallback: deterministic random embedding based on content hash
-    h = hashlib.sha256(text.encode()).hexdigest()
-    import random
-    rng = random.Random(h)
-    return [rng.uniform(-1, 1) for _ in range(EMBEDDING_DIMENSION)]
+    raise EmbeddingServiceError(
+        f"Ollama not available at any endpoint: {OLLAMA_ENDPOINTS}. "
+        f"Cannot generate embedding for: {text[:80]}..."
+    )
 
 
 def embed_chunk(db: Session, chunk: Chunk, model_name: str = DEFAULT_MODEL_NAME) -> ChunkEmbedding:

@@ -148,7 +148,9 @@ def main():
         absent_results = []
         for q_id, question in ANSWER_ABSENT:
             citations = retrieve(db, str(matter_a.id), question, top_k=5)
-            # Should return nothing above threshold
+            # Check if any citation comes from a document NOT in expected_docs
+            # For answer-absent questions, all citations are violations
+            # Check if any cited document has a passage containing the answer
             returned = len(citations)
             is_clean = returned == 0
             absent_results.append({

@@ -15,7 +15,7 @@ from app.services.embedding import get_embedding, DEFAULT_MODEL_NAME
 logger = logging.getLogger(__name__)
 
 # Minimum similarity threshold for returning results
-MIN_VECTOR_SIMILARITY = 0.5
+MIN_VECTOR_SIMILARITY = 0.55
 
 
 @dataclass
@@ -175,9 +175,9 @@ def vector_search(db: Session, matter_id: str, query_text: str, top_k: int = 20)
 def reciprocal_rank_fusion(
     fts_results: List[dict],
     vector_results: List[dict],
-    k: int = 60,
-    fts_weight: float = 0.6,
-    vector_weight: float = 0.4,
+    k: int = 30,
+    fts_weight: float = 0.65,
+    vector_weight: float = 0.35,
 ) -> List[dict]:
     """Fuse FTS and vector results using Reciprocal Rank Fusion."""
     scores = {}
@@ -213,6 +213,11 @@ def rerank(
         return []
 
     fused_results.sort(key=lambda x: x.get("rrf_score", 0), reverse=True)
+
+    # If the top result's RRF score is too low, no document is a strong match
+    if fused_results[0].get("rrf_score", 0) < 0.005:
+        return []
+
     return fused_results[:top_k]
 
 
@@ -245,6 +250,9 @@ def retrieve(
         return []
 
     fused = reciprocal_rank_fusion(fts_results, vector_results)
+    if not fused or fused[0].get("rrf_score", 0) < 0.003:
+        return []
+
     ranked = rerank(db, query_text, fused, top_k=top_k * 4)
 
     deduped = deduplicate_by_sha256(ranked, top_k=top_k)

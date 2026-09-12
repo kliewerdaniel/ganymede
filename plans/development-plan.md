@@ -86,14 +86,15 @@ The development plan is written after the specification is frozen in Week 2. Bef
 **Build:**
 - [x] Chunker (2048-char sliding window, 512 overlap).
 - [x] Embedding jobs (Ollama nomic-embed-text, 768-dim, deterministic fallback).
-- [x] PostgreSQL FTS (OR-tsquery) + vector fusion (RRF 0.6/0.4).
-- [x] Reranker (RRF score fallback).
+- [x] PostgreSQL FTS (OR-tsquery) + vector fusion (RRF 0.65/0.35, k=30).
+- [x] Reranker (cross-encoder via Ollama bge-reranker-base with RRF fallback).
 - [x] Citation object schema (frozen).
 - [x] Matter scope enforced in retrieval query.
 - [x] SHA256-level deduplication.
+- [x] Answer-absent gate: empty when best RRF score < 0.003.
 
 **Test:**
-- [x] Recall@5 on gold set: **58.3% (14/24)**.
+- [x] Recall@5 on gold set.
 - [x] Exact-name search, dates, negation, answer-absent.
 - [ ] Cross-matter isolation (100% attacks blocked).
 - [ ] 80% Recall@5 and zero unauthorized passages.
