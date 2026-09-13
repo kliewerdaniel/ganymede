@@ -61,6 +61,12 @@ This is the fail-closed tradeoff the SKILL.md requires: "Model output is untrust
 
 **Related:** `api/tests/full-pipeline-report.json`
 
+**Note on verifier prompt:** The prompt requires "exact quoting span from passage." When query expansion introduces synonyms (breach→default breach), the retrieved passages contain the synonym, but the verifier checks against the original question's wording and says NO. Two paths forward:
+1. Version-bump the prompt to instruct the verifier to accept synonym-equivalent answers (tradeoff: may increase false positives on unanswerable queries)
+2. Use a larger verification model (qwen3:8b) that understands semantic equivalence
+
+Both deferred to Week 5 after usability sessions with the current strict configuration.
+
 ---
 
 ## Recall@5 measurement with legal_synonyms expansion: 86.2% (PASS)

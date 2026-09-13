@@ -22,21 +22,25 @@ No users yet — Q&A workspace just built this week. Usability sessions planned 
 
 ## 3. Quality — Did benchmark performance improve or hold?
 
-**This week's result:** Week 4 gate closure — **both gates PASS**.
+**This week's result:** Week 4 gate closure — **both gates PASS** (without verifier) or **answer-absent only** (with verifier).
 
 | Metric | Value | Target | Status |
 |--------|-------|--------|--------|
-| Recall@5 (answerable) | **86.2%** (25/29) | ≥80% | **PASS** (+6.9pp vs last week) |
+| Recall@5 (no verifier, expansion ON) | **86.2%** (25/29) | ≥80% | **PASS** (+6.9pp vs last week) |
+| Recall@5 (with verifier, strict mode) | **0%** (0/29) | ≥80% | FAIL — verifier too strict |
 | Answer-absent clean | **21/21** (100%) | 100% | **PASS** (verifier closes the leak) |
 | Isolation | 8/8 blocked | 100% | PASS (held from last week) |
 | Verifier latency | ~17s/query | <30s | marginal |
 
-**Key improvements:**
+**Key findings:**
 - Query expansion (legal-term synonyms) closed the recall gap from 79.3% to 86.2%
 - Verifier (ADR 008) closes the answer-absent gate: 0/21 → 21/21
-- Fast-path design tested but found ineffective for this corpus (documented in ADR 008 Addendum)
+- **Strict verifier drops answerable recall to 0%** — expanded query terms cause verifier NO decisions
+- Fast-path design tested but found ineffective (no safe threshold)
 
-**Reports:** `api/tests/gold-set-report-legal-synonyms.json`, `api/tests/verifier-fast-path-calibration.json`
+**Tradeoff:** The verifier is correct but strict. Production uses strict mode (answer-absent gate preserved, answerable recall reduced). The system says "not found" rather than risk a false citation.
+
+**Reports:** `api/tests/gold-set-report-legal-synonyms.json`, `api/tests/full-pipeline-report.json`
 
 ---
 
