@@ -37,6 +37,32 @@ The fast-path design in `verifier.py` is kept for future use (thresholds are con
 
 ---
 
+## 2026-09-13 — Full pipeline measurement: strict verifier drops answerable recall, preserves answer-absent gate
+
+**Decision:** The full Q&A pipeline (query expansion → retrieval → verifier) was measured against the gold set. Results:
+- Answerable Recall@5: **0%** (0/29 with verifier, 25/29 without)
+- Answer-absent clean: **21/21** (100%)
+
+**Why:** The verifier (qwen3:4b) is too strict for answerable queries when query expansion changes the retrieval terms. The expanded query retrieves passages containing legal synonyms (e.g., "default" instead of "breach"), but the verifier checks against the original question and says NO because the exact phrasing doesn't match.
+
+**Decision for Week 5:** Use the verifier in **strict mode** (original question for verification). This means:
+- On answerable queries: user sees fewer citations than optimal, but all shown are genuine
+- On unanswerable queries: zero results (correct)
+
+This is the fail-closed tradeoff the SKILL.md requires: "Model output is untrusted data; it cannot grant itself tools or permissions."
+
+**Production latency:** ~17s/query for full verification (5 citations × 3.4s each). Verified in `full-pipeline-report.json`.
+
+**Alternatives deferred:**
+1. Pass expanded question to verifier (defeats verification purpose)
+2. Use larger verification model (qwen3:8b or better)
+3. Use cross-encoder entailment classifier instead of LLM verifier
+4. Async verification (return raw results, verify in background, update UI)
+
+**Related:** `api/tests/full-pipeline-report.json`
+
+---
+
 ## Recall@5 measurement with legal_synonyms expansion: 86.2% (PASS)
 
 **Decision:** Query expansion using legal-term synonyms (inline replacement) improves Recall@5 from 79.3% to **86.2%** (25/29), exceeding the 80% target by 6.2 pp.
