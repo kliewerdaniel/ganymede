@@ -93,7 +93,7 @@ The development plan is written after the specification is frozen in Week 2. Bef
 - [x] Recall@5 on gold set.
 - [x] Exact-name search, dates, negation, answer-absent.
 - [x] Cross-matter isolation (100% attacks blocked). — **PASS (8/8 blocked, verified 2026-09-12)**
-- [ ] 80% Recall@5 and zero unauthorized passages. — **FAIL (79.3% Recall@5, 0% answer-absent; 6 structural misses; see ADR 007 Addendum)**
+- [ ] 80% Recall@5 and zero unauthorized passages. — **FAIL (79.3% Recall@5 = 23/29; 0% answer-absent = 0/21 clean; 6 structural misses; see ADR 007 Addendum)**
 - [ ] Reranker improves precision without unacceptable latency. — **FAIL (zero recall gain, +520 ms/query; see ADR 007 Addendum)**
 
 **Exit:** evidence returned before prose. — **NOT MET (retrieval 0.7 pp below target; answer-absent 0%; block Week 5)**

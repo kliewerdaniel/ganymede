@@ -62,7 +62,15 @@
 
 ---
 
-## vs. ADRs
+## 2026-09-12 — DB schema tech debt: FK cascade deletes disabled, raw SQL used for cleanup
+
+**Decision:** Log a schema tech debt. The SQLAlchemy models do not configure cascade deletes on foreign key relationships (no `cascade="all, delete-orphan"` on `Document→pages`, `Document→chunks`, `Chunk→chunk_embeddings`, `Document→ingestion_jobs`). When cleaning 691 duplicate documents + 4 corrigendum old-SHA records on 2026-09-12, ORM-level deletion failed with `NotNullViolation` (ingestion_jobs.document_id) and `ForeignKeyViolation` (pages.document_id). The cleanup was performed via raw SQL in reverse-dependency order: `chunk_embeddings → chunks → pages → ingestion_jobs → documents`.
+
+**Impact:** Test DB only. The cleanup worked but required manual SQL ordering knowledge. If a future cleanup needs to remove documents, the same FK issue will recur.
+
+**Fix (deferred):** Add `cascade="all, delete-orphan"` to the `Document.pages`, `Document.chunks`, and related relationships in `api/app/models/`. This is a test-environment issue but the schema should be correct regardless.
+
+**Related:** `decisions/log.md` (DB cleanup entry above); `api/app/models/` (relationship definitions).
 
 - **ADR:** material technical decision with context, consequences, and alternatives. Written before implementation.
 - **Decision log:** narrower, operational, or provisional decisions. Still written down, still dated, still watched.

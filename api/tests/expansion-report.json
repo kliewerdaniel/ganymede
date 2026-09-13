@@ -1,0 +1,263 @@
+{
+  "timestamp": "2026-09-12T18:16:21",
+  "n_misses_tested": 6,
+  "variants": [
+    "original",
+    "date_normalized",
+    "legal_synonyms",
+    "combined"
+  ],
+  "per_question": [
+    {
+      "q_id": "Q05",
+      "question": "On what date did the first breach notice arrive?",
+      "expected": [
+        "DOC-014-Chronology.pdf"
+      ],
+      "variants": {
+        "original": {
+          "found": false,
+          "top_doc": "DOC-002-Answer.pdf",
+          "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+          "elapsed_ms": 3201.655149459839,
+          "n_citations": 5,
+          "query_used": "On what date did the first breach notice arrive?"
+        },
+        "date_normalized": {
+          "found": false,
+          "top_doc": "DOC-002-Answer.pdf",
+          "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+          "elapsed_ms": 324.6140480041504,
+          "n_citations": 5,
+          "query_used": "On what DATE date did the first breach notice arrive?"
+        },
+        "legal_synonyms": {
+          "found": true,
+          "top_doc": "DOC-017-Notice-Email.pdf",
+          "top_sha": "4dc8881313cb43106f03dfe3a319fd78be9419d54c2ff4c3bb2f389174a7a0a9",
+          "elapsed_ms": 311.5499019622803,
+          "n_citations": 5,
+          "query_used": "On what date did the first default breach notice demand arrive?"
+        },
+        "combined": {
+          "found": false,
+          "top_doc": "DOC-017-Notice-Email.pdf",
+          "top_sha": "4dc8881313cb43106f03dfe3a319fd78be9419d54c2ff4c3bb2f389174a7a0a9",
+          "elapsed_ms": 1409.869909286499,
+          "n_citations": 5,
+          "query_used": "On what DATE date did the first default breach notice demand arrive?"
+        }
+      }
+    },
+    {
+      "q_id": "Q09",
+      "question": "What is the contract price stated in the invoice that matches the dispute?",
+      "expected": [
+        "DOC-007-Invoice-1044.docx",
+        "DOC-008-Invoice-1045.docx"
+      ],
+      "variants": {
+        "original": {
+          "found": false,
+          "top_doc": "DOC-018-Handwritten-Notes.pdf",
+          "top_sha": "d7bde94ac76c68a49df723922a6bceb3f1b88f00d8f3f60ce7de335874a31ac7",
+          "elapsed_ms": 336.64798736572266,
+          "n_citations": 5,
+          "query_used": "What is the contract price stated in the invoice that matches the dispute?"
+        },
+        "date_normalized": {
+          "found": false,
+          "top_doc": "DOC-018-Handwritten-Notes.pdf",
+          "top_sha": "d7bde94ac76c68a49df723922a6bceb3f1b88f00d8f3f60ce7de335874a31ac7",
+          "elapsed_ms": 274.8837471008301,
+          "n_citations": 5,
+          "query_used": "What is the contract price stated in the invoice that matches the dispute?"
+        },
+        "legal_synonyms": {
+          "found": false,
+          "top_doc": "DOC-018-Handwritten-Notes.pdf",
+          "top_sha": "d7bde94ac76c68a49df723922a6bceb3f1b88f00d8f3f60ce7de335874a31ac7",
+          "elapsed_ms": 511.58595085144043,
+          "n_citations": 5,
+          "query_used": "What is the contract price stated in the invoice contract price that matches the"
+        },
+        "combined": {
+          "found": false,
+          "top_doc": "DOC-018-Handwritten-Notes.pdf",
+          "top_sha": "d7bde94ac76c68a49df723922a6bceb3f1b88f00d8f3f60ce7de335874a31ac7",
+          "elapsed_ms": 279.7729969024658,
+          "n_citations": 5,
+          "query_used": "What is the contract price stated in the invoice contract price that matches the"
+        }
+      }
+    },
+    {
+      "q_id": "Q25",
+      "question": "Which documents establish that the defendant received notice before filing?",
+      "expected": [
+        "DOC-009-Notice-of-Default.pdf",
+        "DOC-010-Response-Letter.pdf"
+      ],
+      "variants": {
+        "original": {
+          "found": false,
+          "top_doc": "DOC-002-Answer.pdf",
+          "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+          "elapsed_ms": 281.33082389831543,
+          "n_citations": 5,
+          "query_used": "Which documents establish that the defendant received notice before filing?"
+        },
+        "date_normalized": {
+          "found": false,
+          "top_doc": "DOC-002-Answer.pdf",
+          "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+          "elapsed_ms": 266.12401008605957,
+          "n_citations": 5,
+          "query_used": "Which documents establish that the defendant received notice before filing?"
+        },
+        "legal_synonyms": {
+          "found": false,
+          "top_doc": "DOC-020-Docket.pdf",
+          "top_sha": "424c1de39885020e653a9e8f2055198442370cd5f6df80e9d1d929b84b61114b",
+          "elapsed_ms": 302.69384384155273,
+          "n_citations": 5,
+          "query_used": "Which document filings establish that the defendant received notice demand befor"
+        },
+        "combined": {
+          "found": false,
+          "top_doc": "DOC-020-Docket.pdf",
+          "top_sha": "424c1de39885020e653a9e8f2055198442370cd5f6df80e9d1d929b84b61114b",
+          "elapsed_ms": 277.7750492095947,
+          "n_citations": 5,
+          "query_used": "Which document filings establish that the defendant received notice demand befor"
+        }
+      }
+    },
+    {
+      "q_id": "Q33",
+      "question": "Who sent the first breach notice and on what date?",
+      "expected": [
+        "DOC-009-Notice-of-Default.pdf"
+      ],
+      "variants": {
+        "original": {
+          "found": false,
+          "top_doc": "DOC-003-MSA.docx",
+          "top_sha": "8c0a06cf2ea94d163422037d497f4d70b4e50140b8faa5fe89c35c80de9f9c49",
+          "elapsed_ms": 296.09084129333496,
+          "n_citations": 5,
+          "query_used": "Who sent the first breach notice and on what date?"
+        },
+        "date_normalized": {
+          "found": false,
+          "top_doc": "DOC-003-MSA.docx",
+          "top_sha": "8c0a06cf2ea94d163422037d497f4d70b4e50140b8faa5fe89c35c80de9f9c49",
+          "elapsed_ms": 291.75686836242676,
+          "n_citations": 5,
+          "query_used": "Who sent the first breach notice and on what DATE date?"
+        },
+        "legal_synonyms": {
+          "found": true,
+          "top_doc": "DOC-017-Notice-Email.pdf",
+          "top_sha": "4dc8881313cb43106f03dfe3a319fd78be9419d54c2ff4c3bb2f389174a7a0a9",
+          "elapsed_ms": 292.6640510559082,
+          "n_citations": 5,
+          "query_used": "Who sent the first default breach notice demand and on what date?"
+        },
+        "combined": {
+          "found": true,
+          "top_doc": "DOC-017-Notice-Email.pdf",
+          "top_sha": "4dc8881313cb43106f03dfe3a319fd78be9419d54c2ff4c3bb2f389174a7a0a9",
+          "elapsed_ms": 311.89513206481934,
+          "n_citations": 5,
+          "query_used": "Who sent the first default breach notice demand and on what DATE date?"
+        }
+      }
+    },
+    {
+      "q_id": "Q46",
+      "question": "Two documents give different dates for the same event. Which is better supported?",
+      "expected": [
+        "DOC-013-Deposition-Notice.pdf",
+        "DOC-019-Deposition-Transcript.pdf"
+      ],
+      "variants": {
+        "original": {
+          "found": false,
+          "top_doc": "DOC-016-Technical-Report.docx",
+          "top_sha": "daff19c2a010d71cb35e9f9fc1244f67cffc6c8d4bc609801978cd7228e09f32",
+          "elapsed_ms": 335.036039352417,
+          "n_citations": 5,
+          "query_used": "Two documents give different dates for the same event. Which is better supported"
+        },
+        "date_normalized": {
+          "found": false,
+          "top_doc": "DOC-016-Technical-Report.docx",
+          "top_sha": "daff19c2a010d71cb35e9f9fc1244f67cffc6c8d4bc609801978cd7228e09f32",
+          "elapsed_ms": 312.15786933898926,
+          "n_citations": 5,
+          "query_used": "Two documents give different DATE dates for the same event. Which is better supp"
+        },
+        "legal_synonyms": {
+          "found": false,
+          "top_doc": "DOC-020-Docket.pdf",
+          "top_sha": "424c1de39885020e653a9e8f2055198442370cd5f6df80e9d1d929b84b61114b",
+          "elapsed_ms": 300.9781837463379,
+          "n_citations": 5,
+          "query_used": "Two document filings give different dates for the same event. Which is better su"
+        },
+        "combined": {
+          "found": false,
+          "top_doc": "DOC-020-Docket.pdf",
+          "top_sha": "424c1de39885020e653a9e8f2055198442370cd5f6df80e9d1d929b84b61114b",
+          "elapsed_ms": 298.6609935760498,
+          "n_citations": 5,
+          "query_used": "Two document filings give different DATE dates for the same event. Which is bett"
+        }
+      }
+    },
+    {
+      "q_id": "Q49",
+      "question": "The same fact appears in two documents with different quoted wording. Which is the primary source?",
+      "expected": [
+        "DOC-009-Notice-of-Default.pdf",
+        "DOC-017-Notice-Email.pdf"
+      ],
+      "variants": {
+        "original": {
+          "found": false,
+          "top_doc": "DOC-014-Chronology.pdf",
+          "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
+          "elapsed_ms": 283.1909656524658,
+          "n_citations": 5,
+          "query_used": "The same fact appears in two documents with different quoted wording. Which is t"
+        },
+        "date_normalized": {
+          "found": false,
+          "top_doc": "DOC-014-Chronology.pdf",
+          "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
+          "elapsed_ms": 242.23613739013672,
+          "n_citations": 5,
+          "query_used": "The same fact appears in two documents with different quoted wording. Which is t"
+        },
+        "legal_synonyms": {
+          "found": false,
+          "top_doc": "DOC-014-Chronology.pdf",
+          "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
+          "elapsed_ms": 297.4259853363037,
+          "n_citations": 5,
+          "query_used": "The same fact appears in two document filings with different quoted wording. Whi"
+        },
+        "combined": {
+          "found": false,
+          "top_doc": "DOC-014-Chronology.pdf",
+          "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
+          "elapsed_ms": 268.4769630432129,
+          "n_citations": 5,
+          "query_used": "The same fact appears in two document filings with different quoted wording. Whi"
+        }
+      }
+    }
+  ],
+  "total_time_s": 11.320363998413086
+}
