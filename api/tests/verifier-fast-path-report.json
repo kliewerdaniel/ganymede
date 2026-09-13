@@ -1,0 +1,224 @@
+{
+  "timestamp": "2026-09-13T10:18:06",
+  "variant": "fast_path_verifier",
+  "rrf_threshold": 0.025,
+  "verifier_recall_at_5": 82.75862068965517,
+  "verifier_found": 24,
+  "recall_gate_pass": true,
+  "unanswerable_clean": 0,
+  "unanswerable_total": 21,
+  "unanswerable_gate_pass": false,
+  "nic_clean": 0,
+  "aa_clean": 0,
+  "fast_path_triggered": 29,
+  "full_verify": 0,
+  "fast_path_rate": 1.0,
+  "latency_p50_s": 5.0067901611328125e-06,
+  "latency_p95_s": 6.9141387939453125e-06,
+  "latency_mean_s": 5.154774106782058e-06,
+  "latency_min_s": 4.0531158447265625e-06,
+  "latency_max_s": 7.3909759521484375e-06,
+  "answerable_time_s": 2.502213954925537,
+  "unanswerable_time_s": 1.626720905303955,
+  "misses": [
+    {
+      "q_id": "Q05",
+      "found": false,
+      "n_raw": 5,
+      "n_verified": 5,
+      "fast_path": true,
+      "latency_s": 6.198883056640625e-06,
+      "top_raw_doc": "DOC-002-Answer.pdf",
+      "top_verified_doc": "DOC-002-Answer.pdf"
+    },
+    {
+      "q_id": "Q09",
+      "found": false,
+      "n_raw": 5,
+      "n_verified": 5,
+      "fast_path": true,
+      "latency_s": 4.76837158203125e-06,
+      "top_raw_doc": "DOC-011-Demand-Letter.pdf",
+      "top_verified_doc": "DOC-011-Demand-Letter.pdf"
+    },
+    {
+      "q_id": "Q25",
+      "found": false,
+      "n_raw": 5,
+      "n_verified": 5,
+      "fast_path": true,
+      "latency_s": 4.0531158447265625e-06,
+      "top_raw_doc": "DOC-020-Docket.pdf",
+      "top_verified_doc": "DOC-020-Docket.pdf"
+    },
+    {
+      "q_id": "Q29",
+      "found": false,
+      "n_raw": 5,
+      "n_verified": 5,
+      "fast_path": true,
+      "latency_s": 5.0067901611328125e-06,
+      "top_raw_doc": "DOC-018-Handwritten-Notes.pdf",
+      "top_verified_doc": "DOC-018-Handwritten-Notes.pdf"
+    },
+    {
+      "q_id": "Q49",
+      "found": false,
+      "n_raw": 5,
+      "n_verified": 5,
+      "fast_path": true,
+      "latency_s": 5.245208740234375e-06,
+      "top_raw_doc": "DOC-014-Chronology.pdf",
+      "top_verified_doc": "DOC-014-Chronology.pdf"
+    }
+  ],
+  "leaks": [
+    {
+      "q_id": "Q02",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q03",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q06",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q10",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q16",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q18",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q20",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q23",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q24",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q26",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q27",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q28",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q30",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q35",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q37",
+      "group": "NOT_IN_CORPUS",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q39",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q40",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q41",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q42",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q43",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    },
+    {
+      "q_id": "Q44",
+      "group": "ANSWER_ABSENT",
+      "returned": 5,
+      "is_clean": false,
+      "n_raw": 5
+    }
+  ]
+}

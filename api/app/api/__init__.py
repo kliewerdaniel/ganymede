@@ -5,8 +5,10 @@
 import uuid
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from app.core.database import get_db
+from app.core.cors import setup_cors
 from app.schemas import (
     MatterCreate, MatterResponse,
     UserCreate, UserResponse,
@@ -16,9 +18,19 @@ from app.schemas import (
 from app.services.ingestion import ingest_document, get_ingestion_status
 from app.services.antivirus import scan_file
 from app.services.retrieval import retrieve
+from app.services.query_expansion import expand_query
+from app.services.verifier import verify_top_k, verify_top_k_fast_path
 from app.models import Matter, User, Document, Page
 
 router = APIRouter()
+
+
+# --- Health Check ---
+
+@router.get("/health")
+def health_check():
+    """Health check endpoint."""
+    return {"status": "ok", "service": "ganymede-api", "version": "0.1.0"}
 
 
 # --- Matter Routes ---
@@ -115,6 +127,15 @@ async def upload_document(
     )
 
 
+@router.get("/matters/{matter_id}/documents", response_model=List[DocumentResponse])
+def list_documents(matter_id: str, db: Session = Depends(get_db)):
+    """List all documents in a matter."""
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+    return db.query(Document).filter(Document.matter_id == matter_id, Document.is_duplicate == False).all()
+
+
 @router.get("/documents/{document_id}", response_model=DocumentResponse)
 def get_document(document_id: str, db: Session = Depends(get_db)):
     """Get a document by ID."""
@@ -192,3 +213,72 @@ def query_matter(
         ],
         result_count=len(citations),
     )
+
+
+# --- Verified Q&A Route ---
+
+@router.post("/matters/{matter_id}/ask")
+def ask_matter(
+    matter_id: str,
+    request: QueryRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Ask a question and get a verified answer with citations.
+    Uses query expansion + verifier for answer-absent precision.
+    """
+    # Verify matter exists
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+
+    # Apply query expansion
+    expanded_query = expand_query(request.query_text)
+
+    # Retrieve raw citations
+    raw_citations = retrieve(
+        db=db,
+        matter_id=matter_id,
+        query_text=expanded_query,
+        top_k=request.top_k or 5,
+    )
+
+    # Apply verifier
+    if len(raw_citations) > 0:
+        verified_citations = verify_top_k(
+            request.query_text,  # Use original question for verification
+            raw_citations,
+            top_k_verify=len(raw_citations),
+        )
+    else:
+        verified_citations = []
+
+    # Build answer text
+    if len(verified_citations) == 0:
+        answer_text = "Not found in the approved matter sources."
+    else:
+        answer_text = f"Found {len(verified_citations)} relevant passage(s) in the matter documents."
+
+    return {
+        "matter_id": matter_id,
+        "query_text": request.query_text,
+        "expanded_query": expanded_query,
+        "answer": answer_text,
+        "citations": [
+            {
+                "document_id": str(c.document_id),
+                "sha256": c.sha256,
+                "page": c.page,
+                "start_offset": c.start_offset,
+                "end_offset": c.end_offset,
+                "quoted_text": c.quoted_text,
+                "parser_version": c.parser_version,
+                "retrieval_scores": c.retrieval_scores,
+                "access_scope": c.access_scope,
+                "model_version": c.model_version,
+            }
+            for c in verified_citations
+        ],
+        "result_count": len(verified_citations),
+        "raw_count": len(raw_citations),
+    }

@@ -286,10 +286,26 @@ def retrieve(
     matter_id: str,
     query_text: str,
     top_k: int = 10,
+    use_expansion: bool = True,
 ) -> List[Citation]:
-    """Main retrieval function."""
-    fts_results = fts_search(db, matter_id, query_text, top_k=30)
-    vector_results = vector_search(db, matter_id, query_text, top_k=30)
+    """Main retrieval function.
+
+    Args:
+        db: database session
+        matter_id: matter to search
+        query_text: the user's question
+        top_k: number of results to return
+        use_expansion: whether to apply query expansion (default: True)
+    """
+    # Apply query expansion
+    if use_expansion:
+        from app.services.query_expansion import expand_query
+        expanded_text = expand_query(query_text)
+    else:
+        expanded_text = query_text
+
+    fts_results = fts_search(db, matter_id, expanded_text, top_k=30)
+    vector_results = vector_search(db, matter_id, expanded_text, top_k=30)
 
     best_vector_sim = vector_results[0]["vector_similarity"] if vector_results else 0
     if not fts_results and best_vector_sim < MIN_VECTOR_SIMILARITY:

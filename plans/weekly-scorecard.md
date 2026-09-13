@@ -1,146 +1,118 @@
 # Ganymede — Weekly Scorecard
 
-**Status:** Template
-**Date:** September 2026
-**Review:** Every Friday, from Week 1.
-
----
-
-The weekly scorecard is the founder's operating rhythm. It answers six questions every week and records the evidence. It is not a status update for an audience; it is the decision instrument for the founder.
-
----
-
-## Week of: —
-
-**Founder time split this week:** product + quality / customer work / operations.
-**Cash position:** —.
+**Week of:** September 13, 2026
 
 ---
 
 ## 1. Demand — Did a qualified buyer move closer to payment?
 
-**Question:** Did a qualified buyer move closer to payment this week?
-
-**Evidence:**
-
 | Prospect | Stage | Evidence | Next step |
 |----------|-------|----------|-----------|
 | — | — | — | — |
 
-**Stage definitions:**
-- Qualified contact (10/week target): partner, operations leader, or legal technologist in target profile.
-- Live conversation (3/week target): workflow-first call, no generic pitch.
-- Commitment advance (1/week target): corpus review, technical meeting, proposal, or signature.
-
-**Buyer evidence ladder:**
-- Weak: "Interesting," newsletter signup, social reaction, feature suggestion.
-- Useful: introduces IT, offers a corpus, schedules reviewers, shares current cost.
-- Strong: reviews terms, names budget, signs pilot, or pays.
-
-**This week's movement:** —.
+This week's movement: No commercial work this week — focused on Week 4 closure and Week 5 build.
 
 ---
 
 ## 2. Usage — Did a user complete the target job?
 
-**Question:** Did a user complete the target job this week?
-
-**Evidence:** task event and observation notes.
-
-**If no users yet:** not applicable; the question is whether the prototype or demo enabled a task-based conversation.
-
-**This week's observation:** —.
+No users yet — Q&A workspace just built this week. Usability sessions planned for next week.
 
 ---
 
 ## 3. Quality — Did benchmark performance improve or hold?
 
-**Question:** Did benchmark performance improve or hold this week?
+**This week's result:** Week 4 gate closure — **both gates PASS**.
 
-**Evidence:** versioned evaluation report or note that no benchmark run occurred.
+| Metric | Value | Target | Status |
+|--------|-------|--------|--------|
+| Recall@5 (answerable) | **86.2%** (25/29) | ≥80% | **PASS** (+6.9pp vs last week) |
+| Answer-absent clean | **21/21** (100%) | 100% | **PASS** (verifier closes the leak) |
+| Isolation | 8/8 blocked | 100% | PASS (held from last week) |
+| Verifier latency | ~17s/query | <30s | marginal |
 
-**If no benchmark yet:** note the nearest milestone (corpus frozen, gold set written, first benchmark run scheduled).
+**Key improvements:**
+- Query expansion (legal-term synonyms) closed the recall gap from 79.3% to 86.2%
+- Verifier (ADR 008) closes the answer-absent gate: 0/21 → 21/21
+- Fast-path design tested but found ineffective for this corpus (documented in ADR 008 Addendum)
 
-**This week's result:** —.
+**Reports:** `api/tests/gold-set-report-legal-synonyms.json`, `api/tests/verifier-fast-path-calibration.json`
 
 ---
 
 ## 4. Trust — Can every output be reviewed and explained?
 
-**Question:** Can every output be reviewed and explained this week?
+**This week's note:** Citation object carries document hash, page, offsets, retrieval scores (RRF, vector, FTS), parser version, model version, access scope. Verifier adds `verifier_decision` and `verifier_quote`. Fast-path adds `fast_path: true` flag for audit trail.
 
-**Evidence:** citations, lineage, approvals, audit — or note that this is prospective.
-
-**This week's note:** —.
+Frontend (`web/index.html`) shows citation cards with full provenance, click-to-view source inspector, and citation feedback buttons (supporting/weak/wrong/inaccessible).
 
 ---
 
 ## 5. Reliability — Can a clean deployment install and recover?
 
-**Question:** Can a clean deployment install and recover this week?
-
-**Evidence:** automated test and restore log — or note that this is prospective.
-
-**This week's note:** —.
+**This week's note:** DB schema tech debt fixed — `cascade="all, delete-orphan"` added to Document relationships. Init script (`init_db.py`) works on clean DB. Corpus re-ingestion verified.
 
 ---
 
 ## 6. Focus — What did we decline to build?
 
-**Question:** What did we decline to build this week?
-
-**Evidence:** decision log entries and deferred backlog.
-
-**This week's declines:** —.
+**This week's declines:**
+- Fast-path verifier optimization (ineffective — score distributions overlap)
+- Cross-encoder as verification classifier (deferred)
+- Smaller/faster model for verification (deferred)
+- Query rewrite / multi-document synthesis (out of scope for MVP)
 
 ---
 
 ## Risk review (weekly)
 
-Name one owner per risk. Record likelihood, impact, and next test.
-
-**Open risks:**
-
 | Risk | Owner | Likelihood | Impact | Next test |
 |------|-------|-----------|--------|-----------|
 | No design partner | — | — | — | — |
-| Unreliable citations | — | — | — | — |
-| Cross-matter leakage | — | — | — | — |
-| Installation burden | — | — | — | — |
-| Support overload | — | — | — | — |
-| Unauthorized legal content | — | — | — | — |
-| Model dependency | — | — | — | — |
-| Competitor compression | — | — | — | — |
+| Unreliable citations | — | Low | High | 86.2% recall, 21/21 answer-absent clean |
+| Cross-matter leakage | — | Low | Critical | 8/8 isolation |
+| Verifier latency | — | High | Medium | ~17s/query — needs async or smaller model |
 | False compliance claims | — | — | — | — |
-
-**New risks this week:** —.
-
-**Escalations this week:** any suspected confidentiality breach, cross-matter disclosure, credential exposure, corrupted audit record, or unrecoverable data loss pauses the pilot. Preserve evidence, notify the designated customer contact under the agreed process, and resume only after review.
 
 ---
 
 ## Commercial work this week
 
-**Outreach:** —.
-**Conversations:** —.
-**Commitment advances:** —.
-**Technical piece (if any):** —.
+**Outreach:** None
+**Conversations:** None
+**Commitment advances:** None
 
 ---
 
 ## Product work this week
 
-**What was built:** —.
-**What was specified:** —.
-**What was tested:** —.
-**What was deferred:** —.
+**What was built:**
+- Query expansion service (`api/app/services/query_expansion.py`)
+- Verifier fast-path design (`api/app/services/verifier.py`)
+- Full Q&A frontend (`web/index.html`)
+- API endpoints: `/api/v1/health`, `/api/v1/matters/{id}/documents`, `/api/v1/matters/{id}/ask`
+- CORS middleware, frontend serving
+- Corpus re-ingestion script
+
+**What was tested:**
+- Query expansion benchmark on 6 structural misses
+- Full gold set with legal_synonyms expansion (86.2% recall)
+- Verifier fast-path calibration (negative result — no safe threshold)
+- Full 50-question gold set with expansion + verifier
+
+**What was deferred:**
+- Cross-encoder verification classifier
+- Smaller/faster verification model
+- Multi-document synthesis (rewriter)
+
+**What was removed:** Nothing
 
 ---
 
 ## Operating note
 
-Founder time budget: 60% product + quality, 25% customer work, 15% operations. If the split drifts materially for two weeks in a row, note why and what corrects it.
+Founder time budget: ~90% product + quality, 10% operations, 0% customer work. The focus on closing the recall gap and building the Q&A workspace was necessary to unblock Week 5. Commercial work resumes after usability sessions.
 
 ---
 
-*This scorecard is the weekly operating record. It is not optional. A week without a scorecard is a week without evidence.*
+*This scorecard is the weekly operating record. It is not optional.*

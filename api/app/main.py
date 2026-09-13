@@ -2,8 +2,12 @@
 
 """FastAPI app factory."""
 
+import os
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from app.api import router
+from app.core.cors import setup_cors
 
 
 def create_app() -> FastAPI:
@@ -13,7 +17,25 @@ def create_app() -> FastAPI:
         description="Private Matter Intelligence",
         version="0.1.0",
     )
+
+    # CORS
+    setup_cors(app)
+
+    # API routes
     app.include_router(router, prefix="/api/v1")
+
+    # Static frontend
+    web_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "web")
+    if os.path.exists(web_dir):
+        app.mount("/static", StaticFiles(directory=web_dir), name="static")
+
+        @app.get("/")
+        def serve_frontend():
+            index_path = os.path.join(web_dir, "index.html")
+            if os.path.exists(index_path):
+                return FileResponse(index_path)
+            return {"message": "Ganymede API — frontend not built"}
+
     return app
 
 

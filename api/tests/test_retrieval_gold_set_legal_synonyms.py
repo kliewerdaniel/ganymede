@@ -1,13 +1,20 @@
-# Ganymede — Full Gold Set Retrieval Test (correctly categorized, all 50 questions)
+"""Test the exact legal_synonyms variant from the expansion benchmark.
 
-"""Run the frozen gold set through the retrieval pipeline and report Recall@5.
+The legal_synonyms variant from bench_expansion.py recovered Q05 and Q33
+in the original benchmark. This test applies ONLY that variant (not the
+over-expanded "combined" variant) to see if it improves recall without
+regressing other questions.
 
-The frozen gold-set-draft.md binds 29 questions to evidence pointers (answerable).
-The remaining 21 are verified unanswerable by construction:
-  - 15 questions are NOT IN corpus-v0.1 (no document contains the answer)
-  - 6 questions are formal answer-absent (Q39-Q44)
+The legal_synonyms variant uses inline replacement for 6 specific terms:
+- breach → default breach
+- notice → notice demand
+- invoice → invoice contract price
+- filing → filing court docket
+- deposition → deposition transcript
+- document → document filing
 
-All 21 unanswerable questions must return zero results. Any citation = a defect."""
+It does NOT apply date normalization or add extra terms.
+"""
 
 import os
 import sys
@@ -28,9 +35,28 @@ settings = get_settings()
 engine = create_engine(settings.DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# 28 answerable questions with evidence pointers from frozen gold-set-draft.md
+# The exact legal_synonyms variant from bench_expansion.py
+LEGAL_SYNONYMS = [
+    ("breach", "default breach"),
+    ("notice", "notice demand"),
+    ("invoice", "invoice contract price"),
+    ("filing", "filing court docket"),
+    ("deposition", "deposition transcript"),
+    ("document", "document filing"),
+]
+
+
+def legal_synonyms_expand(query: str) -> str:
+    """Apply the exact legal_synonyms variant from the expansion benchmark."""
+    q = query
+    for term, replacement in LEGAL_SYNONYMS:
+        if term in q.lower():
+            q = q.replace(term, replacement)
+    return q
+
+
+# 29 answerable questions
 GOLD_SET = [
-    # Direct factual (answerable)
     ("Q01", "What is the termination date stated in the master services agreement?", "DOC-003-MSA.docx"),
     ("Q04", "What amount does the complaint allege as damages?", "DOC-001-Complaint.pdf"),
     ("Q05", "On what date did the first breach notice arrive?", "DOC-014-Chronology.pdf"),
@@ -45,7 +71,6 @@ GOLD_SET = [
     ("Q15", "What page of the technical report contains the failure-mode analysis?", "DOC-016-Technical-Report.docx"),
     ("Q17", "What is the effective date of the most recent amendment?", "DOC-004-Amendment-No-1.docx"),
     ("Q19", "What is the stated cure period in the default clause?", "DOC-003-MSA.docx"),
-    # Multi-document synthesis (answerable)
     ("Q21", "Across the contract and the amendment, what is the current notice period for termination?",
      ["DOC-003-MSA.docx", "DOC-004-Amendment-No-1.docx"]),
     ("Q22", "Do the complaint and the defendant's answer agree on the date of the alleged breach?",
@@ -55,13 +80,11 @@ GOLD_SET = [
     ("Q29", "Which documents show the sequence of communications leading to the settlement offer?",
      ["DOC-009-Notice-of-Default.pdf", "DOC-010-Response-Letter.pdf",
       "DOC-011-Demand-Letter.pdf", "DOC-012-Settlement-Email.pdf"]),
-    # Chronology (answerable)
     ("Q31", "List the events in the matter in chronological order", "DOC-014-Chronology.pdf"),
     ("Q32", "On what date did the contract transition from draft to executed?", "DOC-003-MSA.docx"),
     ("Q33", "Who sent the first breach notice and on what date?", "DOC-009-Notice-of-Default.pdf"),
     ("Q34", "What is the sequence of amendments to the agreement?", "DOC-004-Amendment-No-1.docx"),
     ("Q36", "List the filing dates for each document in the court docket excerpt", "DOC-020-Docket.pdf"),
-    # Adversarial/ambiguous (answerable)
     ("Q38", "Who participated in the settlement conference, and on what date?", "DOC-012-Settlement-Email.pdf"),
     ("Q45", "The contract states the termination date as the end of the term. What is that date?", "DOC-003-MSA.docx"),
     ("Q46", "Two documents give different dates for the same event. Which is better supported?",
@@ -73,7 +96,7 @@ GOLD_SET = [
     ("Q50", "A user asks for a chronology of events that only some documents support. What does the chronology contain, and where is the gap?", "DOC-014-Chronology.pdf"),
 ]
 
-# 16 questions verified NOT IN corpus-v0.1 — no document contains the answer
+# 16 NOT_IN_CORPUS questions
 NOT_IN_CORPUS = [
     ("Q02", "Who is named as the non-compete defendant in the employment dispute?"),
     ("Q03", "Which paragraph of the lease states the notice period for termination?"),
@@ -92,7 +115,7 @@ NOT_IN_CORPUS = [
     ("Q37", "Which event occurred first: the inspection or the repair request?"),
 ]
 
-# 6 formal answer-absent questions (Q39-Q44, frozen Section D)
+# 6 formal ANSWER_ABSENT questions
 ANSWER_ABSENT = [
     ("Q39", "What did the CEO say in the internal meeting on March 14?"),
     ("Q40", "Which external case law supports the defendant's motion?"),
@@ -112,8 +135,8 @@ def main():
             return
 
         print("=" * 70)
-        print("Week 4 Full Gold Set Retrieval Test")
-        print("29 answerable + 21 unanswerable = 50 total (frozen gold-set-draft.md)")
+        print("Week 4 Gold Set Test — With legal_synonyms Expansion")
+        print("29 answerable + 21 unanswerable = 50 total")
         print("=" * 70)
 
         # Step 1: Chunk all pages
@@ -131,7 +154,7 @@ def main():
             doc_lookup[doc.sha256] = doc.original_filename
 
         # --- Answerable queries ---
-        print(f"\n[3] Running {len(GOLD_SET)} answerable gold set queries...")
+        print(f"\n[3] Running {len(GOLD_SET)} answerable queries WITH legal_synonyms expansion...")
         results = []
         start_time = time.time()
 
@@ -149,7 +172,10 @@ def main():
                 if doc:
                     expected_shas.add(doc.sha256)
 
-            citations = retrieve(db, str(matter_a.id), question, top_k=5)
+            # Apply legal_synonyms expansion
+            expanded_q = legal_synonyms_expand(question)
+
+            citations = retrieve(db, str(matter_a.id), expanded_q, top_k=5)
 
             found = False
             for c in citations[:5]:
@@ -166,6 +192,7 @@ def main():
                 "citations_count": len(citations),
                 "top_sha": citations[0].sha256 if citations else None,
                 "top_doc": doc_lookup.get(citations[0].sha256, "?") if citations else None,
+                "query_used": expanded_q if expanded_q != question else question,
             })
 
             status = "✓" if found else "✗ MISS"
@@ -179,7 +206,8 @@ def main():
         unanswerable_results = []
 
         for q_id, question in NOT_IN_CORPUS + ANSWER_ABSENT:
-            citations = retrieve(db, str(matter_a.id), question, top_k=5)
+            expanded_q = legal_synonyms_expand(question)
+            citations = retrieve(db, str(matter_a.id), expanded_q, top_k=5)
             returned = len(citations)
             is_clean = returned == 0
             unanswerable_results.append({
@@ -239,6 +267,7 @@ def main():
         # Save report
         report = {
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "variant": "legal_synonyms_only",
             "recall_at_5": recall_at_5,
             "found": found_count,
             "total_answerable": total_answerable,
@@ -254,7 +283,7 @@ def main():
 
         report_dir = os.path.join(os.path.dirname(__file__), "..", "tests")
         os.makedirs(report_dir, exist_ok=True)
-        report_path = os.path.join(report_dir, "gold-set-report.json")
+        report_path = os.path.join(report_dir, "gold-set-report-legal-synonyms.json")
         with open(report_path, "w") as f:
             json.dump(report, f, indent=2)
         print(f"\nDetailed report saved to: {report_path}")

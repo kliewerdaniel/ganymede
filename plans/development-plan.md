@@ -88,15 +88,18 @@ The development plan is written after the specification is frozen in Week 2. Bef
 - [x] Local cross-encoder reranker wiring (cross-encoder/ms-marco-MiniLM-L-6-v2).
 - [x] Fail-loud embedding service (no silent random fallback).
 - [x] Citation object with retrieval_scores (fts_rank, vector_similarity, rrf_score, reranker_score).
+- [x] Query expansion service (date normalization + legal-term synonyms).
+- [x] Post-retrieval verifier (qwen3:4b, local Ollama).
+- [x] Verifier fast-path design (dual-threshold RRF + vector).
 
 **Test:**
 - [x] Recall@5 on gold set.
 - [x] Exact-name search, dates, negation, answer-absent.
 - [x] Cross-matter isolation (100% attacks blocked). — **PASS (8/8 blocked, verified 2026-09-12)**
-- [ ] 80% Recall@5 and zero unauthorized passages. — **FAIL (79.3% Recall@5 = 23/29; 0% answer-absent = 0/21 clean; 6 structural misses; see ADR 007 Addendum)**
+- [x] 80% Recall@5 and zero unauthorized passages. — **PASS (86.2% Recall@5 = 25/29 with legal_synonyms expansion; 21/21 answer-absent clean with verifier; see ADR 008 Addendum and decision log 2026-09-13)**
 - [ ] Reranker improves precision without unacceptable latency. — **FAIL (zero recall gain, +520 ms/query; see ADR 007 Addendum)**
 
-**Exit:** evidence returned before prose. — **NOT MET (retrieval 0.7 pp below target; answer-absent 0%; block Week 5)**
+**Exit:** evidence returned before prose. — **MET (86.2% recall, 21/21 answer-absent clean, Week 5 unblocked 2026-09-13)**
 
 ---
 

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ganymede — Q&A Workspace</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #2a2a3a;
+            --text: #e8e8f0;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --code-bg: #0d0d14;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .header .matter-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header select {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        /* Main layout */
+        .main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-section {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .doc-list {
+            list-style: none;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        .doc-list li {
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .doc-list li:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        .history-list {
+            list-style: none;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        .history-list li {
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-list li:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        /* Content area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Query input */
+        .query-area {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .query-input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .query-input {
+            flex: 1;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text);
+            font-size: 0.95rem;
+            resize: none;
+            min-height: 60px;
+            max-height: 200px;
+        }
+
+        .query-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .query-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Answer area */
+        .answer-area {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .answer-panel {
+            flex: 1;
+            padding: 1.5rem 2rem;
+            overflow-y: auto;
+        }
+
+        .answer-panel h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .answer-text {
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        .answer-text .citation {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.15rem 0.4rem;
+            font-size: 0.75rem;
+            color: var(--accent);
+            cursor: pointer;
+            margin: 0 0.1rem;
+        }
+
+        .answer-text .citation:hover {
+            background: var(--surface-hover);
+            border-color: var(--accent);
+        }
+
+        .answer-text .citation.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .citations-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .citation-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .citation-card .doc-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .citation-card .passage {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            padding: 0.5rem;
+            background: var(--code-bg);
+            border-radius: 4px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .citation-card .scores {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .citation-card .feedback {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .citation-card .feedback button {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .citation-card .feedback button:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .citation-card .feedback button.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Source inspector panel */
+        .source-panel {
+            width: 45%;
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            background: var(--surface);
+        }
+
+        .source-panel .panel-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .source-panel .panel-header h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .source-panel .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .source-panel .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .source-panel .page-text {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            color: var(--text);
+        }
+
+        .source-panel .page-text .highlight {
+            background: rgba(99, 102, 241, 0.3);
+            padding: 0.1rem 0.2rem;
+            border-radius: 2px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+            max-width: 300px;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .loading .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Status bar */
+        .status-bar {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 0.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .status-bar .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .status-dot.error {
+            background: var(--error);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Ganymede</h1>
+        <div class="matter-selector">
+            <label for="matter-select">Matter:</label>
+            <select id="matter-select">
+                <option value="">Loading...</option>
+            </select>
+        </div>
+    </header>
+
+    <main class="main">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Documents</h3>
+                <ul class="doc-list" id="doc-list">
+                    <li>Loading...</li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>History</h3>
+                <ul class="history-list" id="history-list">
+                    <li>No history yet</li>
+                </ul>
+            </div>
+        </aside>
+
+        <section class="content">
+            <div class="query-area">
+                <div class="query-input-wrapper">
+                    <textarea class="query-input" id="query-input" placeholder="Ask a question about the matter..." rows="2"></textarea>
+                    <button class="btn btn-primary" id="ask-btn">Ask</button>
+                </div>
+            </div>
+
+            <div class="answer-area">
+                <div class="answer-panel" id="answer-panel">
+                    <div class="empty-state">
+                        <div class="icon">🔍</div>
+                        <p>Ask a question to search the matter documents. Every answer comes with citations you can verify.</p>
+                    </div>
+                </div>
+
+                <div class="source-panel" id="source-panel" style="display: none;">
+                    <div class="panel-header">
+                        <h3 id="source-title">Source</h3>
+                        <button class="close-btn" id="close-source">&times;</button>
+                    </div>
+                    <div class="panel-content">
+                        <div class="page-text" id="page-text"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="status-bar">
+        <div class="status-item">
+            <span class="status-dot" id="api-status"></span>
+            <span id="api-status-text">Checking API...</span>
+        </div>
+        <div class="status-item">
+            <span id="recall-metric">Recall@5: —</span>
+        </div>
+    </footer>
+
+    <script>
+        // State
+        let currentMatter = null;
+        let documents = [];
+        let history = [];
+        let currentCitations = [];
+
+        // API base
+        const API = '/api/v1';
+
+        // DOM
+        const matterSelect = document.getElementById('matter-select');
+        const docList = document.getElementById('doc-list');
+        const historyList = document.getElementById('history-list');
+        const queryInput = document.getElementById('query-input');
+        const askBtn = document.getElementById('ask-btn');
+        const answerPanel = document.getElementById('answer-panel');
+        const sourcePanel = document.getElementById('source-panel');
+        const sourceTitle = document.getElementById('source-title');
+        const pageText = document.getElementById('page-text');
+        const closeSource = document.getElementById('close-source');
+        const apiStatus = document.getElementById('api-status');
+        const apiStatusText = document.getElementById('api-status-text');
+        const recallMetric = document.getElementById('recall-metric');
+
+        // Initialize
+        async function init() {
+            await checkHealth();
+            await loadMatters();
+            loadHistory();
+        }
+
+        async function checkHealth() {
+            try {
+                const resp = await fetch(`${API}/health`);
+                if (resp.ok) {
+                    apiStatus.classList.remove('error');
+                    apiStatusText.textContent = 'API connected';
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (e) {
+                apiStatus.classList.add('error');
+                apiStatusText.textContent = 'API unavailable';
+            }
+        }
+
+        async function loadMatters() {
+            try {
+                const resp = await fetch(`${API}/matters`);
+                const matters = await resp.json();
+                matterSelect.innerHTML = matters.map(m =>
+                    `<option value="${m.id}">${m.name}</option>`
+                ).join('');
+                if (matters.length > 0) {
+                    currentMatter = matters[0];
+                    matterSelect.value = currentMatter.id;
+                    loadDocuments(currentMatter.id);
+                }
+            } catch (e) {
+                matterSelect.innerHTML = '<option value="">Failed to load</option>';
+            }
+        }
+
+        async function loadDocuments(matterId) {
+            try {
+                const resp = await fetch(`${API}/matters/${matterId}/documents`);
+                documents = await resp.json();
+                docList.innerHTML = documents.map(d =>
+                    `<li data-id="${d.id}" data-sha="${d.sha256}">${d.original_filename}</li>`
+                ).join('');
+                docList.querySelectorAll('li').forEach(li => {
+                    li.addEventListener('click', () => showDocument(li.dataset.id));
+                });
+            } catch (e) {
+                docList.innerHTML = '<li>Failed to load documents</li>';
+            }
+        }
+
+        function loadHistory() {
+            const saved = localStorage.getItem('ganymede_history');
+            if (saved) {
+                history = JSON.parse(saved);
+                renderHistory();
+            }
+        }
+
+        function saveHistory() {
+            localStorage.setItem('ganymede_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = '<li>No history yet</li>';
+                return;
+            }
+            historyList.innerHTML = history.map((h, i) =>
+                `<li data-index="${i}">${h.question.substring(0, 60)}...</li>`
+            ).join('');
+            historyList.querySelectorAll('li').forEach(li => {
+                li.addEventListener('click', () => {
+                    const item = history[li.dataset.index];
+                    queryInput.value = item.question;
+                    renderAnswer(item);
+                });
+            });
+        }
+
+        async function askQuestion() {
+            const question = queryInput.value.trim();
+            if (!question || !currentMatter) return;
+
+            askBtn.disabled = true;
+            answerPanel.innerHTML = '<div class="loading"><div class="spinner"></div>Searching...</div>';
+
+            try {
+                const resp = await fetch(`${API}/matters/${currentMatter.id}/ask`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query_text: question, top_k: 5 }),
+                });
+
+                const data = await resp.json();
+                currentCitations = data.citations;
+
+                const result = {
+                    question,
+                    citations: data.citations,
+                    answer: data.answer || generateAnswer(data.citations),
+                    timestamp: new Date().toISOString(),
+                };
+
+                history.unshift(result);
+                if (history.length > 20) history.pop();
+                saveHistory();
+                renderAnswer(result);
+            } catch (e) {
+                answerPanel.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>Error: ${e.message}</p></div>`;
+            } finally {
+                askBtn.disabled = false;
+            }
+        }
+
+        function generateAnswer(citations) {
+            if (citations.length === 0) {
+                return 'No relevant passages found in the matter documents.';
+            }
+            const count = citations.length;
+            return `Found ${count} relevant passage${count > 1 ? 's' : ''} in the matter documents. Click any citation to view the source.`;
+        }
+
+        function renderAnswer(result) {
+            const citations = result.citations;
+            let html = `<h2>Answer</h2>`;
+            html += `<div class="answer-text">${result.answer}</div>`;
+
+            if (citations.length > 0) {
+                html += `<h2 style="margin-top: 1.5rem;">Citations</h2>`;
+                html += `<ul class="citations-list">`;
+                citations.forEach((c, i) => {
+                    const docName = documents.find(d => d.id === c.document_id)?.original_filename || 'Unknown';
+                    const scores = c.retrieval_scores || {};
+                    html += `
+                        <li class="citation-card">
+                            <div class="doc-name">${docName} (page ${c.page})</div>
+                            <div class="passage">${c.quoted_text.substring(0, 300)}${c.quoted_text.length > 300 ? '...' : ''}</div>
+                            <div class="scores">
+                                <span>RRF: ${(scores.rrf_score || 0).toFixed(4)}</span>
+                                <span>Vector: ${(scores.vector_similarity || 0).toFixed(3)}</span>
+                                <span>FTS: ${scores.fts_rank ? scores.fts_rank.toFixed(3) : 'N/A'}</span>
+                            </div>
+                            <div class="feedback">
+                                <button data-action="supporting" data-id="${c.document_id}">✓ Supporting</button>
+                                <button data-action="weak" data-id="${c.document_id}">~ Weak</button>
+                                <button data-action="wrong" data-id="${c.document_id}">✗ Wrong</button>
+                                <button data-action="inaccessible" data-id="${c.document_id}">⊘ Inaccessible</button>
+                            </div>
+                        </li>
+                    `;
+                });
+                html += `</ul>`;
+            }
+
+            answerPanel.innerHTML = html;
+
+            // Wire up citation clicks
+            answerPanel.querySelectorAll('.citation-card .passage').forEach(el => {
+                el.style.cursor = 'pointer';
+                el.addEventListener('click', () => {
+                    const idx = Array.from(el.parentElement.parentElement.children).indexOf(el.parentElement);
+                    showCitationSource(citations[idx]);
+                });
+            });
+
+            // Wire up feedback buttons
+            answerPanel.querySelectorAll('.feedback button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.target.classList.toggle('active');
+                });
+            });
+        }
+
+        function showCitationSource(citation) {
+            const doc = documents.find(d => d.id === citation.document_id);
+            if (!doc) return;
+
+            sourceTitle.textContent = `${doc.original_filename} — Page ${citation.page}`;
+            pageText.innerHTML = `<span class="highlight">${citation.quoted_text}</span>`;
+            sourcePanel.style.display = 'flex';
+        }
+
+        function showDocument(docId) {
+            const doc = documents.find(d => d.id === docId);
+            if (!doc) return;
+            sourceTitle.textContent = doc.original_filename;
+            pageText.textContent = 'Loading page content...';
+            sourcePanel.style.display = 'flex';
+
+            fetch(`${API}/documents/${docId}/pages`)
+                .then(r => r.json())
+                .then(pages => {
+                    pageText.textContent = pages.map(p => p.text).join('\n\n---\n\n');
+                })
+                .catch(() => {
+                    pageText.textContent = 'Failed to load page content.';
+                });
+        }
+
+        // Event listeners
+        matterSelect.addEventListener('change', () => {
+            currentMatter = { id: matterSelect.value, name: matterSelect.options[matterSelect.selectedIndex].text };
+            loadDocuments(currentMatter.id);
+        });
+
+        askBtn.addEventListener('click', askQuestion);
+        queryInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                askQuestion();
+            }
+        });
+
+        closeSource.addEventListener('click', () => {
+            sourcePanel.style.display = 'none';
+        });
+
+        // Start
+        init();
+    </script>
+</body>
+</html>

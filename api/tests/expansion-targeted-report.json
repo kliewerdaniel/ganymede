@@ -1,0 +1,131 @@
+{
+  "timestamp": "2026-09-13T10:01:10",
+  "variant": "targeted_date_legal",
+  "n_misses_tested": 6,
+  "original_hits": 1,
+  "targeted_hits": 1,
+  "delta": 0,
+  "recovered": [],
+  "lost": [],
+  "per_question": [
+    {
+      "q_id": "Q05",
+      "question": "On what date did the first breach notice arrive?",
+      "expected": [
+        "DOC-014-Chronology.pdf"
+      ],
+      "original": {
+        "found": false,
+        "top_doc": "DOC-004-Amendment-No-1.docx",
+        "elapsed_ms": 1163.7020111083984,
+        "query": "On what date did the first breach notice arrive?"
+      },
+      "targeted": {
+        "found": false,
+        "top_doc": "DOC-017-Notice-Email.pdf",
+        "elapsed_ms": 314.0139579772949,
+        "query": "On what date did the first breach notice arrive? DATE default demand notification"
+      }
+    },
+    {
+      "q_id": "Q09",
+      "question": "What is the contract price stated in the invoice that matches the dispute?",
+      "expected": [
+        "DOC-007-Invoice-1044.docx",
+        "DOC-008-Invoice-1045.docx"
+      ],
+      "original": {
+        "found": false,
+        "top_doc": "DOC-003-MSA.docx",
+        "elapsed_ms": 188.8587474822998,
+        "query": "What is the contract price stated in the invoice that matches the dispute?"
+      },
+      "targeted": {
+        "found": false,
+        "top_doc": "DOC-011-Demand-Letter.pdf",
+        "elapsed_ms": 182.3267936706543,
+        "query": "What is the contract price stated in the invoice that matches the dispute? billing statement amount total balance sum"
+      }
+    },
+    {
+      "q_id": "Q25",
+      "question": "Which documents establish that the defendant received notice before filing?",
+      "expected": [
+        "DOC-009-Notice-of-Default.pdf",
+        "DOC-010-Response-Letter.pdf"
+      ],
+      "original": {
+        "found": false,
+        "top_doc": "DOC-020-Docket.pdf",
+        "elapsed_ms": 164.89505767822266,
+        "query": "Which documents establish that the defendant received notice before filing?"
+      },
+      "targeted": {
+        "found": false,
+        "top_doc": "DOC-020-Docket.pdf",
+        "elapsed_ms": 156.9972038269043,
+        "query": "Which documents establish that the defendant received notice before filing? demand notification docket court filing served with notice notice was sent received demand record paper"
+      }
+    },
+    {
+      "q_id": "Q33",
+      "question": "Who sent the first breach notice and on what date?",
+      "expected": [
+        "DOC-009-Notice-of-Default.pdf"
+      ],
+      "original": {
+        "found": true,
+        "top_doc": "DOC-004-Amendment-No-1.docx",
+        "elapsed_ms": 125.97775459289551,
+        "query": "Who sent the first breach notice and on what date?"
+      },
+      "targeted": {
+        "found": true,
+        "top_doc": "DOC-009-Notice-of-Default.pdf",
+        "elapsed_ms": 146.01588249206543,
+        "query": "Who sent the first breach notice and on what date? DATE default demand notification"
+      }
+    },
+    {
+      "q_id": "Q46",
+      "question": "Two documents give different dates for the same event. Which is better supported?",
+      "expected": [
+        "DOC-013-Deposition-Notice.pdf",
+        "DOC-019-Deposition-Transcript.pdf"
+      ],
+      "original": {
+        "found": false,
+        "top_doc": "DOC-014-Chronology.pdf",
+        "elapsed_ms": 138.80515098571777,
+        "query": "Two documents give different dates for the same event. Which is better supported?"
+      },
+      "targeted": {
+        "found": false,
+        "top_doc": "DOC-014-Chronology.pdf",
+        "elapsed_ms": 150.32005310058594,
+        "query": "Two documents give different dates for the same event. Which is better supported? DATE record paper"
+      }
+    },
+    {
+      "q_id": "Q49",
+      "question": "The same fact appears in two documents with different quoted wording. Which is the primary source?",
+      "expected": [
+        "DOC-009-Notice-of-Default.pdf",
+        "DOC-017-Notice-Email.pdf"
+      ],
+      "original": {
+        "found": false,
+        "top_doc": "DOC-014-Chronology.pdf",
+        "elapsed_ms": 101.87697410583496,
+        "query": "The same fact appears in two documents with different quoted wording. Which is the primary source?"
+      },
+      "targeted": {
+        "found": false,
+        "top_doc": "DOC-014-Chronology.pdf",
+        "elapsed_ms": 135.84303855895996,
+        "query": "The same fact appears in two documents with different quoted wording. Which is the primary source? record paper"
+      }
+    }
+  ],
+  "total_time_s": 3.0100228786468506
+}

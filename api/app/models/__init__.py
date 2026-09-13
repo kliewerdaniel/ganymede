@@ -110,7 +110,8 @@ class Document(Base):
     # Relationships
     matter = relationship("Matter", back_populates="documents")
     pages = relationship("Page", back_populates="document", cascade="all, delete-orphan")
-    ingestion_jobs = relationship("IngestionJob", back_populates="document")
+    chunks = relationship("Chunk", back_populates="document", cascade="all, delete-orphan")
+    ingestion_jobs = relationship("IngestionJob", back_populates="document", cascade="all, delete-orphan")
 
     __table_args__ = (
         Index("idx_documents_matter_sha256", "matter_id", "sha256"),
@@ -178,7 +179,7 @@ class Chunk(Base):
 
     # Relationships
     page = relationship("Page", back_populates="chunks")
-    document = relationship("Document")
+    document = relationship("Document", back_populates="chunks")
     matter = relationship("Matter")
     embedding = relationship("ChunkEmbedding", back_populates="chunk", uselist=False)
 

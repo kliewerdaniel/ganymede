@@ -1,5 +1,6 @@
 {
-  "timestamp": "2026-09-13T10:06:17",
+  "timestamp": "2026-09-13T10:13:40",
+  "variant": "with_query_expansion",
   "recall_at_5": 82.75862068965517,
   "found": 24,
   "total_answerable": 29,
@@ -20,8 +21,9 @@
       ],
       "found": false,
       "citations_count": 5,
-      "top_sha": "589552a867d0b3cb1ad2784d453c9169303a0acbd6992a5fbd7452644331b454",
-      "top_doc": "DOC-004-Amendment-No-1.docx"
+      "top_sha": "d00e92d8f7b9cefbb79a5b31260d896a9b5cb4282fa786ebde1c3674463ec0d4",
+      "top_doc": "DOC-002-Answer.pdf",
+      "query_used": "On what date did the first default breach failure to perform breach notice demand arrive?"
     },
     {
       "q_id": "Q09",
@@ -31,13 +33,14 @@
         "DOC-008-Invoice-1045.docx"
       ],
       "expected_shas": [
-        "4eb0e27673f43b139675ef0fd23f932ade94d0ab766610b271f713bb4a1f1906",
-        "99c7baace1b7ed68112e4581ccb9e807d369509aa7787f90e70591c2a524edc9"
+        "99c7baace1b7ed68112e4581ccb9e807d369509aa7787f90e70591c2a524edc9",
+        "4eb0e27673f43b139675ef0fd23f932ade94d0ab766610b271f713bb4a1f1906"
       ],
       "found": false,
       "citations_count": 5,
-      "top_sha": "8c0a06cf2ea94d163422037d497f4d70b4e50140b8faa5fe89c35c80de9f9c49",
-      "top_doc": "DOC-003-MSA.docx"
+      "top_sha": "ebcc9a0ca1695f5caad20e4dfa8489b7a7bea50e113c42fbd50cf9dd3c04d0c0",
+      "top_doc": "DOC-011-Demand-Letter.pdf",
+      "query_used": "What is the amount total balance sum stated in the invoice billing statement that matches the dispute?"
     },
     {
       "q_id": "Q25",
@@ -53,23 +56,29 @@
       "found": false,
       "citations_count": 5,
       "top_sha": "424c1de39885020e653a9e8f2055198442370cd5f6df80e9d1d929b84b61114b",
-      "top_doc": "DOC-020-Docket.pdf"
+      "top_doc": "DOC-020-Docket.pdf",
+      "query_used": "Which document filing records establish that the defendant served with notice demand before filing court docket?"
     },
     {
-      "q_id": "Q46",
-      "question": "Two documents give different dates for the same event. Which is better supported?",
+      "q_id": "Q29",
+      "question": "Which documents show the sequence of communications leading to the settlement offer?",
       "expected": [
-        "DOC-013-Deposition-Notice.pdf",
-        "DOC-019-Deposition-Transcript.pdf"
+        "DOC-009-Notice-of-Default.pdf",
+        "DOC-010-Response-Letter.pdf",
+        "DOC-011-Demand-Letter.pdf",
+        "DOC-012-Settlement-Email.pdf"
       ],
       "expected_shas": [
-        "267bccac23ca6f15fa9f52dcc91915c4a8e27d9dca9c8090e4b3397ec852ac80",
-        "ced31546e80fc2b64eeb94a511cea96218096054500630bbf3889dccea2e695f"
+        "7fbdc675bd7a537a287d966b29a75820dca051c2c4dca1b7878cdf684b0ce434",
+        "ebcc9a0ca1695f5caad20e4dfa8489b7a7bea50e113c42fbd50cf9dd3c04d0c0",
+        "0b53b6a56768934ca72b9ca6ae81dec0cbd19796014cb21b1011bf443dd95505",
+        "58c57a53836ab1126c761b2ac0aa4016fafe30e8c4e80484c740f08ec8d27614"
       ],
       "found": false,
       "citations_count": 5,
-      "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
-      "top_doc": "DOC-014-Chronology.pdf"
+      "top_sha": "d7bde94ac76c68a49df723922a6bceb3f1b88f00d8f3f60ce7de335874a31ac7",
+      "top_doc": "DOC-018-Handwritten-Notes.pdf",
+      "query_used": "Which document filing records show the sequence of communications leading to the settlement resolution offer?"
     },
     {
       "q_id": "Q49",
@@ -85,7 +94,8 @@
       "found": false,
       "citations_count": 5,
       "top_sha": "54697a83a39d042a98e9d2abdde8896ce96d8a482e897a52836d12513b947e2c",
-      "top_doc": "DOC-014-Chronology.pdf"
+      "top_doc": "DOC-014-Chronology.pdf",
+      "query_used": "The same fact appears in two document filing records with different quoted wording. Which is the primary source?"
     }
   ],
   "leaks": [
@@ -258,5 +268,5 @@
       "top_doc": "DOC-016-Technical-Report.docx"
     }
   ],
-  "query_time_total_s": 2.2680881023406982
+  "query_time_total_s": 2.4961822032928467
 }
