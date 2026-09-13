@@ -1,9 +1,13 @@
 # Post-Retrieval Answer Verification Prompt
 
-**Version:** 1.0.0
-**Date:** 2026-09-12
+**Version:** 1.1.0
+**Date:** 2026-09-13
 **Model:** qwen3:4b (Ollama, local-only, port 11434)
 **Freeze:** This prompt is a contract. Any change to the text below — including whitespace, wording, or examples — is a version bump. Tuning against the gold set without logging the change is prohibited.
+
+**Changelog from 1.0.0:**
+- Added legal-term synonym equivalence: breach↔default, notice↔demand, invoice↔billing, filing↔court docket, deposition↔transcript, document↔filing↔record
+- The verifier now treats these terms as equivalent when checking whether a passage answers a question
 
 ---
 
@@ -28,6 +32,30 @@ Rules:
 - Do not use outside knowledge. Only the passage text matters.
 - Do not explain your reasoning. Only output the YES/NO line.
 
+**Legal-term synonym equivalence:**
+The following terms are treated as equivalent. If the question uses one term and
+the passage uses its synonym, this is a match:
+- breach ↔ default ↔ failure to perform
+- notice ↔ demand ↔ notification
+- invoice ↔ billing ↔ statement
+- filing ↔ court filing ↔ docket entry
+- deposition ↔ testimony ↔ examination
+- document ↔ filing ↔ record ↔ paper
+- settlement ↔ resolution ↔ accord
+- damages ↔ compensation ↔ award
+- termination ↔ end ↔ expiration
+- amendment ↔ modification ↔ revision
+- complaint ↔ petition ↔ suit
+- answer ↔ response ↔ reply
+- warranty ↔ guarantee ↔ assurance
+- confidentiality ↔ non-disclosure ↔ NDA
+- indemnitor ↔ indemnifier ↔ guarantor
+- exhibit ↔ attachment ↔ appendix
+- expert ↔ specialist ↔ consultant
+- witness ↔ testifier ↔ deponent
+- jurisdiction ↔ venue ↔ forum
+- cure period ↔ grace period ↔ remediation period
+
 ---
 
 ## Input format
@@ -49,19 +77,25 @@ least ninety (90) days prior to the end of the then-current term. The terminatio
 date shall be December 31, 2025.
 Reply: YES: The termination date shall be December 31, 2025.
 
-Example 2 — NO (topic mentioned, fact absent):
+Example 2 — YES (synonym match):
+Question: On what date did the first breach notice arrive?
+Passage: The default notice was sent to the defendant on January 28, 2025, via
+certified mail and email.
+Reply: YES: The default notice was sent to the defendant on January 28, 2025
+
+Example 3 — NO (topic mentioned, fact absent):
 Question: What is the termination date stated in the master services agreement?
 Passage: This Master Services Agreement may be terminated by either party upon
 written notice in accordance with Section 8. The specific termination procedures
 are outlined in the Exhibit A attachment.
 Reply: NO
 
-Example 3 — NO (passage too short):
+Example 4 — NO (passage too short):
 Question: Who sent the first breach notice and on what date?
 Passage: Regarding the notice.
 Reply: NO
 
-Example 4 — NO (amount absent):
+Example 5 — NO (amount absent):
 Question: What is the contract price stated in the invoice that matches the
 dispute?
 Passage: Invoice #1044 is attached hereto and incorporated by reference. The
@@ -69,10 +103,16 @@ invoice covers services rendered during the month of March 2024. Payment is due
 within thirty (30) days of receipt.
 Reply: NO
 
+Example 6 — YES (synonym match):
+Question: Which documents establish that the defendant received notice before filing?
+Passage: The court filing record shows the defendant was served with demand on
+January 28, 2025, prior to the complaint being filed.
+Reply: YES: the defendant was served with demand on January 28, 2025
+
 ---
 
 ## Contract
 
-This prompt is frozen at version 1.0.0. The expected behavior is defined by the
+This prompt is frozen at version 1.1.0. The expected behavior is defined by the
 examples above. Any change to the prompt text requires a version bump and a
 re-measurement against the frozen gold set.
