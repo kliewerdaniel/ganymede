@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 OLLAMA_URL = "http://localhost:11434"
 VERIFIER_MODEL = "qwen3:4b"
-VERIFIER_PROMPT_VERSION = "1.0.0"
+VERIFIER_PROMPT_VERSION = "1.1.0"
 
 # Shared Ollama client — reuse across calls, timeout 60s
 _ollama_client: Optional[httpx.Client] = None

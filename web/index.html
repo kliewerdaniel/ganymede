@@ -627,31 +627,73 @@
             answerPanel.innerHTML = '<div class="loading"><div class="spinner"></div>Searching...</div>';
 
             try {
-                const resp = await fetch(`${API}/matters/${currentMatter.id}/ask`, {
+                // Submit async query
+                const resp = await fetch(`${API}/matters/${currentMatter.id}/ask-async`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ query_text: question, top_k: 5 }),
                 });
 
                 const data = await resp.json();
-                currentCitations = data.citations;
+                const queryId = data.query_id;
 
-                const result = {
-                    question,
-                    citations: data.citations,
-                    answer: data.answer || generateAnswer(data.citations),
-                    timestamp: new Date().toISOString(),
-                };
-
-                history.unshift(result);
-                if (history.length > 20) history.pop();
-                saveHistory();
-                renderAnswer(result);
+                // Poll for results
+                await pollForResults(queryId);
             } catch (e) {
                 answerPanel.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>Error: ${e.message}</p></div>`;
             } finally {
                 askBtn.disabled = false;
             }
+        }
+
+        async function pollForResults(queryId) {
+            const maxAttempts = 60; // 60 seconds max
+            let attempts = 0;
+
+            while (attempts < maxAttempts) {
+                const resp = await fetch(`${API}/ask/${queryId}/status`);
+                const data = await resp.json();
+
+                if (data.status === 'complete') {
+                    currentCitations = data.citations;
+                    const result = {
+                        question: data.question,
+                        citations: data.citations,
+                        answer: data.result_count > 0
+                            ? `Found ${data.result_count} verified passage(s) in the matter documents.`
+                            : 'Not found in the approved matter sources.',
+                        timestamp: new Date().toISOString(),
+                    };
+
+                    history.unshift(result);
+                    if (history.length > 20) history.pop();
+                    saveHistory();
+                    renderAnswer(result);
+                    return;
+                }
+
+                if (data.status === 'error') {
+                    answerPanel.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>Error: ${data.error}</p></div>`;
+                    return;
+                }
+
+                // Still processing — show raw results if available
+                if (data.citations && data.citations.length > 0 && attempts === 0) {
+                    currentCitations = data.citations;
+                    const tempResult = {
+                        question: data.question,
+                        citations: data.citations,
+                        answer: `Searching... Found ${data.result_count} raw results, verifying...`,
+                        timestamp: new Date().toISOString(),
+                    };
+                    renderAnswer(tempResult);
+                }
+
+                await new Promise(r => setTimeout(r, 1000));
+                attempts++;
+            }
+
+            answerPanel.innerHTML = '<div class="empty-state"><div class="icon">⏱️</div><p>Verification is taking longer than expected. Please try again.</p></div>';
         }
 
         function generateAnswer(citations) {

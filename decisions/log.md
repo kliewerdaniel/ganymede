@@ -37,35 +37,20 @@ The fast-path design in `verifier.py` is kept for future use (thresholds are con
 
 ---
 
-## 2026-09-13 — Full pipeline measurement: strict verifier drops answerable recall, preserves answer-absent gate
+## 2026-09-13 — Verifier v1.1.0 with synonym equivalence: still 0/29 recall
 
-**Decision:** The full Q&A pipeline (query expansion → retrieval → verifier) was measured against the gold set. Results:
-- Answerable Recall@5: **0%** (0/29 with verifier, 25/29 without)
-- Answer-absent clean: **21/21** (100%)
+**Decision:** Updated verifier prompt to v1.1.0 with legal-term synonym equivalence (breach↔default, notice↔demand, etc.). The verifier still drops answerable recall to 0/29.
 
-**Why:** The verifier (qwen3:4b) is too strict for answerable queries when query expansion changes the retrieval terms. The expanded query retrieves passages containing legal synonyms (e.g., "default" instead of "breach"), but the verifier checks against the original question and says NO because the exact phrasing doesn't match.
+**Why:** qwen3:4b is too small to reliably perform the verification task. Even with explicit synonym rules in the prompt, the model fails to connect question terms to passage terms. The answer-absent gate holds at 21/21, but the cost is rejecting all answerable citations.
 
-**Decision for Week 5:** Use the verifier in **strict mode** (original question for verification). This means:
-- On answerable queries: user sees fewer citations than optimal, but all shown are genuine
-- On unanswerable queries: zero results (correct)
+**Production decision:** Use the verifier in strict mode. The system says "not found" rather than risk a false citation. This is the fail-closed tradeoff SKILL.md requires.
 
-This is the fail-closed tradeoff the SKILL.md requires: "Model output is untrusted data; it cannot grant itself tools or permissions."
+**Path forward for production:**
+1. Use a larger model (qwen3:8b or better) for verification
+2. Implement async verification (return raw results, verify in background, update UI)
+3. Accept ~17s/query latency with the current strict verifier
 
-**Production latency:** ~17s/query for full verification (5 citations × 3.4s each). Verified in `full-pipeline-report.json`.
-
-**Alternatives deferred:**
-1. Pass expanded question to verifier (defeats verification purpose)
-2. Use larger verification model (qwen3:8b or better)
-3. Use cross-encoder entailment classifier instead of LLM verifier
-4. Async verification (return raw results, verify in background, update UI)
-
-**Related:** `api/tests/full-pipeline-report.json`
-
-**Note on verifier prompt:** The prompt requires "exact quoting span from passage." When query expansion introduces synonyms (breach→default breach), the retrieved passages contain the synonym, but the verifier checks against the original question's wording and says NO. Two paths forward:
-1. Version-bump the prompt to instruct the verifier to accept synonym-equivalent answers (tradeoff: may increase false positives on unanswerable queries)
-2. Use a larger verification model (qwen3:8b) that understands semantic equivalence
-
-Both deferred to Week 5 after usability sessions with the current strict configuration.
+**Related:** `docs/specification/verifier-prompt.md` (v1.1.0), `api/tests/full-pipeline-report.json`
 
 ---
 

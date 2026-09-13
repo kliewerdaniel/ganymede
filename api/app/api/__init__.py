@@ -215,6 +215,60 @@ def query_matter(
     )
 
 
+# --- Async Q&A Routes ---
+
+@router.post("/matters/{matter_id}/ask-async")
+def ask_matter_async(
+    matter_id: str,
+    request: QueryRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Submit a question for async processing.
+    Returns immediately with query_id. Poll /ask/{query_id}/status for results.
+    """
+    from app.services.async_verification import submit_query
+    from app.core.database import SessionLocal
+
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+
+    query_id = submit_query(
+        matter_id=matter_id,
+        question=request.query_text,
+        db_session_factory=SessionLocal,
+        top_k=request.top_k or 5,
+    )
+
+    return {"query_id": query_id, "status": "pending"}
+
+
+@router.get("/ask/{query_id}/status")
+def get_query_status(query_id: str):
+    """Get the status of an async query."""
+    from app.services.async_verification import get_query_status
+
+    status = get_query_status(query_id)
+    if not status:
+        raise HTTPException(status_code=404, detail="Query not found")
+
+    return status
+
+
+# --- Citation Feedback ---
+
+@router.post("/citations/{citation_id}/feedback")
+def submit_citation_feedback(
+    citation_id: str,
+    feedback: str,  # supporting, weak, wrong, inaccessible
+    db: Session = Depends(get_db),
+):
+    """Submit feedback on a citation."""
+    # In production, store in audit log
+    return {"status": "received", "citation_id": citation_id, "feedback": feedback}
+
+
 # --- Verified Q&A Route ---
 
 @router.post("/matters/{matter_id}/ask")
