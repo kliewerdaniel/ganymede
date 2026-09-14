@@ -26,6 +26,7 @@ services:
       STORAGE_PATH: /data/storage
     volumes:
       - api_storage:/data/storage
+      - ./api:/app  # Mount local code for development
     ports:
       - "8000:8000"
     depends_on:

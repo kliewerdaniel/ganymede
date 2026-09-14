@@ -2,7 +2,21 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Handle both local and Docker environments
+# When run from host: api/tests/reingest_corpus.py -> api/
+# When run from container: /tmp/reingest_corpus.py -> /app/
+script_dir = os.path.dirname(os.path.abspath(__file__))
+if os.path.exists(os.path.join(script_dir, 'tests')):
+    # Local: script is in api/tests/
+    project_root = os.path.dirname(script_dir)
+elif os.path.exists('/app'):
+    # Docker: script is in /tmp/, app is in /app/
+    project_root = '/app'
+else:
+    project_root = os.path.dirname(script_dir)
+
+sys.path.insert(0, project_root)
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
