@@ -1,11 +1,15 @@
 # Post-Retrieval Answer Verification Prompt
 
-**Version:** 1.1.0
-**Date:** 2026-09-13
-**Model:** qwen3:4b (Ollama, local-only, port 11434)
+**Version:** 1.2.0
+**Date:** 2026-09-14
+**Model:** qwen3:8b (Ollama, local-only, port 11434) — changed from qwen3:4b in v1.2.0
 **Freeze:** This prompt is a contract. Any change to the text below — including whitespace, wording, or examples — is a version bump. Tuning against the gold set without logging the change is prohibited.
 
-**Changelog from 1.0.0:**
+**Changelog from 1.1.0:**
+- **Model change: qwen3:4b → qwen3:8b.** The v1.1.0 synonym equivalence rules make the verifier's decision criteria stricter. qwen3:4b lacks the capacity to apply these rules reliably — it produces false negatives on clear-YES cases (e.g., says NO to "The termination date shall be December 31, 2025" when that exact date appears in the passage). qwen3:8b applies the rules correctly while maintaining answer-absent cleanliness. Latency also drops: ~60s/call on 4b → ~10s/call on 8b, because 4b was burning time on longer, less certain generations.
+- No prompt text changes from v1.1.0. The synonym equivalence rules were correct; the model was too small for them.
+
+**Changelog from 1.0.0 (via 1.1.0):**
 - Added legal-term synonym equivalence: breach↔default, notice↔demand, invoice↔billing, filing↔court docket, deposition↔transcript, document↔filing↔record
 - The verifier now treats these terms as equivalent when checking whether a passage answers a question
 

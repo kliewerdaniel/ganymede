@@ -1,5 +1,50 @@
 # Decision Log — 2026-09-13
 
+---
+
+## 2026-09-14 — Week 6 closeout: Docker/Ollama connectivity fix
+
+**Decision:** The Docker build was never a registry/network issue. The root cause was Ollama reachability from inside the container: `localhost:11434` resolves to the container itself, not the host running Ollama.
+
+**Fix (committed as `274e0d0`):**
+- `docker-compose.yml`: Added `OLLAMA_ENDPOINTS=host.docker.internal:11434,localhost:11434`, `OLLAMA_URL=http://host.docker.internal:11434`, `extra_hosts: host.docker.internal:host-gateway`, and `./docs:/docs` mount
+- `api/Dockerfile`: Pinned `python:3.11-slim@sha256:9534e5a8e315485d4061ed659af0fd78a284c015f9b73661b41d6bab25604534`
+- `api/app/services/verifier.py`: `OLLAMA_URL` reads from env (default `http://host.docker.internal:11434`), timeout 60s→180s via `OLLAMA_TIMEOUT_SECONDS`
+
+**Verified:** Clean restart, all endpoints return expected responses. Sync `/ask` returns in <1s with `"verified": false`.
+
+---
+
+## 2026-09-14 — Week 6 closeout: Verifier recall root cause identified
+
+**Decision:** The verifier prompt v1.1.0 is the problem, not model size in isolation. The synonym equivalence rules make the decision criteria stricter, and qwen3:4b lacks the capacity to apply them reliably.
+
+**Isolation experiment (5-case probe):**
+
+| Model | Prompt | Correct | Latency |
+|-------|--------|---------|---------|
+| qwen3:4b | Minimal ("Reply YES or NO...") | 5/5 | 4–18s |
+| qwen3:4b | Full verifier prompt v1.1.0 | 2/5 | 28–142s |
+| qwen3:8b | Full verifier prompt v1.1.0 | 4/5 | 6–30s |
+
+**Key finding:** With the full prompt, qwen3:4b says NO to "The termination date shall be December 31, 2025" when that exact date appears in the passage. qwen3:8b gets it right. This is a capability-times-prompt-complexity interaction.
+
+**Decision: Adopt qwen3:8b for verification.** Provisional pending full gold-set confirmation.
+
+**Related:** `adr/009-verifier-recall-recovery.md`, `docs/specification/verifier-prompt.md` (v1.2.0)
+
+---
+
+## 2026-09-14 — Week 6 closeout: Sync /ask endpoint is unverified by design
+
+**Decision:** The synchronous `POST /api/v1/matters/{id}/ask` endpoint no longer calls the verifier. It returns raw citations with `"verified": false`. The async endpoint (`POST /ask-async` + `GET /ask/{id}/status`) is the only path to verified answers.
+
+**Rationale:** Verification adds ~10-60s per citation. A synchronous HTTP endpoint should return in <2s. The async endpoint is the correct pattern for slow verification. The old behavior (returning "Not found" when the verifier rejected everything) was misleading — it looked like a verified negative, not a verifier failure.
+
+**Committed as `493e217`.** ADR: `adr/010-sync-ask-unverified.md`.
+
+---
+
 ## Verifier fast-path measurement complete — no safe threshold found
 
 **Decision:** The verifier fast-path (ADR 008 Addendum) was tested against the full 50-question gold set with query expansion enabled. The score distributions for answerable and unanswerable queries overlap so significantly that **no threshold can skip LLM verification without reopening the answer-absent gate**.

@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 import os
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
-VERIFIER_MODEL = "qwen3:4b"
+VERIFIER_MODEL = os.environ.get("VERIFIER_MODEL", "qwen3:8b")
 VERIFIER_PROMPT_VERSION = "1.1.0"
 
 # Shared Ollama client — reuse across calls, timeout 60s
