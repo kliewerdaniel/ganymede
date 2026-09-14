@@ -24,9 +24,17 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg2://ganymede:ganymede@db:5432/ganymede
       STORAGE_PATH: /data/storage
+      # Ollama on host — primary is host.docker.internal (works from container to host).
+      # Fallback to localhost only runs if host.docker.internal is unavailable.
+      OLLAMA_ENDPOINTS: "host.docker.internal:11434,localhost:11434"
+      # Verifier Ollama URL — uses host.docker.internal by default
+      OLLAMA_URL: "http://host.docker.internal:11434"
     volumes:
       - api_storage:/data/storage
       - ./api:/app  # Mount local code for development
+      - ./docs:/docs  # Mount docs so verifier prompt loads
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "8000:8000"
     depends_on:

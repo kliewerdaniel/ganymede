@@ -22,18 +22,24 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-OLLAMA_URL = "http://localhost:11434"
+import os
+OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
 VERIFIER_MODEL = "qwen3:4b"
 VERIFIER_PROMPT_VERSION = "1.1.0"
 
 # Shared Ollama client — reuse across calls, timeout 60s
 _ollama_client: Optional[httpx.Client] = None
 
+# Timeout for Ollama API calls (read + connect + write + pool).
+# qwen3:4b takes ~60s/call for full-prompt verification on reference hardware.
+# 180s allows headroom without masking real failures.
+OLLAMA_TIMEOUT_SECONDS = float(os.environ.get("OLLAMA_TIMEOUT_SECONDS", "180.0"))
+
 
 def _get_client() -> httpx.Client:
     global _ollama_client
     if _ollama_client is None:
-        _ollama_client = httpx.Client(base_url=OLLAMA_URL, timeout=60.0)
+        _ollama_client = httpx.Client(base_url=OLLAMA_URL, timeout=OLLAMA_TIMEOUT_SECONDS)
     return _ollama_client
 
 
