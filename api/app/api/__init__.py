@@ -278,8 +278,17 @@ def ask_matter(
     db: Session = Depends(get_db),
 ):
     """
-    Ask a question and get a verified answer with citations.
-    Uses query expansion + verifier for answer-absent precision.
+    Ask a question and get raw citations (UNVERIFIED).
+
+    This endpoint returns retrieved passages without LLM verification.
+    It is intended for debugging and development only.
+
+    For verified answers (with answer-absent precision), use
+    POST /matters/{id}/ask-async and poll GET /ask/{query_id}/status.
+
+    ADR 010: Sync /ask is unverified by design. The verifier adds
+    ~10-60s per citation, which exceeds reasonable synchronous HTTP
+    timeouts. The async endpoint is the only path to a verified answer.
     """
     # Verify matter exists
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
@@ -289,7 +298,7 @@ def ask_matter(
     # Apply query expansion
     expanded_query = expand_query(request.query_text)
 
-    # Retrieve raw citations
+    # Retrieve raw citations (no verifier)
     raw_citations = retrieve(
         db=db,
         matter_id=matter_id,
@@ -297,27 +306,11 @@ def ask_matter(
         top_k=request.top_k or 5,
     )
 
-    # Apply verifier
-    if len(raw_citations) > 0:
-        verified_citations = verify_top_k(
-            request.query_text,  # Use original question for verification
-            raw_citations,
-            top_k_verify=len(raw_citations),
-        )
-    else:
-        verified_citations = []
-
-    # Build answer text
-    if len(verified_citations) == 0:
-        answer_text = "Not found in the approved matter sources."
-    else:
-        answer_text = f"Found {len(verified_citations)} relevant passage(s) in the matter documents."
-
     return {
         "matter_id": matter_id,
         "query_text": request.query_text,
         "expanded_query": expanded_query,
-        "answer": answer_text,
+        "answer": f"Found {len(raw_citations)} raw passage(s) — UNVERIFIED. Use /ask-async for verified results.",
         "citations": [
             {
                 "document_id": str(c.document_id),
@@ -331,8 +324,9 @@ def ask_matter(
                 "access_scope": c.access_scope,
                 "model_version": c.model_version,
             }
-            for c in verified_citations
+            for c in raw_citations
         ],
-        "result_count": len(verified_citations),
+        "result_count": len(raw_citations),
         "raw_count": len(raw_citations),
+        "verified": False,
     }

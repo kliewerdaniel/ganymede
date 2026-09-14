@@ -110,7 +110,16 @@ Per the build plan, the first 48 hours create momentum on both tracks:
 
 ## Status
 
-Pre-build. Documentation phase. No implementation code yet.
+Week 7 build in progress. Implemented and running:
+
+- **Retrieval pipeline** — hybrid FTS + vector fusion (RRF), query expansion with legal-term synonyms, pgvector storage
+- **Verifier** — local LLM (qwen3:8b via Ollama) checks whether retrieved passages actually answer the question; strict mode (fail-closed)
+- **Q&A workspace** — dark-themed SPA with matter selector, document inventory, citation cards, source inspector, async polling
+- **Async verification** — submit-then-poll pattern: returns query_id immediately, verifies in background
+- **Docker Compose** — API + PostgreSQL + pgvector, local Ollama for embeddings and verification
+- **Frozen corpus v0.1** — 23 documents, 50-question gold set (29 answerable, 21 answer-absent)
+
+**Key numbers (Week 4 baseline):** Recall@5 86.2% (25/29), answer-absent 21/21 clean, isolation 8/8 blocked. Verifier recall recovery in progress (Week 7).
 
 ---
 
