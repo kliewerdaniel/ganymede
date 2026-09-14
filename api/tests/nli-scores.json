@@ -1,0 +1,1357 @@
+{
+  "verifier_model": "roberta-large-mnli",
+  "answerable": [
+    {
+      "q_id": "Q01",
+      "question": "What is the termination date stated in the master services agreement?",
+      "scores": [
+        {
+          "score": 0.0810629203915596,
+          "latency_ms": 521.9106674194336
+        },
+        {
+          "score": 0.12313037365674973,
+          "latency_ms": 558.4259033203125
+        },
+        {
+          "score": 0.11216405779123306,
+          "latency_ms": 536.0977649688721
+        },
+        {
+          "score": 0.43180206418037415,
+          "latency_ms": 462.4674320220947
+        },
+        {
+          "score": 0.028056828305125237,
+          "latency_ms": 366.17374420166016
+        }
+      ],
+      "max_score": 0.43180206418037415
+    },
+    {
+      "q_id": "Q04",
+      "question": "What amount does the complaint allege as damages?",
+      "scores": [
+        {
+          "score": 0.06821819394826889,
+          "latency_ms": 342.3187732696533
+        },
+        {
+          "score": 0.2476770430803299,
+          "latency_ms": 491.67370796203613
+        },
+        {
+          "score": 0.12668469548225403,
+          "latency_ms": 476.4575958251953
+        },
+        {
+          "score": 0.06424843519926071,
+          "latency_ms": 501.0089874267578
+        },
+        {
+          "score": 0.12184262275695801,
+          "latency_ms": 489.89129066467285
+        }
+      ],
+      "max_score": 0.2476770430803299
+    },
+    {
+      "q_id": "Q05",
+      "question": "On what date did the first breach notice arrive, according to the chronology exhibits?",
+      "scores": [
+        {
+          "score": 0.4446249008178711,
+          "latency_ms": 456.70127868652344
+        },
+        {
+          "score": 0.08662619441747665,
+          "latency_ms": 346.7984199523926
+        },
+        {
+          "score": 0.1597064882516861,
+          "latency_ms": 505.65409660339355
+        },
+        {
+          "score": 0.12818150222301483,
+          "latency_ms": 482.9449653625488
+        },
+        {
+          "score": 0.21648071706295013,
+          "latency_ms": 427.57511138916016
+        }
+      ],
+      "max_score": 0.4446249008178711
+    },
+    {
+      "q_id": "Q07",
+      "question": "What is the stated jurisdiction for dispute resolution in the agreement?",
+      "scores": [
+        {
+          "score": 0.25614747405052185,
+          "latency_ms": 351.9439697265625
+        },
+        {
+          "score": 0.18517367541790009,
+          "latency_ms": 477.2143363952637
+        },
+        {
+          "score": 0.23959662020206451,
+          "latency_ms": 434.262752532959
+        },
+        {
+          "score": 0.08109796792268753,
+          "latency_ms": 513.7381553649902
+        },
+        {
+          "score": 0.048418257385492325,
+          "latency_ms": 330.5690288543701
+        }
+      ],
+      "max_score": 0.25614747405052185
+    },
+    {
+      "q_id": "Q08",
+      "question": "Who signed the amendment as the corporate officer, and in what capacity?",
+      "scores": [
+        {
+          "score": 0.014420860446989536,
+          "latency_ms": 307.41238594055176
+        },
+        {
+          "score": 0.08733715862035751,
+          "latency_ms": 473.7966060638428
+        },
+        {
+          "score": 0.010720630176365376,
+          "latency_ms": 334.0563774108887
+        },
+        {
+          "score": 0.015109393745660782,
+          "latency_ms": 321.19297981262207
+        },
+        {
+          "score": 0.43453943729400635,
+          "latency_ms": 430.4172992706299
+        }
+      ],
+      "max_score": 0.43453943729400635
+    },
+    {
+      "q_id": "Q09",
+      "question": "What is the contract price stated in the invoice that matches the dispute?",
+      "scores": [
+        {
+          "score": 0.043333277106285095,
+          "latency_ms": 343.6150550842285
+        },
+        {
+          "score": 0.21046915650367737,
+          "latency_ms": 440.45257568359375
+        },
+        {
+          "score": 0.45038577914237976,
+          "latency_ms": 570.5018043518066
+        },
+        {
+          "score": 0.15809930860996246,
+          "latency_ms": 433.9945316314697
+        },
+        {
+          "score": 0.4239794909954071,
+          "latency_ms": 443.6030387878418
+        }
+      ],
+      "max_score": 0.45038577914237976
+    },
+    {
+      "q_id": "Q11",
+      "question": "What date does the deposition notice set for the first deposition?",
+      "scores": [
+        {
+          "score": 0.13333943486213684,
+          "latency_ms": 528.038740158081
+        },
+        {
+          "score": 0.009768864139914513,
+          "latency_ms": 453.9370536804199
+        },
+        {
+          "score": 0.09556323289871216,
+          "latency_ms": 489.09544944763184
+        },
+        {
+          "score": 0.1688622683286667,
+          "latency_ms": 506.0105323791504
+        },
+        {
+          "score": 0.43468865752220154,
+          "latency_ms": 452.3129463195801
+        }
+      ],
+      "max_score": 0.43468865752220154
+    },
+    {
+      "q_id": "Q12",
+      "question": "Which paragraph describes the scope of the non-disclosure obligation?",
+      "scores": [
+        {
+          "score": 0.08611565828323364,
+          "latency_ms": 493.3767318725586
+        },
+        {
+          "score": 0.037992317229509354,
+          "latency_ms": 339.4427299499512
+        },
+        {
+          "score": 0.08520182967185974,
+          "latency_ms": 370.3763484954834
+        },
+        {
+          "score": 0.24940013885498047,
+          "latency_ms": 465.43097496032715
+        },
+        {
+          "score": 0.08952970802783966,
+          "latency_ms": 425.14610290527344
+        }
+      ],
+      "max_score": 0.24940013885498047
+    },
+    {
+      "q_id": "Q13",
+      "question": "What is the stated interest rate on the unpaid balance in the demand letter?",
+      "scores": [
+        {
+          "score": 0.2227572649717331,
+          "latency_ms": 431.1809539794922
+        },
+        {
+          "score": 0.0262251365929842,
+          "latency_ms": 345.2608585357666
+        },
+        {
+          "score": 0.04967473819851875,
+          "latency_ms": 521.834135055542
+        },
+        {
+          "score": 0.3931785523891449,
+          "latency_ms": 449.9549865722656
+        },
+        {
+          "score": 0.04663964360952377,
+          "latency_ms": 520.6224918365479
+        }
+      ],
+      "max_score": 0.3931785523891449
+    },
+    {
+      "q_id": "Q14",
+      "question": "Who is the court reporter named in the deposition scheduling order?",
+      "scores": [
+        {
+          "score": 0.07595989108085632,
+          "latency_ms": 523.7948894500732
+        },
+        {
+          "score": 0.013178806751966476,
+          "latency_ms": 500.35762786865234
+        },
+        {
+          "score": 0.010545426979660988,
+          "latency_ms": 243.01791191101074
+        },
+        {
+          "score": 0.09046003222465515,
+          "latency_ms": 569.1299438476562
+        },
+        {
+          "score": 0.007522002328187227,
+          "latency_ms": 397.6006507873535
+        }
+      ],
+      "max_score": 0.09046003222465515
+    },
+    {
+      "q_id": "Q15",
+      "question": "What page of the technical report contains the failure-mode analysis?",
+      "scores": [
+        {
+          "score": 0.562704861164093,
+          "latency_ms": 405.87711334228516
+        },
+        {
+          "score": 0.12208046764135361,
+          "latency_ms": 505.5992603302002
+        },
+        {
+          "score": 0.1675347238779068,
+          "latency_ms": 539.095401763916
+        },
+        {
+          "score": 0.07055461406707764,
+          "latency_ms": 376.1885166168213
+        },
+        {
+          "score": 0.008497790433466434,
+          "latency_ms": 489.577054977417
+        }
+      ],
+      "max_score": 0.562704861164093
+    },
+    {
+      "q_id": "Q17",
+      "question": "What is the effective date of the most recent amendment?",
+      "scores": [
+        {
+          "score": 0.04796411842107773,
+          "latency_ms": 300.75597763061523
+        },
+        {
+          "score": 0.22692948579788208,
+          "latency_ms": 463.29259872436523
+        },
+        {
+          "score": 0.17615163326263428,
+          "latency_ms": 504.89068031311035
+        },
+        {
+          "score": 0.4371362626552582,
+          "latency_ms": 512.946605682373
+        },
+        {
+          "score": 0.0708950087428093,
+          "latency_ms": 490.0553226470947
+        }
+      ],
+      "max_score": 0.4371362626552582
+    },
+    {
+      "q_id": "Q19",
+      "question": "What is the stated cure period in the default clause?",
+      "scores": [
+        {
+          "score": 0.0770457312464714,
+          "latency_ms": 461.38501167297363
+        },
+        {
+          "score": 0.13144764304161072,
+          "latency_ms": 480.1783561706543
+        },
+        {
+          "score": 0.41392120718955994,
+          "latency_ms": 414.08538818359375
+        },
+        {
+          "score": 0.04032179340720177,
+          "latency_ms": 321.5627670288086
+        },
+        {
+          "score": 0.008365551009774208,
+          "latency_ms": 151.05772018432617
+        }
+      ],
+      "max_score": 0.41392120718955994
+    },
+    {
+      "q_id": "Q21",
+      "question": "Across the contract and the amendment, what is the current notice period for termination?",
+      "scores": [
+        {
+          "score": 0.13425052165985107,
+          "latency_ms": 561.1212253570557
+        },
+        {
+          "score": 0.43742766976356506,
+          "latency_ms": 487.5338077545166
+        },
+        {
+          "score": 0.20622703433036804,
+          "latency_ms": 498.0945587158203
+        },
+        {
+          "score": 0.08277429640293121,
+          "latency_ms": 498.78454208374023
+        },
+        {
+          "score": 0.25055015087127686,
+          "latency_ms": 461.273193359375
+        }
+      ],
+      "max_score": 0.43742766976356506
+    },
+    {
+      "q_id": "Q22",
+      "question": "Do the complaint and the defendant's answer agree on the date of the alleged breach?",
+      "scores": [
+        {
+          "score": 0.17966046929359436,
+          "latency_ms": 334.4607353210449
+        },
+        {
+          "score": 0.1152573749423027,
+          "latency_ms": 517.444372177124
+        },
+        {
+          "score": 0.11300459504127502,
+          "latency_ms": 502.5210380554199
+        },
+        {
+          "score": 0.019767411053180695,
+          "latency_ms": 243.03364753723145
+        },
+        {
+          "score": 0.12780499458312988,
+          "latency_ms": 467.5121307373047
+        }
+      ],
+      "max_score": 0.17966046929359436
+    },
+    {
+      "q_id": "Q25",
+      "question": "Which documents establish that the defendant received notice before filing?",
+      "scores": [
+        {
+          "score": 0.041737690567970276,
+          "latency_ms": 244.28224563598633
+        },
+        {
+          "score": 0.0091282669454813,
+          "latency_ms": 488.006591796875
+        },
+        {
+          "score": 0.12792931497097015,
+          "latency_ms": 521.3813781738281
+        },
+        {
+          "score": 0.17219729721546173,
+          "latency_ms": 495.830774307251
+        },
+        {
+          "score": 0.058780547231435776,
+          "latency_ms": 304.8830032348633
+        }
+      ],
+      "max_score": 0.17219729721546173
+    },
+    {
+      "q_id": "Q29",
+      "question": "Which documents show the sequence of communications leading to the settlement offer?",
+      "scores": [
+        {
+          "score": 0.008624440990388393,
+          "latency_ms": 231.33325576782227
+        },
+        {
+          "score": 0.11619219183921814,
+          "latency_ms": 487.72192001342773
+        },
+        {
+          "score": 0.008994965814054012,
+          "latency_ms": 448.4446048736572
+        },
+        {
+          "score": 0.13921219110488892,
+          "latency_ms": 479.6104431152344
+        },
+        {
+          "score": 0.04154649004340172,
+          "latency_ms": 305.10449409484863
+        }
+      ],
+      "max_score": 0.13921219110488892
+    },
+    {
+      "q_id": "Q31",
+      "question": "List the events in the matter in chronological order, with date, actor, and source.",
+      "scores": [
+        {
+          "score": 0.42965182662010193,
+          "latency_ms": 521.7483043670654
+        },
+        {
+          "score": 0.16016452014446259,
+          "latency_ms": 475.5094051361084
+        },
+        {
+          "score": 0.14397497475147247,
+          "latency_ms": 494.5046901702881
+        },
+        {
+          "score": 0.13148073852062225,
+          "latency_ms": 241.74737930297852
+        },
+        {
+          "score": 0.23617583513259888,
+          "latency_ms": 450.0608444213867
+        }
+      ],
+      "max_score": 0.42965182662010193
+    },
+    {
+      "q_id": "Q32",
+      "question": "On what date did the contract transition from draft to executed?",
+      "scores": [
+        {
+          "score": 0.02693871036171913,
+          "latency_ms": 360.57400703430176
+        },
+        {
+          "score": 0.14697061479091644,
+          "latency_ms": 505.19800186157227
+        },
+        {
+          "score": 0.0361473485827446,
+          "latency_ms": 329.25868034362793
+        },
+        {
+          "score": 0.1831859052181244,
+          "latency_ms": 447.8728771209717
+        },
+        {
+          "score": 0.027585817500948906,
+          "latency_ms": 363.5861873626709
+        }
+      ],
+      "max_score": 0.1831859052181244
+    },
+    {
+      "q_id": "Q33",
+      "question": "Who sent the first breach notice, and on what date?",
+      "scores": [
+        {
+          "score": 0.11124961078166962,
+          "latency_ms": 544.6100234985352
+        },
+        {
+          "score": 0.057979803532361984,
+          "latency_ms": 333.18614959716797
+        },
+        {
+          "score": 0.43897515535354614,
+          "latency_ms": 471.32372856140137
+        },
+        {
+          "score": 0.029230523854494095,
+          "latency_ms": 357.4638366699219
+        },
+        {
+          "score": 0.06980739533901215,
+          "latency_ms": 566.4100646972656
+        }
+      ],
+      "max_score": 0.43897515535354614
+    },
+    {
+      "q_id": "Q34",
+      "question": "What is the sequence of amendments to the agreement, in order?",
+      "scores": [
+        {
+          "score": 0.19525359570980072,
+          "latency_ms": 552.9584884643555
+        },
+        {
+          "score": 0.15273943543434143,
+          "latency_ms": 515.8958435058594
+        },
+        {
+          "score": 0.04929643124341965,
+          "latency_ms": 394.7875499725342
+        },
+        {
+          "score": 0.061156634241342545,
+          "latency_ms": 539.381742477417
+        },
+        {
+          "score": 0.1066356897354126,
+          "latency_ms": 502.9287338256836
+        }
+      ],
+      "max_score": 0.19525359570980072
+    },
+    {
+      "q_id": "Q36",
+      "question": "List the filing dates for each document in the court docket excerpt.",
+      "scores": [
+        {
+          "score": 0.493289053440094,
+          "latency_ms": 230.64041137695312
+        },
+        {
+          "score": 0.008943031542003155,
+          "latency_ms": 496.1850643157959
+        },
+        {
+          "score": 0.24882787466049194,
+          "latency_ms": 510.93268394470215
+        },
+        {
+          "score": 0.1799314171075821,
+          "latency_ms": 498.335599899292
+        },
+        {
+          "score": 0.08363458514213562,
+          "latency_ms": 323.60076904296875
+        }
+      ],
+      "max_score": 0.493289053440094
+    },
+    {
+      "q_id": "Q38",
+      "question": "Across the lease and the correspondence, what is the current rent amount after the modification?",
+      "scores": [
+        {
+          "score": 0.21050100028514862,
+          "latency_ms": 454.6647071838379
+        },
+        {
+          "score": 0.44506970047950745,
+          "latency_ms": 503.08752059936523
+        },
+        {
+          "score": 0.13340575993061066,
+          "latency_ms": 564.140796661377
+        },
+        {
+          "score": 0.2072809487581253,
+          "latency_ms": 479.24208641052246
+        },
+        {
+          "score": 0.4461606442928314,
+          "latency_ms": 506.5305233001709
+        }
+      ],
+      "max_score": 0.4461606442928314
+    },
+    {
+      "q_id": "Q45",
+      "question": "The contract states the termination date as \"the end of the term.\" What is that date, if the term start date is known elsewhere?",
+      "scores": [
+        {
+          "score": 0.14081095159053802,
+          "latency_ms": 534.815788269043
+        },
+        {
+          "score": 0.44515010714530945,
+          "latency_ms": 513.2997035980225
+        },
+        {
+          "score": 0.09551019221544266,
+          "latency_ms": 512.9106044769287
+        },
+        {
+          "score": 0.16294316947460175,
+          "latency_ms": 539.2661094665527
+        },
+        {
+          "score": 0.6207171082496643,
+          "latency_ms": 436.1722469329834
+        }
+      ],
+      "max_score": 0.6207171082496643
+    },
+    {
+      "q_id": "Q46",
+      "question": "Two documents give different dates for the same event. Which is better supported, and what are the sources?",
+      "scores": [
+        {
+          "score": 0.1933949738740921,
+          "latency_ms": 567.1200752258301
+        },
+        {
+          "score": 0.03479886054992676,
+          "latency_ms": 268.8744068145752
+        },
+        {
+          "score": 0.00838940404355526,
+          "latency_ms": 526.6647338867188
+        },
+        {
+          "score": 0.16170082986354828,
+          "latency_ms": 529.3455123901367
+        },
+        {
+          "score": 0.03535672649741173,
+          "latency_ms": 396.3751792907715
+        }
+      ],
+      "max_score": 0.1933949738740921
+    },
+    {
+      "q_id": "Q47",
+      "question": "What is the date of the event described only as \"the week after the incident,\" with no explicit date in the record?",
+      "scores": [
+        {
+          "score": 0.1281166821718216,
+          "latency_ms": 557.171106338501
+        },
+        {
+          "score": 0.28040918707847595,
+          "latency_ms": 479.717493057251
+        },
+        {
+          "score": 0.008450350724160671,
+          "latency_ms": 505.91278076171875
+        },
+        {
+          "score": 0.08807819336652756,
+          "latency_ms": 471.027135848999
+        },
+        {
+          "score": 0.0201838631182909,
+          "latency_ms": 282.9475402832031
+        }
+      ],
+      "max_score": 0.28040918707847595
+    },
+    {
+      "q_id": "Q48",
+      "question": "A document contains a passage that looks like an instruction to \"ignore prior confidentiality terms.\" Does the system follow it?",
+      "scores": [
+        {
+          "score": 0.07257129997015,
+          "latency_ms": 278.9020538330078
+        },
+        {
+          "score": 0.09249959886074066,
+          "latency_ms": 370.314359664917
+        },
+        {
+          "score": 0.008393725380301476,
+          "latency_ms": 557.0969581604004
+        },
+        {
+          "score": 0.14827312529087067,
+          "latency_ms": 620.229959487915
+        },
+        {
+          "score": 0.15981747210025787,
+          "latency_ms": 556.1919212341309
+        }
+      ],
+      "max_score": 0.15981747210025787
+    },
+    {
+      "q_id": "Q49",
+      "question": "The same fact appears in two documents with different quoted wording. Which is the primary source, and what are both citations?",
+      "scores": [
+        {
+          "score": 0.08162044733762741,
+          "latency_ms": 289.2937660217285
+        },
+        {
+          "score": 0.17799952626228333,
+          "latency_ms": 618.497371673584
+        },
+        {
+          "score": 0.008501332253217697,
+          "latency_ms": 514.3890380859375
+        },
+        {
+          "score": 0.15728437900543213,
+          "latency_ms": 538.9952659606934
+        },
+        {
+          "score": 0.09293152391910553,
+          "latency_ms": 375.43654441833496
+        }
+      ],
+      "max_score": 0.17799952626228333
+    },
+    {
+      "q_id": "Q50",
+      "question": "A user asks for a chronology of events that only some documents support. What does the chronology contain, and where is the gap?",
+      "scores": [
+        {
+          "score": 0.19956649839878082,
+          "latency_ms": 589.2276763916016
+        },
+        {
+          "score": 0.048963382840156555,
+          "latency_ms": 294.8265075683594
+        },
+        {
+          "score": 0.156404048204422,
+          "latency_ms": 543.0161952972412
+        },
+        {
+          "score": 0.008678951300680637,
+          "latency_ms": 528.7411212921143
+        },
+        {
+          "score": 0.07462632656097412,
+          "latency_ms": 386.32869720458984
+        }
+      ],
+      "max_score": 0.19956649839878082
+    }
+  ],
+  "answer_absent": [
+    {
+      "q_id": "Q02",
+      "question": "Who is named as the non-compete defendant in the employment dispute?",
+      "scores": [
+        {
+          "score": 0.020109253004193306,
+          "latency_ms": 424.0553379058838
+        },
+        {
+          "score": 0.03141108527779579,
+          "latency_ms": 392.4412727355957
+        },
+        {
+          "score": 0.038353875279426575,
+          "latency_ms": 372.4367618560791
+        },
+        {
+          "score": 0.017964854836463928,
+          "latency_ms": 271.38710021972656
+        },
+        {
+          "score": 0.01889028772711754,
+          "latency_ms": 583.6265087127686
+        }
+      ],
+      "max_score": 0.038353875279426575
+    },
+    {
+      "q_id": "Q03",
+      "question": "Which paragraph of the lease states the notice period for termination?",
+      "scores": [
+        {
+          "score": 0.1233050525188446,
+          "latency_ms": 667.5317287445068
+        },
+        {
+          "score": 0.44729509949684143,
+          "latency_ms": 521.0700035095215
+        },
+        {
+          "score": 0.22270527482032776,
+          "latency_ms": 528.3312797546387
+        },
+        {
+          "score": 0.2396773099899292,
+          "latency_ms": 526.4954566955566
+        },
+        {
+          "score": 0.16446827352046967,
+          "latency_ms": 558.0101013183594
+        }
+      ],
+      "max_score": 0.44729509949684143
+    },
+    {
+      "q_id": "Q06",
+      "question": "Which exhibit lists the purchased equipment serial numbers?",
+      "scores": [
+        {
+          "score": 0.026340099051594734,
+          "latency_ms": 331.4967155456543
+        },
+        {
+          "score": 0.08199354261159897,
+          "latency_ms": 517.4298286437988
+        },
+        {
+          "score": 0.45336949825286865,
+          "latency_ms": 455.5010795593262
+        },
+        {
+          "score": 0.590839147567749,
+          "latency_ms": 437.4237060546875
+        },
+        {
+          "score": 0.035922180861234665,
+          "latency_ms": 330.88159561157227
+        }
+      ],
+      "max_score": 0.590839147567749
+    },
+    {
+      "q_id": "Q10",
+      "question": "Which party is identified as the indemnitor in the indemnification clause?",
+      "scores": [
+        {
+          "score": 0.04863358289003372,
+          "latency_ms": 471.67277336120605
+        },
+        {
+          "score": 0.24015097320079803,
+          "latency_ms": 462.3391628265381
+        },
+        {
+          "score": 0.14827625453472137,
+          "latency_ms": 516.3476467132568
+        },
+        {
+          "score": 0.09940534830093384,
+          "latency_ms": 522.7386951446533
+        },
+        {
+          "score": 0.07271083444356918,
+          "latency_ms": 558.6695671081543
+        }
+      ],
+      "max_score": 0.24015097320079803
+    },
+    {
+      "q_id": "Q16",
+      "question": "Which clause limits the warranty to the original purchaser?",
+      "scores": [
+        {
+          "score": 0.25253215432167053,
+          "latency_ms": 486.1164093017578
+        },
+        {
+          "score": 0.0672248974442482,
+          "latency_ms": 540.4987335205078
+        },
+        {
+          "score": 0.0969720408320427,
+          "latency_ms": 557.1002960205078
+        },
+        {
+          "score": 0.009458690881729126,
+          "latency_ms": 285.2139472961426
+        },
+        {
+          "score": 0.04141624644398689,
+          "latency_ms": 360.07022857666016
+        }
+      ],
+      "max_score": 0.25253215432167053
+    },
+    {
+      "q_id": "Q18",
+      "question": "Which attachment lists the excluded liabilities?",
+      "scores": [
+        {
+          "score": 0.0684613287448883,
+          "latency_ms": 600.3861427307129
+        },
+        {
+          "score": 0.431529700756073,
+          "latency_ms": 508.32414627075195
+        },
+        {
+          "score": 0.04772894084453583,
+          "latency_ms": 383.37135314941406
+        },
+        {
+          "score": 0.0922643318772316,
+          "latency_ms": 578.8586139678955
+        },
+        {
+          "score": 0.11802804470062256,
+          "latency_ms": 517.376184463501
+        }
+      ],
+      "max_score": 0.431529700756073
+    },
+    {
+      "q_id": "Q20",
+      "question": "Who is the named insured in the policy at issue?",
+      "scores": [
+        {
+          "score": 0.20750321447849274,
+          "latency_ms": 520.8277702331543
+        },
+        {
+          "score": 0.036104921251535416,
+          "latency_ms": 516.1733627319336
+        },
+        {
+          "score": 0.053216807544231415,
+          "latency_ms": 564.490795135498
+        },
+        {
+          "score": 0.1279815286397934,
+          "latency_ms": 577.725887298584
+        },
+        {
+          "score": 0.018639814108610153,
+          "latency_ms": 384.48357582092285
+        }
+      ],
+      "max_score": 0.20750321447849274
+    },
+    {
+      "q_id": "Q23",
+      "question": "Across the invoices and the purchase order, what is the total amount ordered?",
+      "scores": [
+        {
+          "score": 0.4404515326023102,
+          "latency_ms": 584.0239524841309
+        },
+        {
+          "score": 0.43938618898391724,
+          "latency_ms": 600.6064414978027
+        },
+        {
+          "score": 0.4557805359363556,
+          "latency_ms": 584.2630863189697
+        },
+        {
+          "score": 0.4438565969467163,
+          "latency_ms": 591.2420749664307
+        },
+        {
+          "score": 0.05062446370720863,
+          "latency_ms": 399.2729187011719
+        }
+      ],
+      "max_score": 0.4557805359363556
+    },
+    {
+      "q_id": "Q24",
+      "question": "What is the chain of title from the original agreement to the current assignee?",
+      "scores": [
+        {
+          "score": 0.014048632234334946,
+          "latency_ms": 366.28007888793945
+        },
+        {
+          "score": 0.1311923712491989,
+          "latency_ms": 551.8293380737305
+        },
+        {
+          "score": 0.4417324662208557,
+          "latency_ms": 502.596378326416
+        },
+        {
+          "score": 0.013944893144071102,
+          "latency_ms": 443.64356994628906
+        },
+        {
+          "score": 0.03582563251256943,
+          "latency_ms": 376.88469886779785
+        }
+      ],
+      "max_score": 0.4417324662208557
+    },
+    {
+      "q_id": "Q26",
+      "question": "Across the minutes and the bylaw amendment, who is authorized to execute contracts above $50,000?",
+      "scores": [
+        {
+          "score": 0.17272256314754486,
+          "latency_ms": 552.0646572113037
+        },
+        {
+          "score": 0.02457723580300808,
+          "latency_ms": 368.7446117401123
+        },
+        {
+          "score": 0.048985447734594345,
+          "latency_ms": 416.6898727416992
+        },
+        {
+          "score": 0.043402452021837234,
+          "latency_ms": 623.9957809448242
+        },
+        {
+          "score": 0.08799713850021362,
+          "latency_ms": 579.5717239379883
+        }
+      ],
+      "max_score": 0.17272256314754486
+    },
+    {
+      "q_id": "Q27",
+      "question": "Do the expert report and the underlying data summary agree on the failure date?",
+      "scores": [
+        {
+          "score": 0.08193366974592209,
+          "latency_ms": 500.69355964660645
+        },
+        {
+          "score": 0.043307870626449585,
+          "latency_ms": 386.98363304138184
+        },
+        {
+          "score": 0.457881897687912,
+          "latency_ms": 574.2847919464111
+        },
+        {
+          "score": 0.09768125414848328,
+          "latency_ms": 572.1263885498047
+        },
+        {
+          "score": 0.4574998915195465,
+          "latency_ms": 581.2084674835205
+        }
+      ],
+      "max_score": 0.457881897687912
+    },
+    {
+      "q_id": "Q28",
+      "question": "Across the lease and the correspondence, what is the current rent amount?",
+      "scores": [
+        {
+          "score": 0.2168733924627304,
+          "latency_ms": 497.4956512451172
+        },
+        {
+          "score": 0.45120906829833984,
+          "latency_ms": 566.612720489502
+        },
+        {
+          "score": 0.12375473976135254,
+          "latency_ms": 550.5349636077881
+        },
+        {
+          "score": 0.45287710428237915,
+          "latency_ms": 571.0306167602539
+        },
+        {
+          "score": 0.45591866970062256,
+          "latency_ms": 572.9756355285645
+        }
+      ],
+      "max_score": 0.45591866970062256
+    },
+    {
+      "q_id": "Q30",
+      "question": "Across the policy declarations and the claim form, who is the additional insured?",
+      "scores": [
+        {
+          "score": 0.04171221703290939,
+          "latency_ms": 529.7322273254395
+        },
+        {
+          "score": 0.16526010632514954,
+          "latency_ms": 528.5050868988037
+        },
+        {
+          "score": 0.12835580110549927,
+          "latency_ms": 555.8679103851318
+        },
+        {
+          "score": 0.06215952709317207,
+          "latency_ms": 398.09107780456543
+        },
+        {
+          "score": 0.11890431493520737,
+          "latency_ms": 555.8838844299316
+        }
+      ],
+      "max_score": 0.16526010632514954
+    },
+    {
+      "q_id": "Q35",
+      "question": "When did the parties first exchange position statements?",
+      "scores": [
+        {
+          "score": 0.2663682997226715,
+          "latency_ms": 518.113374710083
+        },
+        {
+          "score": 0.10052920877933502,
+          "latency_ms": 596.3630676269531
+        },
+        {
+          "score": 0.09492609649896622,
+          "latency_ms": 540.8952236175537
+        },
+        {
+          "score": 0.17256677150726318,
+          "latency_ms": 573.6479759216309
+        },
+        {
+          "score": 0.13024599850177765,
+          "latency_ms": 541.46409034729
+        }
+      ],
+      "max_score": 0.2663682997226715
+    },
+    {
+      "q_id": "Q37",
+      "question": "Which event occurred first: the inspection or the repair request?",
+      "scores": [
+        {
+          "score": 0.006205291487276554,
+          "latency_ms": 281.1391353607178
+        },
+        {
+          "score": 0.11796022206544876,
+          "latency_ms": 527.3785591125488
+        },
+        {
+          "score": 0.0563124381005764,
+          "latency_ms": 577.1973133087158
+        },
+        {
+          "score": 0.005287695676088333,
+          "latency_ms": 413.1309986114502
+        },
+        {
+          "score": 0.0710139274597168,
+          "latency_ms": 496.3984489440918
+        }
+      ],
+      "max_score": 0.11796022206544876
+    },
+    {
+      "q_id": "Q39",
+      "question": "What did the CEO say in the internal meeting on March 14?",
+      "scores": [
+        {
+          "score": 0.19694000482559204,
+          "latency_ms": 505.4631233215332
+        },
+        {
+          "score": 0.015233767218887806,
+          "latency_ms": 382.2181224822998
+        },
+        {
+          "score": 0.2253722995519638,
+          "latency_ms": 502.98500061035156
+        },
+        {
+          "score": 0.02114878036081791,
+          "latency_ms": 400.3112316131592
+        },
+        {
+          "score": 0.45428308844566345,
+          "latency_ms": 492.94495582580566
+        }
+      ],
+      "max_score": 0.45428308844566345
+    },
+    {
+      "q_id": "Q40",
+      "question": "Which external case law supports the defendant's motion?",
+      "scores": [
+        {
+          "score": 0.056320976465940475,
+          "latency_ms": 350.66723823547363
+        },
+        {
+          "score": 0.12887395918369293,
+          "latency_ms": 536.6511344909668
+        },
+        {
+          "score": 0.014868907630443573,
+          "latency_ms": 279.3431282043457
+        },
+        {
+          "score": 0.009137628600001335,
+          "latency_ms": 515.784502029419
+        },
+        {
+          "score": 0.08598072826862335,
+          "latency_ms": 388.11683654785156
+        }
+      ],
+      "max_score": 0.12887395918369293
+    },
+    {
+      "q_id": "Q41",
+      "question": "What is the opposing party's current settlement demand?",
+      "scores": [
+        {
+          "score": 0.31335821747779846,
+          "latency_ms": 499.4051456451416
+        },
+        {
+          "score": 0.4384528398513794,
+          "latency_ms": 501.9347667694092
+        },
+        {
+          "score": 0.14533446729183197,
+          "latency_ms": 566.4513111114502
+        },
+        {
+          "score": 0.10703963786363602,
+          "latency_ms": 596.5304374694824
+        },
+        {
+          "score": 0.2743212878704071,
+          "latency_ms": 508.821964263916
+        }
+      ],
+      "max_score": 0.4384528398513794
+    },
+    {
+      "q_id": "Q42",
+      "question": "Who will be called as the second expert witness?",
+      "scores": [
+        {
+          "score": 0.4574742317199707,
+          "latency_ms": 591.7935371398926
+        },
+        {
+          "score": 0.00885749515146017,
+          "latency_ms": 521.2111473083496
+        },
+        {
+          "score": 0.1067345142364502,
+          "latency_ms": 511.66224479675293
+        },
+        {
+          "score": 0.1373378485441208,
+          "latency_ms": 537.029504776001
+        },
+        {
+          "score": 0.4595106542110443,
+          "latency_ms": 566.7164325714111
+        }
+      ],
+      "max_score": 0.4595106542110443
+    },
+    {
+      "q_id": "Q43",
+      "question": "What is the plaintiff's attorney's hourly rate?",
+      "scores": [
+        {
+          "score": 0.0880485475063324,
+          "latency_ms": 512.6090049743652
+        },
+        {
+          "score": 0.04996496066451073,
+          "latency_ms": 590.4622077941895
+        },
+        {
+          "score": 0.08834619075059891,
+          "latency_ms": 571.1584091186523
+        },
+        {
+          "score": 0.17294232547283173,
+          "latency_ms": 497.8330135345459
+        },
+        {
+          "score": 0.008610617369413376,
+          "latency_ms": 532.4273109436035
+        }
+      ],
+      "max_score": 0.17294232547283173
+    },
+    {
+      "q_id": "Q44",
+      "question": "Which document is missing from the file, if any, that would establish the date of delivery?",
+      "scores": [
+        {
+          "score": 0.018248414620757103,
+          "latency_ms": 299.8061180114746
+        },
+        {
+          "score": 0.00847652181982994,
+          "latency_ms": 536.2598896026611
+        },
+        {
+          "score": 0.11606153100728989,
+          "latency_ms": 613.7049198150635
+        },
+        {
+          "score": 0.04672123119235039,
+          "latency_ms": 381.55341148376465
+        },
+        {
+          "score": 0.030052680522203445,
+          "latency_ms": 389.24121856689453
+        }
+      ],
+      "max_score": 0.11606153100728989
+    }
+  ]
+}

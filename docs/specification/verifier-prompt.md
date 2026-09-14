@@ -1,17 +1,21 @@
-# Post-Retrieval Answer Verification Prompt
+# Post-Retrieval Answer Verification — Cross-Encoder Architecture
 
-**Version:** 1.2.0
+**Version:** 2.0.0
 **Date:** 2026-09-14
-**Model:** qwen3:8b (Ollama, local-only, port 11434) — changed from qwen3:4b in v1.2.0
-**Freeze:** This prompt is a contract. Any change to the text below — including whitespace, wording, or examples — is a version bump. Tuning against the gold set without logging the change is prohibited.
+**Model:** cross-encoder/ms-marco-MiniLM-L-6-v2 (sentence-transformers, local-only)
+**Freeze:** The threshold and model identifier are the contract. Any change to `VERIFIER_THRESHOLD` or `CROSS_ENCODER_MODEL` is a version bump. Tuning against the gold set without logging the change is prohibited.
 
-**Changelog from 1.1.0:**
-- **Model change: qwen3:4b → qwen3:8b.** The v1.1.0 synonym equivalence rules make the verifier's decision criteria stricter. qwen3:4b lacks the capacity to apply these rules reliably — it produces false negatives on clear-YES cases (e.g., says NO to "The termination date shall be December 31, 2025" when that exact date appears in the passage). qwen3:8b applies the rules correctly while maintaining answer-absent cleanliness. Latency also drops: ~60s/call on 4b → ~10s/call on 8b, because 4b was burning time on longer, less certain generations.
-- No prompt text changes from v1.1.0. The synonym equivalence rules were correct; the model was too small for them.
+**Changelog from 1.2.0:**
+- **Architecture change: LLM-as-judge → cross-encoder semantic similarity.** The LLM binary classification approach (qwen3:4b/8b + prompt v1.1.0) was fundamentally fragile — 4b rejected everything (0/29 recall), 8b produced false positives (18/21 answer-absent). Replaced with deterministic cross-encoder scoring: (question, passage) → score ∈ [0, 1], threshold → YES/NO.
+- **Latency:** ~50ms per citation (vs 10-60s with LLM). Sync `/ask` becomes viable for verified answers.
+- **Memory:** ~500MB model (vs 2.5GB qwen3:4b, 4.8GB qwen3:8b).
+- **Decision boundary:** Single float threshold, calibrated on gold set. No prompt variants, no per-question tuning.
+
+**Changelog from 1.1.0 (via 1.2.0):**
+- Model change qwen3:4b → qwen3:8b was attempted and revoked (ADR 009 → ADR 011). See ADR 011 for full rationale.
 
 **Changelog from 1.0.0 (via 1.1.0):**
-- Added legal-term synonym equivalence: breach↔default, notice↔demand, invoice↔billing, filing↔court docket, deposition↔transcript, document↔filing↔record
-- The verifier now treats these terms as equivalent when checking whether a passage answers a question
+- Legal-term synonym equivalence rules (breach↔default, notice↔demand, etc.) were correct in principle but could not be reliably applied by available LLM models. Superseded by cross-encoder approach.
 
 ---
 

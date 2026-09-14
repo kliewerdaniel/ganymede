@@ -251,20 +251,13 @@ def rerank(
 
 
 def _load_reranker():
-    """Load a local cross-encoder model. Must be set via RECRANKER_MODEL_PATH."""
-    import sentence_transformers
-    if not RECRANKER_MODEL_PATH:
-        raise RuntimeError("RECRANKER_MODEL_PATH is not set — cannot load cross-encoder")
-    return sentence_transformers.CrossEncoder(RECRANKER_MODEL_PATH)
+    """Deprecated: cross-encoder reranker removed. RRF score ordering is used."""
+    raise NotImplementedError("Cross-encoder reranker removed — use RRF ordering")
 
 
 def _rerank_with_model(model, query: str, results: List[dict]) -> List[dict]:
-    """Score each result with the cross-encoder and attach reranker_score."""
-    pairs = [(query, r["text"]) for r in results]
-    scores = model.predict(pairs)
-    for r, s in zip(results, scores):
-        r["reranker_score"] = float(s)
-    return results
+    """Deprecated: cross-encoder reranker removed."""
+    raise NotImplementedError("Cross-encoder reranker removed — use RRF ordering")
 
 
 def deduplicate_by_sha256(results: List[dict], top_k: int = 5) -> List[dict]:

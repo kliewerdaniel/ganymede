@@ -1,6 +1,6 @@
 # ADR 009: Verifier recall recovery — model swap from qwen3:4b to qwen3:8b
 
-**Status:** Accepted (provisional, pending full gold-set confirmation)
+**Status:** **Revoked** — Full gold-set evaluation (qwen3:8b: 22/29 recall, 18/21 answer-absent) falsified the provisional acceptance. Replaced by ADR 011 (cross-encoder verification).
 **Date:** 2026-09-14
 **Related:** `adr/008-answer-verification.md`, `adr/008-verifier-fast-path-addendum.md`
 

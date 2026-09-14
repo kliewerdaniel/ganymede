@@ -1,0 +1,313 @@
+{
+  "verifier_model": "qwen3:4b",
+  "leaks": [
+    {
+      "q_id": "Q23",
+      "question": "Across the invoices and the purchase order, what is the total amount ordered?",
+      "citations": [
+        {
+          "idx": 0,
+          "document_id": "968ff172-a1ae-4751-801b-928233fdc777",
+          "page": 1,
+          "passage_preview": "INVOICE FROM: Meridian Logistics Solutions, LLC 2200 Commerce Street, Suite 1100 Dallas, Texas 75201 TO: Cascade Retail Group, Inc. 400 Rainey Street Austin, Texas 78701 Attn: Accounts Payable INVOICE",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 98674.9
+        },
+        {
+          "idx": 1,
+          "document_id": "f42d3ef9-f41b-4f09-a723-bdc94199ee2f",
+          "page": 1,
+          "passage_preview": "INVOICE FROM: Meridian Logistics Solutions, LLC 2200 Commerce Street, Suite 1100 Dallas, Texas 75201 TO: Cascade Retail Group, Inc. 400 Rainey Street Austin, Texas 78701 Attn: Accounts Payable INVOICE",
+          "decision": "ERROR",
+          "quote": "",
+          "latency_ms": 180105.0
+        },
+        {
+          "idx": 2,
+          "document_id": "8b1eb06e-6f29-4d58-90ce-cf87e1d6dd4b",
+          "page": 1,
+          "passage_preview": "INVOICE FROM: Meridian Logistics Solutions, LLC 2200 Commerce Street, Suite 1100 Dallas, Texas 75201 TO: Cascade Retail Group, Inc. 400 Rainey Street Austin, Texas 78701 Attn: Accounts Payable INVOICE",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 151443.8
+        },
+        {
+          "idx": 3,
+          "document_id": "af8de90e-d239-4bd8-aa57-2ff19cf67675",
+          "page": 1,
+          "passage_preview": "INVOICE FROM: Meridian Logistics Solutions, LLC 2200 Commerce Street, Suite 1100 Dallas, Texas 75201 TO: Cascade Retail Group, Inc. 400 Rainey Street Austin, Texas 78701 Attn: Accounts Payable INVOICE",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 122981.7
+        },
+        {
+          "idx": 4,
+          "document_id": "95732f09-b691-4b3f-a561-89845a3d5818",
+          "page": 1,
+          "passage_preview": "13. Invoices Nos. 1044 and 1045, totaling $102,100.00, remain unpaid despite Meridian's repeated demands for payment. 14. On or about January 28, 2025, Meridian sent Cascade a written Notice of Defaul",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 70670.9
+        }
+      ]
+    },
+    {
+      "q_id": "Q30",
+      "question": "Across the policy declarations and the claim form, who is the additional insured?",
+      "citations": [
+        {
+          "idx": 0,
+          "document_id": "5658401c-91c4-43ca-b503-9adbad78b051",
+          "page": 1,
+          "passage_preview": "performed during the preceding month. Each invoice shall describe the Services performed, the hours worked, and the amounts charged. 4.3  Payment Terms. Client shall pay each undisputed invoice within",
+          "decision": "YES",
+          "quote": "Client",
+          "latency_ms": 142967.6
+        },
+        {
+          "idx": 1,
+          "document_id": "93e5950e-57ea-4934-b3c3-ae22550f5121",
+          "page": 1,
+          "passage_preview": "Service Level Addendum is incorporated into the MSA by this reference. 4.  REAFFIRMATION OF INSURANCE. The Parties acknowledge and reaffirm that Section 7.4 of the MSA requires Service Provider to mai",
+          "decision": "YES",
+          "quote": "Client",
+          "latency_ms": 174470.3
+        },
+        {
+          "idx": 2,
+          "document_id": "b21763df-33d3-42aa-b50d-0dd165b9cd3f",
+          "page": 1,
+          "passage_preview": "NETWORK / RELATIONS DIAGRAM ? MERIDIAN v. CASCADE (Derived from corpus documents; fictional matter) PARTIES   Plaintiff: Meridian Logistics Solutions, LLC (TX LLC, 2018)   Defendant: Cascade Retail Gr",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 64039.8
+        },
+        {
+          "idx": 3,
+          "document_id": "466bd08f-4f2e-486b-b98e-b370bf83e1cf",
+          "page": 1,
+          "passage_preview": "4. Defendant admits that the Master Services Agreement dated March 15, 2023, and Amendment No. 1 dated January 22, 2024, exist and were executed by the parties. 5. Defendant admits that it received In",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 90773.4
+        },
+        {
+          "idx": 4,
+          "document_id": "95732f09-b691-4b3f-a561-89845a3d5818",
+          "page": 1,
+          "passage_preview": "4. Plaintiff Meridian Logistics Solutions, LLC is a Texas limited liability company with its principal place of business at 2200 Commerce Street, Suite 1100, Dallas, Texas 75201. Meridian was formed i",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 55692.5
+        }
+      ]
+    },
+    {
+      "q_id": "Q35",
+      "question": "When did the parties first exchange position statements?",
+      "citations": [
+        {
+          "idx": 0,
+          "document_id": "5dc0ff1f-732d-4f27-a634-fc7b6acc94ec",
+          "page": 1,
+          "passage_preview": "FROM:    Victoria K. Hensley          Hensley & Associates, PLLC TO:      Marcus T. Duvall          Duvall & Weber, LLP CC:      Margaret E. Reyes (Meridian)          Robert K. Halverson (Cascade) DAT",
+          "decision": "ERROR",
+          "quote": "",
+          "latency_ms": 180070.4
+        },
+        {
+          "idx": 1,
+          "document_id": "5d24aead-cf18-4b4c-8414-f2df10613bb7",
+          "page": 1,
+          "passage_preview": "CHRONOLOGY OF MATTER EVENTS Prepared by Hensley & Associates, PLLC on behalf of Plaintiff Meridian Logistics Solutions, LLC Dated: September 8, 2025 Matter: Meridian Logistics Solutions, LLC v. Cascad",
+          "decision": "ERROR",
+          "quote": "",
+          "latency_ms": 180107.7
+        },
+        {
+          "idx": 2,
+          "document_id": "5658401c-91c4-43ca-b503-9adbad78b051",
+          "page": 1,
+          "passage_preview": "MASTER SERVICES AGREEMENT This Master Services Agreement (this \"Agreement\") is entered into as of March 15, 2023 (the \"Effective Date\"), by and between Meridian Logistics Solutions, LLC, a Texas limit",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 49676.8
+        },
+        {
+          "idx": 3,
+          "document_id": "93e5950e-57ea-4934-b3c3-ae22550f5121",
+          "page": 1,
+          "passage_preview": "AMENDMENT NO. 1 TO MASTER SERVICES AGREEMENT This Amendment No. 1 (this \"Amendment\") is entered into as of January 22, 2024 (the \"Amendment Date\"), by and between Meridian Logistics Solutions, LLC (\"S",
+          "decision": "ERROR",
+          "quote": "",
+          "latency_ms": 180107.8
+        },
+        {
+          "idx": 4,
+          "document_id": "b21763df-33d3-42aa-b50d-0dd165b9cd3f",
+          "page": 1,
+          "passage_preview": "NETWORK / RELATIONS DIAGRAM ? MERIDIAN v. CASCADE (Derived from corpus documents; fictional matter) PARTIES   Plaintiff: Meridian Logistics Solutions, LLC (TX LLC, 2018)   Defendant: Cascade Retail Gr",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 109726.3
+        }
+      ]
+    }
+  ],
+  "misses": [
+    {
+      "q_id": "Q01",
+      "question": "What is the termination date stated in the master services agreement?",
+      "citations": [
+        {
+          "idx": 0,
+          "document_id": "5658401c-91c4-43ca-b503-9adbad78b051",
+          "page": 1,
+          "passage_preview": "MASTER SERVICES AGREEMENT This Master Services Agreement (this \"Agreement\") is entered into as of March 15, 2023 (the \"Effective Date\"), by and between Meridian Logistics Solutions, LLC, a Texas limit",
+          "decision": "ERROR",
+          "quote": "",
+          "latency_ms": 180101.1
+        },
+        {
+          "idx": 1,
+          "document_id": "93e5950e-57ea-4934-b3c3-ae22550f5121",
+          "page": 1,
+          "passage_preview": "AMENDMENT NO. 1 TO MASTER SERVICES AGREEMENT This Amendment No. 1 (this \"Amendment\") is entered into as of January 22, 2024 (the \"Amendment Date\"), by and between Meridian Logistics Solutions, LLC (\"S",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 54755.9
+        },
+        {
+          "idx": 2,
+          "document_id": "89c6e987-ebf6-4147-9219-00c9bc882f30",
+          "page": 1,
+          "passage_preview": "HENSLEY & ASSOCIATES, PLLC Attorneys at Law VIA EMAIL AND CERTIFIED MAIL Date: January 28, 2025 TO: Marcus T. Duvall Duvall & Weber, LLP 100 Congress Avenue, Suite 1500 Austin, Texas 78701 RE: Notice",
+          "decision": "ERROR",
+          "quote": "",
+          "latency_ms": 180102.7
+        },
+        {
+          "idx": 3,
+          "document_id": "6e96e4db-6124-42c2-a3f2-7ae9a65ef1f4",
+          "page": 1,
+          "passage_preview": "FROM:    Victoria K. Hensley          Hensley & Associates, PLLC TO:      Marcus T. Duvall          Duvall & Weber, LLP CC:      Margaret E. Reyes (Meridian) DATE:    January 28, 2025 SUBJECT: NOTICE",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 123996.8
+        },
+        {
+          "idx": 4,
+          "document_id": "a1320adb-cd78-436f-ba3f-e2d25221d400",
+          "page": 1,
+          "passage_preview": "ENGAGEMENT LETTER TO:    Cascade Retail Group, Inc.        400 Rainey Street        Austin, Texas 78701        Attention: Robert K. Halverson, Chief Executive Officer FROM:  Meridian Logistics Solutio",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 78796.6
+        }
+      ]
+    },
+    {
+      "q_id": "Q04",
+      "question": "What amount does the complaint allege as damages?",
+      "citations": [
+        {
+          "idx": 0,
+          "document_id": "466bd08f-4f2e-486b-b98e-b370bf83e1cf",
+          "page": 1,
+          "passage_preview": "IN THE DISTRICT COURT OF TRAVIS COUNTY, TEXAS CAUSE NO. D-2025-00418 MERIDIAN LOGISTICS SOLUTIONS, LLC,   Plaintiff, v. CASCADE RETAIL GROUP, INC.,   Defendant. DEFENDANT'S ORIGINAL ANSWER TO THE HONO",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 137736.0
+        },
+        {
+          "idx": 1,
+          "document_id": "bd9cf9c5-7f22-4557-abd5-d26f41d52da6",
+          "page": 1,
+          "passage_preview": "HENSLEY & ASSOCIATES, PLLC Attorneys at Law VIA EMAIL AND CERTIFIED MAIL Date: March 3, 2025 TO: Marcus T. Duvall Duvall & Weber, LLP 100 Congress Avenue, Suite 1500 Austin, Texas 78701 RE: Final Dema",
+          "decision": "ERROR",
+          "quote": "",
+          "latency_ms": 180105.0
+        },
+        {
+          "idx": 2,
+          "document_id": "95732f09-b691-4b3f-a561-89845a3d5818",
+          "page": 1,
+          "passage_preview": "4. Plaintiff Meridian Logistics Solutions, LLC is a Texas limited liability company with its principal place of business at 2200 Commerce Street, Suite 1100, Dallas, Texas 75201. Meridian was formed i",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 152646.2
+        },
+        {
+          "idx": 3,
+          "document_id": "89c6e987-ebf6-4147-9219-00c9bc882f30",
+          "page": 1,
+          "passage_preview": "HENSLEY & ASSOCIATES, PLLC Attorneys at Law VIA EMAIL AND CERTIFIED MAIL Date: January 28, 2025 TO: Marcus T. Duvall Duvall & Weber, LLP 100 Congress Avenue, Suite 1500 Austin, Texas 78701 RE: Notice",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 100738.6
+        },
+        {
+          "idx": 4,
+          "document_id": "5658401c-91c4-43ca-b503-9adbad78b051",
+          "page": 1,
+          "passage_preview": "MASTER SERVICES AGREEMENT This Master Services Agreement (this \"Agreement\") is entered into as of March 15, 2023 (the \"Effective Date\"), by and between Meridian Logistics Solutions, LLC, a Texas limit",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 81610.2
+        }
+      ]
+    },
+    {
+      "q_id": "Q07",
+      "question": "What is the stated jurisdiction for dispute resolution in the agreement?",
+      "citations": [
+        {
+          "idx": 0,
+          "document_id": "95732f09-b691-4b3f-a561-89845a3d5818",
+          "page": 1,
+          "passage_preview": "IN THE DISTRICT COURT OF TRAVIS COUNTY, TEXAS CAUSE NO. D-2025-00418 MERIDIAN LOGISTICS SOLUTIONS, LLC,   Plaintiff, v. CASCADE RETAIL GROUP, INC.,   Defendant. PLAINTIFF'S ORIGINAL PETITION TO THE HO",
+          "decision": "ERROR",
+          "quote": "",
+          "latency_ms": 180107.2
+        },
+        {
+          "idx": 1,
+          "document_id": "5658401c-91c4-43ca-b503-9adbad78b051",
+          "page": 1,
+          "passage_preview": "ritten consent of the other party, except that either party may assign this Agreement to an affiliate or in connection with a merger, acquisition, or sale of all or substantially all of its assets. 12",
+          "decision": "ERROR",
+          "quote": "",
+          "latency_ms": 180107.1
+        },
+        {
+          "idx": 2,
+          "document_id": "5dc0ff1f-732d-4f27-a634-fc7b6acc94ec",
+          "page": 1,
+          "passage_preview": "FROM:    Victoria K. Hensley          Hensley & Associates, PLLC TO:      Marcus T. Duvall          Duvall & Weber, LLP CC:      Margaret E. Reyes (Meridian)          Robert K. Halverson (Cascade) DAT",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 20083.2
+        },
+        {
+          "idx": 3,
+          "document_id": "93e5950e-57ea-4934-b3c3-ae22550f5121",
+          "page": 1,
+          "passage_preview": "AMENDMENT NO. 1 TO MASTER SERVICES AGREEMENT This Amendment No. 1 (this \"Amendment\") is entered into as of January 22, 2024 (the \"Amendment Date\"), by and between Meridian Logistics Solutions, LLC (\"S",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 22475.9
+        },
+        {
+          "idx": 4,
+          "document_id": "466bd08f-4f2e-486b-b98e-b370bf83e1cf",
+          "page": 1,
+          "passage_preview": "4. Defendant admits that the Master Services Agreement dated March 15, 2023, and Amendment No. 1 dated January 22, 2024, exist and were executed by the parties. 5. Defendant admits that it received In",
+          "decision": "NO",
+          "quote": "",
+          "latency_ms": 28727.9
+        }
+      ]
+    }
+  ]
+}
