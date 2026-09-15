@@ -35,6 +35,7 @@ services:
       - api_storage:/data/storage
       - ./api:/app  # Mount local code for development
       - ./docs:/docs  # Mount docs so verifier prompt loads
+      - ./web:/web  # Mount web frontend
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:

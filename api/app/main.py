@@ -26,9 +26,9 @@ def create_app() -> FastAPI:
     from app.services.health import health_router
     app.include_router(health_router, prefix="/api/v1")
 
-    # Static frontend
-    web_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "web")
-    if os.path.exists(web_dir):
+    # Static frontend — /web mount
+    web_dir = "/web"
+    if os.path.exists(web_dir) and os.path.exists(os.path.join(web_dir, "index.html")):
         app.mount("/static", StaticFiles(directory=web_dir), name="static")
 
         @app.get("/")
