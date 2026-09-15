@@ -18,6 +18,8 @@ from app.schemas import (
     UserCreate, UserResponse, LoginRequest, TokenResponse,
     DocumentResponse, PageResponse, IngestionStatusResponse,
     UploadResponse, QueryRequest, QueryResponse, CitationResponse,
+    ArtifactCreate, ArtifactUpdate, ArtifactApproval, ArtifactResponse,
+    ArtifactVersionResponse, ApprovalResponse,
 )
 from app.services.ingestion import ingest_document, get_ingestion_status
 from app.services.retrieval import retrieve
@@ -632,3 +634,184 @@ def ask_matter(
         "raw_count": len(raw_citations),
         "verified": False,
     }
+
+
+# --- Artifact Routes ---
+
+@router.post("/matters/{matter_id}/artifacts", response_model=ArtifactResponse, status_code=status.HTTP_201_CREATED)
+def create_artifact(
+    matter_id: str,
+    body: ArtifactCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Create a new artifact (chronology, issue_table, or memo)."""
+    from app.services.artifacts import (
+        ArtifactError, generate_chronology, generate_issue_table, generate_memo,
+    )
+
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+    from app.core.rbac import can_access_matter
+    can_access_matter(current_user, matter_id, db)
+
+    try:
+        if body.artifact_type == "chronology":
+            artifact = generate_chronology(
+                db, matter_id, current_user,
+                query_text=body.query_text, top_k=body.top_k or 20,
+            )
+        elif body.artifact_type == "issue_table":
+            artifact = generate_issue_table(
+                db, matter_id, current_user,
+                query_text=body.query_text, top_k=body.top_k or 20,
+            )
+        elif body.artifact_type == "memo":
+            if not body.query_text:
+                raise HTTPException(status_code=400, detail="Memo requires query_text (the question)")
+            artifact = generate_memo(
+                db, matter_id, current_user,
+                question=body.query_text, top_k=body.top_k or 10,
+            )
+        else:
+            raise HTTPException(status_code=400, detail=f"Unknown artifact type: {body.artifact_type}")
+    except ArtifactError as e:
+        raise HTTPException(status_code=400, detail=e.message)
+
+    if body.title and artifact:
+        artifact.title = body.title
+        db.commit()
+
+    log_audit(
+        db, str(current_user.tenant_id), str(current_user.id),
+        "artifact.create", "matter", matter_id,
+        {"artifact_type": body.artifact_type, "artifact_id": str(artifact.id)},
+    )
+
+    return artifact
+
+
+@router.get("/matters/{matter_id}/artifacts", response_model=List[ArtifactResponse])
+def list_matter_artifacts(
+    matter_id: str,
+    artifact_type: str = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """List artifacts for a matter."""
+    from app.services.artifacts import list_artifacts
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+    from app.core.rbac import can_access_matter
+    can_access_matter(current_user, matter_id, db)
+
+    artifacts = list_artifacts(db, matter_id, current_user, artifact_type)
+    return artifacts
+
+
+@router.get("/artifacts/{artifact_id}", response_model=ArtifactResponse)
+def get_artifact_by_id(
+    artifact_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Get an artifact by ID."""
+    from app.services.artifacts import get_artifact
+    try:
+        artifact = get_artifact(db, artifact_id, current_user)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    return artifact
+
+
+@router.put("/artifacts/{artifact_id}", response_model=ArtifactResponse)
+def update_artifact(
+    artifact_id: str,
+    body: ArtifactUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Update artifact content."""
+    from app.services.artifacts import update_artifact_content, ArtifactError
+    try:
+        artifact = update_artifact_content(
+            db, artifact_id, current_user,
+            content=body.content, change_description=body.change_description,
+        )
+    except ArtifactError as e:
+        raise HTTPException(status_code=400, detail=e.message)
+    return artifact
+
+
+@router.post("/artifacts/{artifact_id}/submit")
+def submit_artifact_for_review(
+    artifact_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Submit artifact for review."""
+    from app.services.artifacts import submit_for_review, ArtifactError
+    try:
+        artifact = submit_for_review(db, artifact_id, current_user)
+    except ArtifactError as e:
+        raise HTTPException(status_code=400, detail=e.message)
+    return {"status": artifact.status, "artifact_id": str(artifact.id)}
+
+
+@router.post("/artifacts/{artifact_id}/approve")
+def approve_artifact_endpoint(
+    artifact_id: str,
+    body: ArtifactApproval = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Approve an artifact."""
+    from app.services.artifacts import approve_artifact, ArtifactError
+    try:
+        comment = body.comment if body else None
+        artifact = approve_artifact(db, artifact_id, current_user, comment=comment)
+    except ArtifactError as e:
+        raise HTTPException(status_code=400, detail=e.message)
+    return {"status": artifact.status, "artifact_id": str(artifact.id)}
+
+
+@router.post("/artifacts/{artifact_id}/reject")
+def reject_artifact_endpoint(
+    artifact_id: str,
+    body: ArtifactApproval = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Reject an artifact."""
+    from app.services.artifacts import reject_artifact, ArtifactError
+    try:
+        reason = body.reason if body else ""
+        artifact = reject_artifact(db, artifact_id, current_user, reason=reason)
+    except ArtifactError as e:
+        raise HTTPException(status_code=400, detail=e.message)
+    return {"status": artifact.status, "rejection_reason": artifact.rejection_reason}
+
+
+@router.get("/artifacts/{artifact_id}/versions", response_model=List[ArtifactVersionResponse])
+def get_artifact_versions_endpoint(
+    artifact_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Get version history for an artifact."""
+    from app.services.artifacts import get_artifact_versions
+    versions = get_artifact_versions(db, artifact_id, current_user)
+    return versions
+
+
+@router.get("/artifacts/{artifact_id}/approvals", response_model=List[ApprovalResponse])
+def get_artifact_approvals_endpoint(
+    artifact_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Get approval ledger for an artifact."""
+    from app.services.artifacts import get_approval_history
+    return get_approval_history(db, artifact_id, current_user)

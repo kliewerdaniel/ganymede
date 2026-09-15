@@ -230,3 +230,83 @@ class ChunkEmbedding(Base):
         Index("idx_chunk_embeddings_chunk", "chunk_id"),
         Index("idx_chunk_embeddings_model", "model_name", "model_version"),
     )
+
+
+# Week 6/8: Structured Artifacts
+
+class Artifact(Base):
+    """A structured artifact (chronology, issue_table, memo)."""
+    __tablename__ = "artifacts"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    matter_id = Column(UUID(as_uuid=True), ForeignKey("matters.id"), nullable=False)
+    artifact_type = Column(String(50), nullable=False)  # chronology, issue_table, memo
+    title = Column(String(255), nullable=False)
+    status = Column(String(50), nullable=False, default="draft")  # draft, under_review, approved, rejected
+    approved_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    approved_at = Column(DateTime, nullable=True)
+    rejection_reason = Column(Text, nullable=True)
+    rejection_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    rejection_at = Column(DateTime, nullable=True)
+    source_query = Column(Text, nullable=True)
+    source_citation_ids = Column(JSONB, nullable=True)  # citation IDs used
+    content = Column(JSONB, nullable=False)  # artifact-specific content
+    metadata_json = Column(JSONB, nullable=True)
+    created_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    # Relationships
+    matter = relationship("Matter")
+    versions = relationship("ArtifactVersion", back_populates="artifact", cascade="all, delete-orphan")
+
+    __table_args__ = (
+        Index("idx_artifacts_matter", "matter_id"),
+        Index("idx_artifacts_type", "artifact_type"),
+        Index("idx_artifacts_status", "status"),
+    )
+
+
+class ArtifactVersion(Base):
+    """Version history for an artifact."""
+    __tablename__ = "artifact_versions"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    artifact_id = Column(UUID(as_uuid=True), ForeignKey("artifacts.id"), nullable=False)
+    version = Column(Integer, nullable=False)
+    content = Column(JSONB, nullable=False)
+    change_description = Column(Text, nullable=True)
+    created_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    artifact = relationship("Artifact", back_populates="versions")
+
+    __table_args__ = (
+        UniqueConstraint("artifact_id", "version", name="uq_artifact_version"),
+        Index("idx_artifact_versions_artifact", "artifact_id"),
+    )
+
+
+class Approval(Base):
+    """Append-only approval ledger entry."""
+    __tablename__ = "approvals"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    artifact_id = Column(UUID(as_uuid=True), ForeignKey("artifacts.id"), nullable=False)
+    action = Column(String(50), nullable=False)  # approve, reject, request_review
+    performed_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    performed_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    prior_status = Column(String(50), nullable=True)
+    new_status = Column(String(50), nullable=False)
+    comment = Column(Text, nullable=True)
+    metadata_json = Column(JSONB, nullable=True)
+
+    # Relationships
+    artifact = relationship("Artifact")
+    performer = relationship("User")
+
+    __table_args__ = (
+        Index("idx_approvals_artifact", "artifact_id"),
+        Index("idx_approvals_performed_by", "performed_by"),
+    )

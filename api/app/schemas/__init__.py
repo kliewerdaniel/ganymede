@@ -196,3 +196,73 @@ class QueryResponse(BaseModel):
     query_text: str
     citations: List[CitationResponse]
     result_count: int
+    answer: Optional[str] = None
+    expanded_query: Optional[str] = None
+    raw_count: Optional[int] = None
+    verified: Optional[bool] = None
+
+
+# --- Artifact Schemas ---
+
+class ArtifactCreate(BaseModel):
+    artifact_type: str = Field(..., pattern="^(chronology|issue_table|memo)$")
+    title: Optional[str] = None
+    query_text: Optional[str] = None
+    top_k: int = Field(default=20, ge=1, le=50)
+
+
+class ArtifactUpdate(BaseModel):
+    content: dict
+    change_description: Optional[str] = None
+
+
+class ArtifactApproval(BaseModel):
+    comment: Optional[str] = None
+    reason: Optional[str] = None
+
+
+class SourceRef(BaseModel):
+    document_id: str
+    document_name: str
+    page: int
+    sha256: str
+    quoted_text: Optional[str] = None
+
+
+class ArtifactResponse(BaseModel):
+    id: uuid.UUID
+    matter_id: uuid.UUID
+    artifact_type: str
+    title: str
+    status: str
+    approved_by: Optional[uuid.UUID] = None
+    approved_at: Optional[datetime] = None
+    rejection_reason: Optional[str] = None
+    source_query: Optional[str] = None
+    content: dict
+    created_by: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ArtifactVersionResponse(BaseModel):
+    id: uuid.UUID
+    artifact_id: uuid.UUID
+    version: int
+    change_description: Optional[str] = None
+    created_by: uuid.UUID
+    created_at: datetime
+
+
+class ApprovalResponse(BaseModel):
+    id: uuid.UUID
+    artifact_id: uuid.UUID
+    action: str
+    performed_by: uuid.UUID
+    performed_at: datetime
+    prior_status: Optional[str] = None
+    new_status: str
+    comment: Optional[str] = None
