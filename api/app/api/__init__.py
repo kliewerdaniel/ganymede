@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.auth import create_access_token, decode_access_token, hash_password, verify_password
 from app.core.deps import get_current_user, get_current_active_user
-from app.core.rbac import can_access_matter
+from app.core.rbac import require_matter_access
 from app.core.sanitizer import sanitize_query, detect_injection
 from app.core.audit import log_action as log_audit, query_audit_log
 from app.core.config import get_settings
@@ -98,7 +98,7 @@ def get_matter(
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
     if not matter:
         raise HTTPException(status_code=404, detail="Matter not found")
-    can_access_matter(current_user, matter_id, db)
+    require_matter_access(current_user, matter_id, db)
     return matter
 
 
@@ -215,7 +215,7 @@ async def upload_document(
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
     if not matter:
         raise HTTPException(status_code=404, detail="Matter not found")
-    can_access_matter(current_user, matter_id, db)
+    require_matter_access(current_user, matter_id, db)
     
     file_bytes = await file.read()
     
@@ -253,7 +253,7 @@ def list_documents(
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
     if not matter:
         raise HTTPException(status_code=404, detail="Matter not found")
-    can_access_matter(current_user, matter_id, db)
+    require_matter_access(current_user, matter_id, db)
     return db.query(Document).filter(Document.matter_id == matter_id, Document.is_duplicate == False).all()
 
 
@@ -267,7 +267,7 @@ def get_document(
     doc = db.query(Document).filter(Document.id == document_id).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
-    can_access_matter(current_user, str(doc.matter_id), db)
+    require_matter_access(current_user, str(doc.matter_id), db)
     return doc
 
 
@@ -315,7 +315,7 @@ def query_matter(
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
     if not matter:
         raise HTTPException(status_code=404, detail="Matter not found")
-    can_access_matter(current_user, matter_id, db)
+    require_matter_access(current_user, matter_id, db)
     
     # Sanitize input
     clean_query = sanitize_query(request.query_text)
@@ -379,7 +379,7 @@ def ask_matter_async(
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
     if not matter:
         raise HTTPException(status_code=404, detail="Matter not found")
-    can_access_matter(current_user, matter_id, db)
+    require_matter_access(current_user, matter_id, db)
     
     query_id = submit_query(
         matter_id=matter_id,
@@ -441,7 +441,7 @@ def list_matter_members(
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
     if not matter:
         raise HTTPException(status_code=404, detail="Matter not found")
-    can_access_matter(current_user, matter_id, db)
+    require_matter_access(current_user, matter_id, db)
     
     memberships = get_memberships(db, matter_id)
     return {
@@ -599,7 +599,7 @@ def ask_matter(
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
     if not matter:
         raise HTTPException(status_code=404, detail="Matter not found")
-    can_access_matter(current_user, matter_id, db)
+    require_matter_access(current_user, matter_id, db)
     
     expanded_query = expand_query(request.query_text)
     
@@ -653,8 +653,8 @@ def create_artifact(
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
     if not matter:
         raise HTTPException(status_code=404, detail="Matter not found")
-    from app.core.rbac import can_access_matter
-    can_access_matter(current_user, matter_id, db)
+    from app.core.rbac import require_matter_access
+    require_matter_access(current_user, matter_id, db)
 
     try:
         if body.artifact_type == "chronology":
@@ -704,8 +704,8 @@ def list_matter_artifacts(
     matter = db.query(Matter).filter(Matter.id == matter_id).first()
     if not matter:
         raise HTTPException(status_code=404, detail="Matter not found")
-    from app.core.rbac import can_access_matter
-    can_access_matter(current_user, matter_id, db)
+    from app.core.rbac import require_matter_access
+    require_matter_access(current_user, matter_id, db)
 
     artifacts = list_artifacts(db, matter_id, current_user, artifact_type)
     return artifacts

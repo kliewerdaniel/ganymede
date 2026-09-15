@@ -52,8 +52,6 @@ ROLE_PERMISSIONS = {
         "query.submit", "citation.view", "citation.feedback",
     },
     Role.IT_OPERATOR: {
-        "matter.read",
-        "document.read",
         "audit.read",
     },
 }
@@ -95,10 +93,15 @@ def can_access_matter(user: User, matter_id: str, db: Session) -> bool:
     """Check if user has any access to a matter.
     
     Three tiers:
-    1. Administrators: full access to all matters
+    1. Administrators: full access to all matters within their tenant
     2. Matter members: access based on matter-level role
     3. Non-members: no access (even within same tenant)
     """
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        return False
+    if str(matter.tenant_id) != str(user.tenant_id):
+        return False
     if user.role == Role.ADMINISTRATOR:
         return True
     membership = db.query(MatterMembership).filter(
