@@ -23,6 +23,8 @@ def create_app() -> FastAPI:
 
     # API routes
     app.include_router(router, prefix="/api/v1")
+    from app.services.health import health_router
+    app.include_router(health_router, prefix="/api/v1")
 
     # Static frontend
     web_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "web")

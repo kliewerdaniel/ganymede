@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     PYTHON_DOCX_PARSER_VERSION: str = "1.2.0"
     TESSERACT_OCR_VERSION: str = "5.5.3"
 
+    # Ollama
+    OLLAMA_URL: str = "http://host.docker.internal:11434"
+    OLLAMA_TIMEOUT_SECONDS: int = 180
+    VERIFIER_MODEL: str = "qwen3:8b"
+
     # Security
     SECRET_KEY: str = "dev-secret-change-in-production"
     JWT_SECRET_KEY: str = "dev-jwt-secret-change-in-production"
