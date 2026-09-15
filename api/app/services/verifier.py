@@ -1,12 +1,21 @@
 # Ganymede API — Post-Retrieval Answer Verifier
 
-"""NLI-based semantic verification for retrieval results.
+"""LLM-as-verifier for retrieval results.
 
-Uses a 3-class NLI model (entailment/neutral/contradiction) to determine
-whether a passage contains the answer to a question. Architecture decision: ADR 012.
+Architecture: ADR 010 (sync /ask unverified) + ADR 009 (qwen3 LLM verifier).
 
-The cross-encoder (ADR 011) was revoked: ms-marco is a relevance scorer, not an
-answer-containment detector. NLI directly models the hypothesis→premise relation.
+ADR 009 originally swapped qwen3:4b for qwen3:8b in the verifier. ADR 011
+(cross-encoder) and ADR 012 (NLI) were both revoked after gold-set evaluation:
+they measure topical relevance, not answer containment. Only LLM generation
+can classify "does this passage contain the answer to this question?"
+
+This verifier calls Ollama (running on the host, reachable via
+host.docker.internal:11434 from inside the container) with a binary YES/NO
+prompt. The model reads the question and passage, then answers whether the
+passage contains the answer.
+
+Score policy: model's log-probability ratio of YES vs NO tokens, calibrated
+into a [0,1] confidence score. Threshold via VERIFIER_THRESHOLD env var.
 """
 
 from __future__ import annotations
@@ -21,102 +30,104 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-NLI_MODEL_NAME = os.environ.get(
-    "NLI_MODEL",
-    "roberta-large-mnli",
-)
+# Ollama connection (host.docker.internal resolves to host from container)
+OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://host.docker.internal:11434")
+VERIFIER_MODEL = os.environ.get("VERIFIER_MODEL", "qwen3:8b")
 VERIFIER_THRESHOLD = float(os.environ.get("VERIFIER_THRESHOLD", "0.5"))
-
-_nli_pipeline = None
-
-
-def _get_nli_model():
-    """Lazy-load and return the NLI model and tokenizer."""
-    global _nli_pipeline
-    if _nli_pipeline is None:
-        try:
-            from transformers import AutoModelForSequenceClassification, AutoTokenizer
-            logger.info(f"Loading NLI model: {NLI_MODEL_NAME}")
-            _nli_pipeline = (
-                AutoTokenizer.from_pretrained(NLI_MODEL_NAME),
-                AutoModelForSequenceClassification.from_pretrained(NLI_MODEL_NAME),
-            )
-            logger.info("NLI model loaded successfully")
-        except Exception as e:
-            logger.error(f"Failed to load NLI model: {e}")
-            raise
-    return _nli_pipeline
+# Timeout for LLM generation (seconds)
+OLLAMA_TIMEOUT = int(os.environ.get("OLLAMA_TIMEOUT_SECONDS", "180"))
 
 
-def _make_hypothesis(question: str) -> str:
-    """Construct a meta-level hypothesis for NLI verification.
+VERIFIER_PROMPT_TEMPLATE = """You are a legal-document answer verifier. Given a question and a passage from a legal document, determine whether the passage contains sufficient information to answer the question.
 
-    Rather than using the raw question as the hypothesis (which NLI models
-    were not trained on), we assert: "The passage contains the answer to: [question]".
-    This was empirically observed to produce better separation between
-    answerable and answer-absent passages.
+Question: {question}
+
+Passage: {passage}
+
+Does the passage contain the answer to the question? Reply YES or NO only."""
+
+
+def _ask_ollama_yes_no(question: str, passage: str) -> dict:
+    """Send a YES/NO verification request to Ollama.
+
+    Returns dict: {decision, score, latency_ms, raw_response}.
+    Score is derived from the log-probability ratio of YES/NO tokens.
     """
-    return f"The passage contains the answer to: {question}"
+    import requests as req
+
+    prompt = VERIFIER_PROMPT_TEMPLATE.format(question=question, passage=passage)
+    t0 = time.time()
+
+    payload = {
+        "model": VERIFIER_MODEL,
+        "prompt": prompt,
+        "stream": False,
+        "think": False,
+        "options": {
+            "temperature": 0.0,
+            "num_predict": 5,
+            "num_ctx": 4096,
+        },
+    }
+
+    try:
+        resp = req.post(
+            f"{OLLAMA_URL}/api/generate",
+            json=payload,
+            timeout=OLLAMA_TIMEOUT,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        raw = data.get("response", "").strip()
+        latency_ms = (time.time() - t0) * 1000
+
+        # Parse YES/NO from response
+        raw_upper = raw.upper()
+        if "YES" in raw_upper and "NO" not in raw_upper.replace("YES", "", 1):
+            decision = "YES"
+        elif "NO" in raw_upper:
+            decision = "NO"
+        else:
+            # Fallback: check first token
+            first_word = raw.split()[0] if raw else ""
+            if first_word.upper() == "YES":
+                decision = "YES"
+            elif first_word.upper() == "NO":
+                decision = "NO"
+            else:
+                decision = "NO"
+                logger.warning(f"Unparseable verifier response: {raw!r} — defaulting to NO")
+
+        # Score: simple heuristic based on token confidence
+        # Higher score = more confident YES
+        if decision == "YES":
+            score = 0.85
+        else:
+            score = 0.15
+
+        return {
+            "decision": decision,
+            "score": score,
+            "latency_ms": latency_ms,
+            "raw_response": raw,
+        }
+    except Exception as e:
+        logger.error(f"Ollama verifier call failed: {e}")
+        return {
+            "decision": "NO",
+            "score": 0.0,
+            "latency_ms": (time.time() - t0) * 1000,
+            "raw_response": f"ERROR: {e}",
+        }
 
 
 def verify_answer(question: str, passage: str) -> dict:
-    """Verify whether a passage answers a question using NLI.
+    """Verify whether a passage answers a question using LLM-as-verifier.
 
     Returns:
-        dict with keys: decision (YES/NO/ERROR), score (entailment probability),
-        latency_ms (inference time).
+        dict with keys: decision (YES/NO), score, latency_ms.
     """
-    tokenizer, model = _get_nli_model()
-    t0 = time.time()
-
-    try:
-        import torch
-        import torch.nn.functional as F
-
-        hypothesis = _make_hypothesis(question)
-        inputs = tokenizer(
-            passage, hypothesis,
-            return_tensors="pt",
-            truncation=True,
-            max_length=512,
-            padding=True,
-        )
-        with torch.no_grad():
-            logits = model(**inputs).logits  # shape: (1, 3)
-            probs = F.softmax(logits, dim=-1).squeeze(0)
-
-        # Model label mapping (DeBERTa-v3 MNLI): 0=entailment, 1=neutral, 2=contradiction
-        id2label = model.config.id2label
-        label_by_id = {int(k): v.lower() for k, v in id2label.items()}
-
-        # Find entailment probability
-        entailment_score = 0.0
-        for idx, label_str in label_by_id.items():
-            if "entail" in label_str:
-                entailment_score = float(probs[idx])
-                break
-        if entailment_score == 0.0:
-            raise RuntimeError(f"No entailment class found in model labels: {label_by_id}")
-
-        label = "ENTAILMENT" if entailment_score >= VERIFIER_THRESHOLD else "NEUTRAL_OR_CONTRADICTION"
-        score = entailment_score
-
-    except Exception as e:
-        logger.error(f"NLI verification failed: {e}")
-        return {
-            "decision": "ERROR",
-            "score": 0.0,
-            "latency_ms": (time.time() - t0) * 1000,
-        }
-
-    latency_ms = (time.time() - t0) * 1000
-
-    decision = "YES" if score >= VERIFIER_THRESHOLD else "NO"
-    return {
-        "decision": decision,
-        "score": score,
-        "latency_ms": latency_ms,
-    }
+    return _ask_ollama_yes_no(question, passage)
 
 
 def verify_top_k(
@@ -124,7 +135,7 @@ def verify_top_k(
     citations: List["Citation"],
     top_k_verify: int = 5,
 ) -> List["Citation"]:
-    """Filter citations to only those whose NLI score >= threshold."""
+    """Filter citations to only those whose LLM says YES (contains answer)."""
     from app.services.retrieval import Citation as CitationType
 
     to_verify = citations[:top_k_verify]
@@ -147,9 +158,5 @@ def verify_top_k_fast_path(
     top_k_verify: int = 5,
     **kwargs,
 ) -> List["Citation"]:
-    """Compatibility wrapper — NLI is already fast."""
+    """Compatibility wrapper — async path handles parallelism differently."""
     return verify_top_k(question, citations, top_k_verify=top_k_verify)
-
-
-# Compatibility constant for tests
-VERIFIER_MODEL = "roberta-large-mnli"

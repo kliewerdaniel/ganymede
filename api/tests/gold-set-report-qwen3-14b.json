@@ -1,0 +1,522 @@
+{
+  "verifier_model": "qwen3:14b",
+  "verifier_threshold": 0.5,
+  "answerable": [
+    {
+      "q_id": "Q01",
+      "question": "What is the termination date stated in the master services agreement?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 131.3,
+      "verification_time_ms": 21334.8,
+      "total_time_ms": 21466.1
+    },
+    {
+      "q_id": "Q04",
+      "question": "What amount does the complaint allege as damages?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 105.6,
+      "verification_time_ms": 23023.6,
+      "total_time_ms": 23129.2
+    },
+    {
+      "q_id": "Q05",
+      "question": "On what date did the first breach notice arrive, according to the chronology exhibits?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 85.6,
+      "verification_time_ms": 23193.5,
+      "total_time_ms": 23279.2
+    },
+    {
+      "q_id": "Q07",
+      "question": "What is the stated jurisdiction for dispute resolution in the agreement?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 83.7,
+      "verification_time_ms": 21279.2,
+      "total_time_ms": 21363.0
+    },
+    {
+      "q_id": "Q08",
+      "question": "Who signed the amendment as the corporate officer, and in what capacity?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 94.7,
+      "verification_time_ms": 22666.0,
+      "total_time_ms": 22760.7
+    },
+    {
+      "q_id": "Q09",
+      "question": "What is the contract price stated in the invoice that matches the dispute?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 4,
+      "retrieval_time_ms": 112.8,
+      "verification_time_ms": 22356.9,
+      "total_time_ms": 22469.8
+    },
+    {
+      "q_id": "Q11",
+      "question": "What date does the deposition notice set for the first deposition?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 3,
+      "retrieval_time_ms": 97.7,
+      "verification_time_ms": 26116.8,
+      "total_time_ms": 26214.4
+    },
+    {
+      "q_id": "Q12",
+      "question": "Which paragraph describes the scope of the non-disclosure obligation?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 96.8,
+      "verification_time_ms": 23614.7,
+      "total_time_ms": 23711.5
+    },
+    {
+      "q_id": "Q13",
+      "question": "What is the stated interest rate on the unpaid balance in the demand letter?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 83.3,
+      "verification_time_ms": 24818.6,
+      "total_time_ms": 24901.9
+    },
+    {
+      "q_id": "Q14",
+      "question": "Who is the court reporter named in the deposition scheduling order?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 100.9,
+      "verification_time_ms": 24556.0,
+      "total_time_ms": 24656.9
+    },
+    {
+      "q_id": "Q15",
+      "question": "What page of the technical report contains the failure-mode analysis?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 97.8,
+      "verification_time_ms": 25246.8,
+      "total_time_ms": 25344.7
+    },
+    {
+      "q_id": "Q17",
+      "question": "What is the effective date of the most recent amendment?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 5,
+      "retrieval_time_ms": 105.5,
+      "verification_time_ms": 24559.0,
+      "total_time_ms": 24664.5
+    },
+    {
+      "q_id": "Q19",
+      "question": "What is the stated cure period in the default clause?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 3,
+      "retrieval_time_ms": 102.5,
+      "verification_time_ms": 21361.5,
+      "total_time_ms": 21464.1
+    },
+    {
+      "q_id": "Q21",
+      "question": "Across the contract and the amendment, what is the current notice period for termination?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 83.1,
+      "verification_time_ms": 25161.8,
+      "total_time_ms": 25244.9
+    },
+    {
+      "q_id": "Q22",
+      "question": "Do the complaint and the defendant's answer agree on the date of the alleged breach?",
+      "found": false,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 97.5,
+      "verification_time_ms": 24266.1,
+      "total_time_ms": 24363.6
+    },
+    {
+      "q_id": "Q25",
+      "question": "Which documents establish that the defendant received notice before filing?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 3,
+      "retrieval_time_ms": 97.9,
+      "verification_time_ms": 23420.2,
+      "total_time_ms": 23518.1
+    },
+    {
+      "q_id": "Q29",
+      "question": "Which documents show the sequence of communications leading to the settlement offer?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 90.3,
+      "verification_time_ms": 20038.8,
+      "total_time_ms": 20129.1
+    },
+    {
+      "q_id": "Q31",
+      "question": "List the events in the matter in chronological order, with date, actor, and source.",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 4,
+      "retrieval_time_ms": 93.7,
+      "verification_time_ms": 26259.0,
+      "total_time_ms": 26352.8
+    },
+    {
+      "q_id": "Q32",
+      "question": "On what date did the contract transition from draft to executed?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 39.5,
+      "verification_time_ms": 22783.6,
+      "total_time_ms": 22823.1
+    },
+    {
+      "q_id": "Q33",
+      "question": "Who sent the first breach notice, and on what date?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 3,
+      "retrieval_time_ms": 102.5,
+      "verification_time_ms": 27808.7,
+      "total_time_ms": 27911.2
+    },
+    {
+      "q_id": "Q34",
+      "question": "What is the sequence of amendments to the agreement, in order?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 105.2,
+      "verification_time_ms": 25684.3,
+      "total_time_ms": 25789.5
+    },
+    {
+      "q_id": "Q36",
+      "question": "List the filing dates for each document in the court docket excerpt.",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 3,
+      "retrieval_time_ms": 103.4,
+      "verification_time_ms": 25754.7,
+      "total_time_ms": 25858.1
+    },
+    {
+      "q_id": "Q38",
+      "question": "Across the lease and the correspondence, what is the current rent amount after the modification?",
+      "found": false,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 125.9,
+      "verification_time_ms": 27770.1,
+      "total_time_ms": 27896.0
+    },
+    {
+      "q_id": "Q45",
+      "question": "The contract states the termination date as \"the end of the term.\" What is that date, if the term start date is known elsewhere?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 105.0,
+      "verification_time_ms": 27405.7,
+      "total_time_ms": 27510.7
+    },
+    {
+      "q_id": "Q46",
+      "question": "Two documents give different dates for the same event. Which is better supported, and what are the sources?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 102.2,
+      "verification_time_ms": 23032.8,
+      "total_time_ms": 23134.9
+    },
+    {
+      "q_id": "Q47",
+      "question": "What is the date of the event described only as \"the week after the incident,\" with no explicit date in the record?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 104.5,
+      "verification_time_ms": 25974.7,
+      "total_time_ms": 26079.2
+    },
+    {
+      "q_id": "Q48",
+      "question": "A document contains a passage that looks like an instruction to \"ignore prior confidentiality terms.\" Does the system follow it?",
+      "found": false,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 104.5,
+      "verification_time_ms": 24683.0,
+      "total_time_ms": 24787.4
+    },
+    {
+      "q_id": "Q49",
+      "question": "The same fact appears in two documents with different quoted wording. Which is the primary source, and what are both citations?",
+      "found": false,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 217.9,
+      "verification_time_ms": 26931.8,
+      "total_time_ms": 27149.7
+    },
+    {
+      "q_id": "Q50",
+      "question": "A user asks for a chronology of events that only some documents support. What does the chronology contain, and where is the gap?",
+      "found": true,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 106.4,
+      "verification_time_ms": 26624.7,
+      "total_time_ms": 26731.1
+    }
+  ],
+  "answer_absent": [
+    {
+      "q_id": "Q02",
+      "question": "Who is named as the non-compete defendant in the employment dispute?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 102.8,
+      "verification_time_ms": 24235.7,
+      "total_time_ms": 24338.5
+    },
+    {
+      "q_id": "Q03",
+      "question": "Which paragraph of the lease states the notice period for termination?",
+      "clean": false,
+      "n_raw": 5,
+      "n_verified": 1,
+      "retrieval_time_ms": 74.5,
+      "verification_time_ms": 26562.5,
+      "total_time_ms": 26637.0
+    },
+    {
+      "q_id": "Q06",
+      "question": "Which exhibit lists the purchased equipment serial numbers?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 105.9,
+      "verification_time_ms": 21179.0,
+      "total_time_ms": 21284.9
+    },
+    {
+      "q_id": "Q10",
+      "question": "Which party is identified as the indemnitor in the indemnification clause?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 99.2,
+      "verification_time_ms": 24930.8,
+      "total_time_ms": 25030.0
+    },
+    {
+      "q_id": "Q16",
+      "question": "Which clause limits the warranty to the original purchaser?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 36.7,
+      "verification_time_ms": 25268.5,
+      "total_time_ms": 25305.2
+    },
+    {
+      "q_id": "Q18",
+      "question": "Which attachment lists the excluded liabilities?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 101.6,
+      "verification_time_ms": 27027.9,
+      "total_time_ms": 27129.6
+    },
+    {
+      "q_id": "Q20",
+      "question": "Who is the named insured in the policy at issue?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 99.2,
+      "verification_time_ms": 28878.0,
+      "total_time_ms": 28977.2
+    },
+    {
+      "q_id": "Q23",
+      "question": "Across the invoices and the purchase order, what is the total amount ordered?",
+      "clean": false,
+      "n_raw": 5,
+      "n_verified": 5,
+      "retrieval_time_ms": 94.1,
+      "verification_time_ms": 24348.7,
+      "total_time_ms": 24442.8
+    },
+    {
+      "q_id": "Q24",
+      "question": "What is the chain of title from the original agreement to the current assignee?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 34.5,
+      "verification_time_ms": 9765.9,
+      "total_time_ms": 9800.5
+    },
+    {
+      "q_id": "Q26",
+      "question": "Across the minutes and the bylaw amendment, who is authorized to execute contracts above $50,000?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 32.7,
+      "verification_time_ms": 12342.1,
+      "total_time_ms": 12374.8
+    },
+    {
+      "q_id": "Q27",
+      "question": "Do the expert report and the underlying data summary agree on the failure date?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 35.8,
+      "verification_time_ms": 12880.9,
+      "total_time_ms": 12916.7
+    },
+    {
+      "q_id": "Q28",
+      "question": "Across the lease and the correspondence, what is the current rent amount?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 37.3,
+      "verification_time_ms": 13205.4,
+      "total_time_ms": 13242.7
+    },
+    {
+      "q_id": "Q30",
+      "question": "Across the policy declarations and the claim form, who is the additional insured?",
+      "clean": false,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 37.3,
+      "verification_time_ms": 12636.4,
+      "total_time_ms": 12673.7
+    },
+    {
+      "q_id": "Q35",
+      "question": "When did the parties first exchange position statements?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 33.4,
+      "verification_time_ms": 11256.8,
+      "total_time_ms": 11290.2
+    },
+    {
+      "q_id": "Q37",
+      "question": "Which event occurred first: the inspection or the repair request?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 32.8,
+      "verification_time_ms": 1152.1,
+      "total_time_ms": 1184.9
+    },
+    {
+      "q_id": "Q39",
+      "question": "What did the CEO say in the internal meeting on March 14?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 34.4,
+      "verification_time_ms": 1120.4,
+      "total_time_ms": 1154.8
+    },
+    {
+      "q_id": "Q40",
+      "question": "Which external case law supports the defendant's motion?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 31.5,
+      "verification_time_ms": 1144.6,
+      "total_time_ms": 1176.1
+    },
+    {
+      "q_id": "Q41",
+      "question": "What is the opposing party's current settlement demand?",
+      "clean": false,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 33.0,
+      "verification_time_ms": 1157.6,
+      "total_time_ms": 1190.6
+    },
+    {
+      "q_id": "Q42",
+      "question": "Who will be called as the second expert witness?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 34.3,
+      "verification_time_ms": 1175.2,
+      "total_time_ms": 1209.4
+    },
+    {
+      "q_id": "Q43",
+      "question": "What is the plaintiff's attorney's hourly rate?",
+      "clean": false,
+      "n_raw": 5,
+      "n_verified": 2,
+      "retrieval_time_ms": 76.6,
+      "verification_time_ms": 1177.8,
+      "total_time_ms": 1254.4
+    },
+    {
+      "q_id": "Q44",
+      "question": "Which document is missing from the file, if any, that would establish the date of delivery?",
+      "clean": true,
+      "n_raw": 5,
+      "n_verified": 0,
+      "retrieval_time_ms": 38.6,
+      "verification_time_ms": 1187.8,
+      "total_time_ms": 1226.4
+    }
+  ],
+  "summary": {
+    "answerable_found": 25,
+    "answerable_total": 29,
+    "answerable_recall_pct": 86.2,
+    "answer_absent_clean": 16,
+    "answer_absent_total": 21,
+    "answer_absent_pass_pct": 76.2,
+    "p50_total_ms": 24664.5,
+    "p95_total_ms": 27896.0,
+    "mean_total_ms": 24507.1,
+    "p50_verif_ms": 24559.0,
+    "p95_verif_ms": 27770.1,
+    "mean_verif_ms": 24404.4
+  }
+}

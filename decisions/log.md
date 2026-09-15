@@ -142,3 +142,43 @@ The fast-path design in `verifier.py` is kept for future use (thresholds are con
 All 21 unanswerable queries correctly return 5 raw citations (the verifier handles the filtering). The recall gate (≥80%) is **PASS**.
 
 **Related:** `api/tests/gold-set-report-legal-synonyms.json`
+
+---
+
+## 2026-09-15 — Week 7 closeout: Verifier model selection
+
+**Decision:** Ship **qwen3:8b** as the production verifier. Best balance of recall (75.9%), answer-absent protection (85.7%), and latency (~12s).
+
+### Gold-set evaluation results (5 models tested)
+
+| Model | Params | Recall | Answer-absent | Latency | Status |
+|-------|--------|--------|---------------|---------|--------|
+| **qwen3:8b** | 8B | **75.9% (22/29)** | **85.7% (18/21)** | **12s** | **Production** |
+| qwen3:14b | 14B | 86.2% (25/29) | 76.2% (16/21) | 24.5s | Higher recall, more leaks, 2× latency |
+| qwen3.5:9b | 9B | 65.5% (19/29) | 85.7% (18/21) | 6.6s | Too strict |
+| ornith-1.5:35b | 35B MoE (3B active) | 58.6% (17/29) | 81.0% (17/21) | 4.4s | 3B active insufficient for task |
+| muse-glimmer:30b-mlx | 30B dense | 0.0% (0/29) | 100% (21/21) | 18s | Useless — always says NO |
+
+### Key findings
+
+1. **MoE with few active params fails the task.** Both ornith-1.5:35b (3B active) and qwen3:4b (dense, small) miss 40%+ of answerable questions. The binary YES/NO task needs sufficient active capacity.
+
+2. **Newer generation ≠ better for this task.** qwen3.5:9b (released 3 weeks ago) is stricter than 3:8b, missing 10 more answerable questions. Architecture improvements don't transfer to answer-containment detection.
+
+3. **14b is the ceiling, not the target.** qwen3:14b gets 86.2% recall but leaks 5 answer-absent questions (vs 3 for 8b) and doubles latency. Net negative for production.
+
+4. **Score heuristic is too coarse.** The current verifier returns a hardcoded 0.85 for YES / 0.15 for NO instead of log-prob-calibrated scores. This means `VERIFIER_THRESHOLD` has a dead zone between 0.15–0.85. **Deferred** — not worth optimizing until we see production leakage.
+
+### Files changed
+
+- `api/app/services/verifier.py`: LLM-as-verifier via Ollama, `think: False` required for qwen3 models
+- `api/Dockerfile`: Removed torch/transformers/NLI pre-download (verifier no longer runs locally)
+- `api/requirements.txt`: Removed `transformers>=4.40.0` and `torch>=2.0.0`
+- `api/tests/eval_llm_verifier.py`: Gold-set evaluation script (supports `VERIFIER_MODEL` env var)
+
+### ADR status
+
+- **ADR 009** (qwen3 LLM verifier): **Accepted** — only architecture that classifies answer containment
+- **ADR 011** (cross-encoder): **Revoked** — measures topical relevance, not answer containment
+- **ADR 012** (NLI/roberta-large-mnli): **Revoked** — same architectural limitation as cross-encoder
+- **ADR 010** (sync `/ask` unverified): **Accepted** — sync returns immediately, async is verified
