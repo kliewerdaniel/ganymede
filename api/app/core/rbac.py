@@ -92,11 +92,15 @@ def get_matter_role(user: User, matter_id: str, db: Session) -> Optional[str]:
 
 
 def can_access_matter(user: User, matter_id: str, db: Session) -> bool:
-    """Check if user has any access to a matter."""
-    # Administrators can access all matters
+    """Check if user has any access to a matter.
+    
+    Three tiers:
+    1. Administrators: full access to all matters
+    2. Matter members: access based on matter-level role
+    3. Non-members: no access (even within same tenant)
+    """
     if user.role == Role.ADMINISTRATOR:
         return True
-    # Otherwise must be a member
     membership = db.query(MatterMembership).filter(
         MatterMembership.user_id == user.id,
         MatterMembership.matter_id == matter_id,

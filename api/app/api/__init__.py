@@ -22,6 +22,10 @@ from app.schemas import (
 from app.services.ingestion import ingest_document, get_ingestion_status
 from app.services.retrieval import retrieve
 from app.services.query_expansion import expand_query
+from app.services.membership import (
+    get_memberships, get_user_memberships, add_member, remove_member,
+    update_member_role, MembershipError, is_matter_lead,
+)
 from app.models import Matter, User, Document, Page, AuditLog
 
 settings = get_settings()
@@ -45,7 +49,7 @@ def create_matter(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    """Create a new matter."""
+    """Create a new matter. Creator is automatically added as lead."""
     db_matter = Matter(
         id=uuid.uuid4(),
         tenant_id=current_user.tenant_id,
@@ -57,6 +61,9 @@ def create_matter(
     db.add(db_matter)
     db.commit()
     db.refresh(db_matter)
+    
+    # Auto-add creator as matter lead
+    add_member(db, str(db_matter.id), str(current_user.id), "lead")
     
     log_audit(
         db, str(current_user.tenant_id), str(current_user.id),
@@ -420,7 +427,164 @@ def submit_citation_feedback(
     return {"status": "received", "citation_id": citation_id, "feedback": feedback}
 
 
-# --- Verified Q&A Route ---
+# --- Matter Membership Routes ---
+
+@router.get("/matters/{matter_id}/members")
+def list_matter_members(
+    matter_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """List all members of a matter."""
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+    can_access_matter(current_user, matter_id, db)
+    
+    memberships = get_memberships(db, matter_id)
+    return {
+        "matter_id": matter_id,
+        "members": [
+            {
+                "user_id": str(m.user_id),
+                "email": m.user.email,
+                "name": m.user.name,
+                "role": m.role,
+                "created_at": m.created_at.isoformat(),
+            }
+            for m in memberships
+        ],
+    }
+
+
+@router.post("/matters/{matter_id}/members")
+def add_matter_member(
+    matter_id: str,
+    body: dict,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Add a user to a matter. Requires matter lead or admin."""
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+    
+    # Only matter leads and admins can add members
+    if current_user.role != "administrator" and not is_matter_lead(db, str(current_user.id), matter_id):
+        raise HTTPException(status_code=403, detail="Only matter leads can add members")
+    
+    user_id = body.get("user_id")
+    role = body.get("role", "member")
+    
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id is required")
+    
+    try:
+        membership = add_member(db, matter_id, user_id, role)
+    except MembershipError as e:
+        raise HTTPException(status_code=400, detail=e.message)
+    
+    log_audit(
+        db, str(current_user.tenant_id), str(current_user.id),
+        "matter.add_member", "matter", matter_id,
+        {"added_user_id": user_id, "role": role},
+    )
+    
+    return {
+        "membership_id": str(membership.id),
+        "matter_id": matter_id,
+        "user_id": user_id,
+        "role": role,
+    }
+
+
+@router.delete("/matters/{matter_id}/members/{user_id}")
+def remove_matter_member(
+    matter_id: str,
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Remove a user from a matter. Requires matter lead or admin."""
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+    
+    if current_user.role != "administrator" and not is_matter_lead(db, str(current_user.id), matter_id):
+        raise HTTPException(status_code=403, detail="Only matter leads can remove members")
+    
+    try:
+        remove_member(db, matter_id, user_id)
+    except MembershipError as e:
+        raise HTTPException(status_code=400, detail=e.message)
+    
+    log_audit(
+        db, str(current_user.tenant_id), str(current_user.id),
+        "matter.remove_member", "matter", matter_id,
+        {"removed_user_id": user_id},
+    )
+    
+    return {"status": "removed", "matter_id": matter_id, "user_id": user_id}
+
+
+@router.put("/matters/{matter_id}/members/{user_id}")
+def update_matter_member_role(
+    matter_id: str,
+    user_id: str,
+    body: dict,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Update a member's role in a matter. Requires matter lead or admin."""
+    matter = db.query(Matter).filter(Matter.id == matter_id).first()
+    if not matter:
+        raise HTTPException(status_code=404, detail="Matter not found")
+    
+    if current_user.role != "administrator" and not is_matter_lead(db, str(current_user.id), matter_id):
+        raise HTTPException(status_code=403, detail="Only matter leads can update member roles")
+    
+    role = body.get("role")
+    if not role:
+        raise HTTPException(status_code=400, detail="role is required")
+    
+    try:
+        membership = update_member_role(db, matter_id, user_id, role)
+    except MembershipError as e:
+        raise HTTPException(status_code=400, detail=e.message)
+    
+    log_audit(
+        db, str(current_user.tenant_id), str(current_user.id),
+        "matter.update_member_role", "matter", matter_id,
+        {"updated_user_id": user_id, "new_role": role},
+    )
+    
+    return {
+        "membership_id": str(membership.id),
+        "matter_id": matter_id,
+        "user_id": user_id,
+        "role": membership.role,
+    }
+
+
+@router.get("/users/me/memberships")
+def get_my_memberships(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """List all matters the current user is a member of."""
+    memberships = get_user_memberships(db, str(current_user.id))
+    return {
+        "user_id": str(current_user.id),
+        "memberships": [
+            {
+                "matter_id": str(m.matter_id),
+                "matter_name": m.matter.name,
+                "role": m.role,
+                "created_at": m.created_at.isoformat(),
+            }
+            for m in memberships
+        ],
+    }
 
 @router.post("/matters/{matter_id}/ask")
 def ask_matter(
