@@ -1,0 +1,11 @@
+# Secrets
+*.pem
+*.key
+.env
+.env.local
+backups/
+diagnostics/
+.update_rollback/
+
+# OS
+.DS_Store
