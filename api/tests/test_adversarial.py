@@ -1,15 +1,14 @@
 # Ganymede API — Adversarial Fixture Test
-
 """Test adversarial fixtures: corrupt, duplicate, rotated, tables."""
 
 import os
 import sys
-import time
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from app.core.config import get_settings
 from app.models import Base, Tenant, Matter, Document, Page
 from app.services.ingestion import ingest_document
@@ -18,8 +17,8 @@ settings = get_settings()
 engine = create_engine(settings.DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-FIXTURES_DIR = "/Users/danielkliewer/Projects/ganymede/testdata/fixtures"
-CORPUS_A = "/Users/danielkliewer/Projects/ganymede/testdata/corpus-v0.1"
+FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "testdata", "fixtures")
+CORPUS_A = os.path.join(os.path.dirname(__file__), "..", "..", "testdata", "corpus-v0.1")
 
 MIME_MAP = {
     ".pdf": "application/pdf",
@@ -32,53 +31,41 @@ def get_mime_type(filename: str) -> str:
     return MIME_MAP.get(ext, "application/octet-stream")
 
 
-def test_fixture(db, matter_id: str, filename: str, expect_status: str, description: str):
-    """Test a single fixture."""
+def _ingest_fixture(db, matter_id, filename, expect_status):
     filepath = os.path.join(FIXTURES_DIR, filename)
     if not os.path.exists(filepath):
-        print(f"  SKIP: {filename} not found")
-        return
+        return {"skipped": True, "filename": filename}
 
     mime_type = get_mime_type(filename)
-    file_size = os.path.getsize(filepath)
-
-    print(f"\n[{filename}]")
-    print(f"  Description: {description}")
-    print(f"  MIME: {mime_type}, Size: {file_size} bytes")
-
     with open(filepath, "rb") as f:
         file_bytes = f.read()
 
-    try:
-        doc = ingest_document(
-            db=db,
-            matter_id=matter_id,
-            filename=filename,
-            file_bytes=file_bytes,
-            mime_type=mime_type,
-        )
+    doc = ingest_document(
+        db=db,
+        matter_id=matter_id,
+        filename=filename,
+        file_bytes=file_bytes,
+        mime_type=mime_type,
+    )
 
-        page_count = db.query(Page).filter(Page.document_id == doc.id).count()
+    page_count = db.query(Page).filter(Page.document_id == doc.id).count()
+    status_ok = doc.ingestion_status == expect_status
 
-        status_match = "✓" if doc.ingestion_status == expect_status else "✗ UNEXPECTED"
-        print(f"  {status_match} Status: {doc.ingestion_status} (expected: {expect_status})")
-        print(f"    Pages: {page_count}")
-        if doc.is_duplicate:
-            print(f"    ⚠ DUPLICATE detected (duplicate_of: {doc.duplicate_of_id})")
-        if doc.ingestion_error:
-            print(f"    Error: {doc.ingestion_error}")
-
-    except Exception as e:
-        if expect_status == "failed":
-            print(f"  ✓ Expected failure: {str(e)}")
-        else:
-            print(f"  ✗ Unexpected error: {str(e)}")
+    return {
+        "skipped": False,
+        "filename": filename,
+        "status": doc.ingestion_status,
+        "expected": expect_status,
+        "status_ok": status_ok,
+        "page_count": page_count,
+        "is_duplicate": doc.is_duplicate,
+    }
 
 
-def main():
+def test_adversarial_fixtures():
     db = SessionLocal()
     try:
-        # Get or create matter
+        # Get or create test matter
         matter = db.query(Matter).filter(Matter.name.like("%Test%")).first()
         if not matter:
             tenant = db.query(Tenant).first()
@@ -90,30 +77,22 @@ def main():
             db.add(matter)
             db.commit()
 
-        print("=" * 60)
-        print("Adversarial Fixture Tests")
-        print("=" * 60)
-
-        # Test 1: Corrupt PDF - should fail visibly (0 pages)
-        test_fixture(
-            db, str(matter.id), "adversarial-corrupt.pdf", "failed",
-            "Corrupt PDF with invalid structure (should produce 0 pages and fail)"
-        )
+        # Test 1: Corrupt PDF - should fail visibly
+        r1 = _ingest_fixture(db, str(matter.id), "adversarial-corrupt.pdf", "failed")
+        if not r1["skipped"]:
+            assert r1["status_ok"], f"Corrupt PDF: expected failed, got {r1['status']}"
 
         # Test 2: Rotated pages - should parse (possibly partial)
-        test_fixture(
-            db, str(matter.id), "adversarial-rotated.pdf", "completed",
-            "PDF with rotated pages (90°, 180°)"
-        )
+        r2 = _ingest_fixture(db, str(matter.id), "adversarial-rotated.pdf", "completed")
+        if not r2["skipped"]:
+            assert r2["status_ok"], f"Rotated PDF: expected completed, got {r2['status']}"
 
         # Test 3: DOCX with tables - should parse
-        test_fixture(
-            db, str(matter.id), "adversarial-tables.docx", "completed",
-            "DOCX with tables"
-        )
+        r3 = _ingest_fixture(db, str(matter.id), "adversarial-tables.docx", "completed")
+        if not r3["skipped"]:
+            assert r3["status_ok"], f"Tables DOCX: expected completed, got {r3['status']}"
 
         # Test 4: Duplicate - should be detected
-        # First, ingest the original from corpus A
         orig_path = os.path.join(CORPUS_A, "DOC-001-Complaint.pdf")
         if os.path.exists(orig_path):
             with open(orig_path, "rb") as f:
@@ -125,21 +104,9 @@ def main():
                 file_bytes=orig_bytes,
                 mime_type="application/pdf",
             )
-            print(f"\n[Original DOC-001 ingested] SHA256: {orig_doc.sha256[:16]}...")
-
-        # Now test the duplicate
-        test_fixture(
-            db, str(matter.id), "adversarial-duplicate.pdf", "completed",
-            "Duplicate of DOC-001 (should be detected)"
-        )
-
-        print("\n" + "=" * 60)
-        print("Adversarial tests complete")
-        print("=" * 60)
+            r4 = _ingest_fixture(db, str(matter.id), "adversarial-duplicate.pdf", "completed")
+            if not r4["skipped"]:
+                assert r4["is_duplicate"], "Duplicate PDF should be detected as duplicate"
 
     finally:
         db.close()
-
-
-if __name__ == "__main__":
-    main()

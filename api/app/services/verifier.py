@@ -37,6 +37,11 @@ VERIFIER_THRESHOLD = float(os.environ.get("VERIFIER_THRESHOLD", "0.5"))
 # Timeout for LLM generation (seconds)
 OLLAMA_TIMEOUT = int(os.environ.get("OLLAMA_TIMEOUT_SECONDS", "180"))
 
+# Compatibility constants (Week 4 fast-path design — deferred but kept for API compat)
+VERIFIER_PROMPT_VERSION = "1.2.0"
+FAST_PATH_RRF_THRESHOLD = 0.025
+FAST_PATH_VECTOR_THRESHOLD = 0.72
+
 
 VERIFIER_PROMPT_TEMPLATE = """You are a legal-document answer verifier. Given a question and a passage from a legal document, determine whether the passage contains sufficient information to answer the question.
 
@@ -150,6 +155,50 @@ def verify_top_k(
             verified.append(cite)
 
     return verified
+
+
+def verify_batch_latency(
+    questions: list,
+    get_citations_fn,
+    top_k_verify: int = 5,
+) -> dict:
+    """Measure verifier latency across a batch of questions.
+
+    Args:
+        questions: list of (q_id, question_text) tuples
+        get_citations_fn: callable(question_text) -> list of citations
+        top_k_verify: how many citations to verify per question
+
+    Returns:
+        dict with p50_ms, p95_ms, mean_ms, min_ms, max_ms, n_queries
+    """
+    latencies = []
+    for q_id, question in questions:
+        citations = get_citations_fn(question)
+        if citations:
+            result = verify_top_k(question, citations, top_k_verify=min(top_k_verify, len(citations)))
+            # Sum latency across all verified citations
+            total_ms = sum(
+                c.retrieval_scores.get("verifier_latency_ms", 0)
+                for c in result
+            )
+            latencies.append(total_ms)
+        else:
+            latencies.append(0)
+
+    if not latencies:
+        return {"p50_ms": 0, "p95_ms": 0, "mean_ms": 0, "min_ms": 0, "max_ms": 0, "n_queries": 0}
+
+    latencies_sorted = sorted(latencies)
+    n = len(latencies_sorted)
+    return {
+        "p50_ms": latencies_sorted[n // 2],
+        "p95_ms": latencies_sorted[int(n * 0.95)],
+        "mean_ms": sum(latencies) / n,
+        "min_ms": latencies_sorted[0],
+        "max_ms": latencies_sorted[-1],
+        "n_queries": n,
+    }
 
 
 def verify_top_k_fast_path(

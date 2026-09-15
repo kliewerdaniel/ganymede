@@ -37,6 +37,7 @@ class Settings(BaseSettings):
 
     # Security
     SECRET_KEY: str = "dev-secret-change-in-production"
+    JWT_SECRET_KEY: str = "dev-jwt-secret-change-in-production"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     class Config:

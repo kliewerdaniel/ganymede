@@ -29,6 +29,8 @@ services:
       OLLAMA_ENDPOINTS: "host.docker.internal:11434,localhost:11434"
       # Verifier Ollama URL — uses host.docker.internal by default
       OLLAMA_URL: "http://host.docker.internal:11434"
+      # JWT signing secret — CHANGE IN PRODUCTION
+      JWT_SECRET_KEY: "dev-jwt-secret-change-in-production"
     volumes:
       - api_storage:/data/storage
       - ./api:/app  # Mount local code for development

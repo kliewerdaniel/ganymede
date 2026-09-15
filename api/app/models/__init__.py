@@ -13,6 +13,26 @@ from sqlalchemy.orm import relationship, declarative_base
 Base = declarative_base()
 
 
+class AuditLog(Base):
+    """Append-only audit log entry."""
+    __tablename__ = "audit_logs"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    action = Column(String(100), nullable=False)
+    resource_type = Column(String(50), nullable=False)
+    resource_id = Column(String(255), nullable=True)
+    metadata_json = Column(JSONB, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    __table_args__ = (
+        Index("idx_audit_logs_tenant_user", "tenant_id", "user_id"),
+        Index("idx_audit_logs_action", "action"),
+        Index("idx_audit_logs_created_at", "created_at"),
+    )
+
+
 class Tenant(Base):
     """Single-tenant deployment. One row per deployment."""
     __tablename__ = "tenants"
@@ -37,6 +57,7 @@ class User(Base):
     name = Column(String(255), nullable=False)
     role = Column(String(50), nullable=False, default="attorney")
     is_active = Column(Boolean, default=True, nullable=False)
+    password_hash = Column(String(255), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
