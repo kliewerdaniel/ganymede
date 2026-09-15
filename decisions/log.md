@@ -182,3 +182,38 @@ All 21 unanswerable queries correctly return 5 raw citations (the verifier handl
 - **ADR 011** (cross-encoder): **Revoked** — measures topical relevance, not answer containment
 - **ADR 012** (NLI/roberta-large-mnli): **Revoked** — same architectural limitation as cross-encoder
 - **ADR 010** (sync `/ask` unverified): **Accepted** — sync returns immediately, async is verified
+
+---
+
+## 2026-09-15 — Week 7-8 closeout: Governance (auth, RBAC, audit, sanitizer)
+
+**Decision:** Added full authentication and authorization layer to all matter-scoped endpoints.
+
+**Architecture (ADR 013):**
+- JWT auth via PyJWT (HS256, 30min TTL), bcrypt password hashing
+- 5 roles: administrator, attorney, reviewer, paralegal, it_operator
+- Matter-level access control (admin bypass, membership check)
+- Audit log: append-only table with action, resource, metadata
+- Prompt injection detection: 15 patterns, blocks + logs attempts
+
+**PyJWT used instead of python-jose** — `python-jose[cryptography]` causes SIGILL (illegal instruction) on ARM64 Docker.
+**bcrypt 4.x pinned** — 5.x breaks passlib compatibility.
+
+**Test results:** 62 passing
+- test_auth.py: 13 (JWT create/decode, password hashing)
+- test_rbac.py: 16 (role hierarchy, permission checks)
+- test_audit.py: 8 (log creation, query, pagination)
+- test_sanitizer.py: 24 (injection detection, sanitization)
+- test_adversarial.py: 1 (fixture-based tests)
+
+**Verified live:**
+- `POST /auth/login` → JWT with user object
+- `GET /matters` with Bearer → returns matter list
+- `GET /matters` without auth → 401
+- `POST /query` with injection pattern → 400 + audit entry
+- `POST /query` benign → returns citations with retrieval scores
+
+**Endpoints protected:** all `/matters/{id}/*` and `/documents/*`
+**Unauthenticated:** `/health`, `/auth/login`, `/auth/register`
+
+**Committed as `e57cea3`.** ADR: `adr/013-governance-auth-rbac.md`.
