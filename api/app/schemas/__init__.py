@@ -266,3 +266,10 @@ class ApprovalResponse(BaseModel):
     prior_status: Optional[str] = None
     new_status: str
     comment: Optional[str] = None
+
+
+class CitationFeedbackCreate(BaseModel):
+    citation_document_id: str
+    citation_page: int
+    citation_sha256: str
+    feedback: str = Field(..., pattern="^(supporting|weak|wrong|inaccessible)$")

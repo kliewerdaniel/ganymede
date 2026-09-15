@@ -19,7 +19,7 @@ from app.schemas import (
     DocumentResponse, PageResponse, IngestionStatusResponse,
     UploadResponse, QueryRequest, QueryResponse, CitationResponse,
     ArtifactCreate, ArtifactUpdate, ArtifactApproval, ArtifactResponse,
-    ArtifactVersionResponse, ApprovalResponse,
+    ArtifactVersionResponse, ApprovalResponse, CitationFeedbackCreate,
 )
 from app.services.ingestion import ingest_document, get_ingestion_status
 from app.services.retrieval import retrieve
@@ -815,3 +815,64 @@ def get_artifact_approvals_endpoint(
     """Get approval ledger for an artifact."""
     from app.services.artifacts import get_approval_history
     return get_approval_history(db, artifact_id, current_user)
+
+
+# --- Citation Feedback Routes ---
+
+@router.post("/artifacts/{artifact_id}/feedback")
+def submit_artifact_feedback(
+    artifact_id: str,
+    body: CitationFeedbackCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Submit feedback on a citation within an artifact."""
+    from app.services.artifacts import submit_citation_feedback, ArtifactError
+
+    try:
+        fb = submit_citation_feedback(
+            db, artifact_id, current_user,
+            citation_document_id=str(body.citation_document_id),
+            citation_page=body.citation_page,
+            citation_sha256=body.citation_sha256,
+            feedback=body.feedback,
+        )
+    except ArtifactError as e:
+        raise HTTPException(status_code=400, detail=e.message)
+
+    log_audit(
+        db, str(current_user.tenant_id), str(current_user.id),
+        "artifact.citation_feedback", "artifact", artifact_id,
+        {"citation_id": str(fb.id), "feedback": fb.feedback},
+    )
+
+    return {
+        "id": str(fb.id),
+        "artifact_id": str(fb.artifact_id),
+        "citation_document_id": str(fb.citation_document_id),
+        "feedback": fb.feedback,
+    }
+
+
+@router.get("/artifacts/{artifact_id}/feedback")
+def get_artifact_feedback(
+    artifact_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Get all citation feedback for an artifact."""
+    from app.services.artifacts import get_citation_feedback
+    feedback = get_citation_feedback(db, artifact_id, current_user)
+    return [
+        {
+            "id": str(f.id),
+            "artifact_id": str(f.artifact_id),
+            "citation_document_id": str(f.citation_document_id),
+            "citation_page": f.citation_page,
+            "citation_sha256": f.citation_sha256,
+            "feedback": f.feedback,
+            "provided_by": str(f.provided_by),
+            "created_at": f.created_at.isoformat(),
+        }
+        for f in feedback
+    ]

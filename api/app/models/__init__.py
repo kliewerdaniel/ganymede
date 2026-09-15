@@ -310,3 +310,27 @@ class Approval(Base):
         Index("idx_approvals_artifact", "artifact_id"),
         Index("idx_approvals_performed_by", "performed_by"),
     )
+
+
+class CitationFeedback(Base):
+    """User feedback on a specific citation."""
+    __tablename__ = "citation_feedback"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    artifact_id = Column(UUID(as_uuid=True), ForeignKey("artifacts.id"), nullable=False)
+    citation_document_id = Column(UUID(as_uuid=True), nullable=False)
+    citation_page = Column(Integer, nullable=False)
+    citation_sha256 = Column(String(64), nullable=False)
+    feedback = Column(String(50), nullable=False)  # supporting, weak, wrong, inaccessible
+    provided_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    artifact = relationship("Artifact")
+    provider = relationship("User")
+
+    __table_args__ = (
+        Index("idx_citation_feedback_artifact", "artifact_id"),
+        UniqueConstraint("artifact_id", "citation_document_id", "citation_sha256", "provided_by",
+                         name="uq_citation_feedback"),
+    )

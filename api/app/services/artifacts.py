@@ -18,7 +18,7 @@ from typing import Optional, List, Dict, Any, Callable
 from sqlalchemy.orm import Session
 
 from app.models import (
-    Artifact, ArtifactVersion, Approval,
+    Artifact, ArtifactVersion, Approval, CitationFeedback,
     Matter, User, Chunk, Page, Document,
 )
 from app.services.retrieval import retrieve as default_retrieve
@@ -441,3 +441,61 @@ def get_approval_history(db: Session, artifact_id: str, user: User) -> List[Appr
     return db.query(Approval).filter(
         Approval.artifact_id == artifact_id
     ).order_by(Approval.performed_at.desc()).all()
+
+
+# --- Public API: Citation Feedback ---
+
+VALID_FEEDBACK_VALUES = {"supporting", "weak", "wrong", "inaccessible"}
+
+
+def submit_citation_feedback(
+    db: Session,
+    artifact_id: str,
+    user: User,
+    citation_document_id: str,
+    citation_page: int,
+    citation_sha256: str,
+    feedback: str,
+) -> CitationFeedback:
+    """Submit feedback on a citation within an artifact."""
+    if feedback not in VALID_FEEDBACK_VALUES:
+        raise ArtifactError(f"Invalid feedback value: {feedback}. Must be one of: {VALID_FEEDBACK_VALUES}")
+
+    artifact = get_artifact(db, artifact_id, user)
+
+    # Check for existing feedback from this user on this citation
+    existing = db.query(CitationFeedback).filter(
+        CitationFeedback.artifact_id == artifact_id,
+        CitationFeedback.citation_document_id == citation_document_id,
+        CitationFeedback.citation_sha256 == citation_sha256,
+        CitationFeedback.provided_by == user.id,
+    ).first()
+
+    if existing:
+        # Update existing feedback
+        existing.feedback = feedback
+        db.commit()
+        db.refresh(existing)
+        return existing
+
+    # Create new feedback entry
+    fb = CitationFeedback(
+        artifact_id=artifact_id,
+        citation_document_id=citation_document_id,
+        citation_page=citation_page,
+        citation_sha256=citation_sha256,
+        feedback=feedback,
+        provided_by=user.id,
+    )
+    db.add(fb)
+    db.commit()
+    db.refresh(fb)
+    return fb
+
+
+def get_citation_feedback(db: Session, artifact_id: str, user: User) -> List[CitationFeedback]:
+    """Get all citation feedback for an artifact."""
+    get_artifact(db, artifact_id, user)
+    return db.query(CitationFeedback).filter(
+        CitationFeedback.artifact_id == artifact_id
+    ).order_by(CitationFeedback.created_at.desc()).all()

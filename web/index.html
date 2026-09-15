@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ganymede — Q&A Workspace</title>
+    <title>Ganymede — Matter Intelligence</title>
     <style>
         :root {
             --bg: #0a0a0f;
@@ -20,11 +20,7 @@
             --code-bg: #0d0d14;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -35,7 +31,6 @@
             flex-direction: column;
         }
 
-        /* Header */
         .header {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
@@ -45,17 +40,9 @@
             justify-content: space-between;
         }
 
-        .header h1 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text);
-        }
+        .header h1 { font-size: 1.25rem; font-weight: 600; }
 
-        .header .matter-selector {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        .matter-selector { display: flex; align-items: center; gap: 0.5rem; }
 
         .header select {
             background: var(--bg);
@@ -66,14 +53,8 @@
             font-size: 0.875rem;
         }
 
-        /* Main layout */
-        .main {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
+        .main { display: flex; flex: 1; overflow: hidden; }
 
-        /* Sidebar */
         .sidebar {
             width: 280px;
             background: var(--surface);
@@ -83,10 +64,7 @@
             overflow: hidden;
         }
 
-        .sidebar-section {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
+        .sidebar-section { padding: 1rem; border-bottom: 1px solid var(--border); }
 
         .sidebar-section h3 {
             font-size: 0.75rem;
@@ -96,13 +74,13 @@
             margin-bottom: 0.75rem;
         }
 
-        .doc-list {
+        .doc-list, .history-list, .artifact-list {
             list-style: none;
             overflow-y: auto;
-            max-height: 300px;
+            max-height: 250px;
         }
 
-        .doc-list li {
+        .doc-list li, .history-list li, .artifact-list li {
             padding: 0.5rem 0.75rem;
             border-radius: 4px;
             cursor: pointer;
@@ -113,52 +91,29 @@
             text-overflow: ellipsis;
         }
 
-        .doc-list li:hover {
+        .doc-list li:hover, .history-list li:hover, .artifact-list li:hover {
             background: var(--surface-hover);
             color: var(--text);
         }
 
-        .history-list {
-            list-style: none;
-            overflow-y: auto;
-            max-height: 300px;
+        .artifact-list li .artifact-status {
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            margin-right: 0.4rem;
         }
 
-        .history-list li {
-            padding: 0.5rem 0.75rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        .artifact-status.draft { background: var(--surface); border: 1px solid var(--border); }
+        .artifact-status.under_review { background: var(--warning); color: black; }
+        .artifact-status.approved { background: var(--success); color: white; }
+        .artifact-status.rejected { background: var(--error); color: white; }
 
-        .history-list li:hover {
-            background: var(--surface-hover);
-            color: var(--text);
-        }
+        .content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
-        /* Content area */
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+        .query-area { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); }
 
-        /* Query input */
-        .query-area {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .query-input-wrapper {
-            display: flex;
-            gap: 0.75rem;
-            align-items: flex-end;
-        }
+        .query-input-wrapper { display: flex; gap: 0.75rem; align-items: flex-end; }
 
         .query-input {
             flex: 1;
@@ -173,14 +128,8 @@
             max-height: 200px;
         }
 
-        .query-input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .query-input::placeholder {
-            color: var(--text-muted);
-        }
+        .query-input:focus { outline: none; border-color: var(--accent); }
+        .query-input::placeholder { color: var(--text-muted); }
 
         .btn {
             padding: 0.75rem 1.5rem;
@@ -192,74 +141,31 @@
             transition: all 0.15s;
         }
 
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .btn-primary:hover {
-            background: var(--accent-hover);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Answer area */
-        .answer-area {
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-        }
-
-        .answer-panel {
-            flex: 1;
-            padding: 1.5rem 2rem;
-            overflow-y: auto;
-        }
-
-        .answer-panel h2 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text);
-        }
-
-        .answer-text {
-            line-height: 1.7;
-            font-size: 0.95rem;
-            color: var(--text);
-        }
-
-        .answer-text .citation {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
+        .artifact-btn {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
             background: var(--surface);
             border: 1px solid var(--border);
+            color: var(--text-muted);
             border-radius: 4px;
-            padding: 0.15rem 0.4rem;
-            font-size: 0.75rem;
-            color: var(--accent);
             cursor: pointer;
-            margin: 0 0.1rem;
         }
 
-        .answer-text .citation:hover {
-            background: var(--surface-hover);
-            border-color: var(--accent);
-        }
+        .artifact-btn:hover { border-color: var(--accent); color: var(--text); }
 
-        .answer-text .citation.active {
-            background: var(--accent);
-            color: white;
-        }
+        .answer-area { flex: 1; display: flex; overflow: hidden; }
 
-        .citations-list {
-            list-style: none;
-            margin-top: 1.5rem;
-        }
+        .answer-panel { flex: 1; padding: 1.5rem 2rem; overflow-y: auto; }
+
+        .answer-panel h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; }
+
+        .answer-text { line-height: 1.7; font-size: 0.95rem; }
+
+        .citations-list { list-style: none; margin-top: 1.5rem; }
 
         .citation-card {
             background: var(--surface);
@@ -269,12 +175,7 @@
             margin-bottom: 0.75rem;
         }
 
-        .citation-card .doc-name {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 0.5rem;
-        }
+        .citation-card .doc-name { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
 
         .citation-card .passage {
             font-size: 0.85rem;
@@ -284,7 +185,10 @@
             background: var(--code-bg);
             border-radius: 4px;
             border-left: 3px solid var(--accent);
+            cursor: pointer;
         }
+
+        .citation-card .passage:hover { background: var(--surface-hover); }
 
         .citation-card .scores {
             display: flex;
@@ -294,11 +198,7 @@
             color: var(--text-muted);
         }
 
-        .citation-card .feedback {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
+        .citation-card .feedback { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
 
         .citation-card .feedback button {
             background: var(--bg);
@@ -310,18 +210,13 @@
             cursor: pointer;
         }
 
-        .citation-card .feedback button:hover {
-            border-color: var(--accent);
-            color: var(--text);
-        }
+        .citation-card .feedback button:hover { border-color: var(--accent); color: var(--text); }
 
-        .citation-card .feedback button.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
+        .citation-card .feedback button.active-supporting { background: var(--success); color: white; border-color: var(--success); }
+        .citation-card .feedback button.active-weak { background: var(--warning); color: white; border-color: var(--warning); }
+        .citation-card .feedback button.active-wrong { background: var(--error); color: white; border-color: var(--error); }
+        .citation-card .feedback button.active-inaccessible { background: var(--text-muted); color: white; border-color: var(--text-muted); }
 
-        /* Source inspector panel */
         .source-panel {
             width: 45%;
             border-left: 1px solid var(--border);
@@ -338,10 +233,7 @@
             justify-content: space-between;
         }
 
-        .source-panel .panel-header h3 {
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
+        .source-panel .panel-header h3 { font-size: 0.875rem; font-weight: 600; }
 
         .source-panel .close-btn {
             background: none;
@@ -351,18 +243,9 @@
             font-size: 1.25rem;
         }
 
-        .source-panel .panel-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-        }
+        .source-panel .panel-content { flex: 1; overflow-y: auto; padding: 1rem; }
 
-        .source-panel .page-text {
-            font-size: 0.85rem;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            color: var(--text);
-        }
+        .source-panel .page-text { font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; }
 
         .source-panel .page-text .highlight {
             background: rgba(99, 102, 241, 0.3);
@@ -370,7 +253,6 @@
             border-radius: 2px;
         }
 
-        /* Empty state */
         .empty-state {
             display: flex;
             flex-direction: column;
@@ -382,24 +264,9 @@
             padding: 2rem;
         }
 
-        .empty-state .icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
 
-        .empty-state p {
-            font-size: 0.9rem;
-            max-width: 300px;
-        }
-
-        /* Loading */
-        .loading {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-        }
+        .loading { display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.875rem; }
 
         .loading .spinner {
             width: 16px;
@@ -410,11 +277,8 @@
             animation: spin 0.8s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Status bar */
         .status-bar {
             background: var(--surface);
             border-top: 1px solid var(--border);
@@ -426,22 +290,10 @@
             color: var(--text-muted);
         }
 
-        .status-bar .status-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        .status-item { display: flex; align-items: center; gap: 0.5rem; }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--success);
-        }
-
-        .status-dot.error {
-            background: var(--error);
-        }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+        .status-dot.error { background: var(--error); }
     </style>
 </head>
 <body>
@@ -449,9 +301,7 @@
         <h1>Ganymede</h1>
         <div class="matter-selector">
             <label for="matter-select">Matter:</label>
-            <select id="matter-select">
-                <option value="">Loading...</option>
-            </select>
+            <select id="matter-select"><option value="">Loading...</option></select>
         </div>
     </header>
 
@@ -459,15 +309,15 @@
         <aside class="sidebar">
             <div class="sidebar-section">
                 <h3>Documents</h3>
-                <ul class="doc-list" id="doc-list">
-                    <li>Loading...</li>
-                </ul>
+                <ul class="doc-list" id="doc-list"><li>Loading...</li></ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>Artifacts</h3>
+                <ul class="artifact-list" id="artifact-list"><li>No artifacts yet</li></ul>
             </div>
             <div class="sidebar-section">
                 <h3>History</h3>
-                <ul class="history-list" id="history-list">
-                    <li>No history yet</li>
-                </ul>
+                <ul class="history-list" id="history-list"><li>No history yet</li></ul>
             </div>
         </aside>
 
@@ -477,13 +327,18 @@
                     <textarea class="query-input" id="query-input" placeholder="Ask a question about the matter..." rows="2"></textarea>
                     <button class="btn btn-primary" id="ask-btn">Ask</button>
                 </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+                    <button class="artifact-btn" id="new-chronology-btn">+ Chronology</button>
+                    <button class="artifact-btn" id="new-issue-table-btn">+ Issue Table</button>
+                    <button class="artifact-btn" id="new-memo-btn">+ Memo</button>
+                </div>
             </div>
 
             <div class="answer-area">
                 <div class="answer-panel" id="answer-panel">
                     <div class="empty-state">
                         <div class="icon">🔍</div>
-                        <p>Ask a question to search the matter documents. Every answer comes with citations you can verify.</p>
+                        <p>Ask a question or create an artifact. Every answer comes with citations you can verify.</p>
                     </div>
                 </div>
 
@@ -506,36 +361,20 @@
             <span id="api-status-text">Checking API...</span>
         </div>
         <div class="status-item">
-            <span id="recall-metric">Recall@5: —</span>
+            <span id="artifact-count">0 artifacts</span>
         </div>
     </footer>
 
     <script>
-        // State
+        const API = '/api/v1';
         let currentMatter = null;
         let documents = [];
         let history = [];
         let currentCitations = [];
+        let currentArtifactId = null;
 
-        // API base
-        const API = '/api/v1';
+        const $ = (id) => document.getElementById(id);
 
-        // DOM
-        const matterSelect = document.getElementById('matter-select');
-        const docList = document.getElementById('doc-list');
-        const historyList = document.getElementById('history-list');
-        const queryInput = document.getElementById('query-input');
-        const askBtn = document.getElementById('ask-btn');
-        const answerPanel = document.getElementById('answer-panel');
-        const sourcePanel = document.getElementById('source-panel');
-        const sourceTitle = document.getElementById('source-title');
-        const pageText = document.getElementById('page-text');
-        const closeSource = document.getElementById('close-source');
-        const apiStatus = document.getElementById('api-status');
-        const apiStatusText = document.getElementById('api-status-text');
-        const recallMetric = document.getElementById('recall-metric');
-
-        // Initialize
         async function init() {
             await checkHealth();
             await loadMatters();
@@ -544,16 +383,14 @@
 
         async function checkHealth() {
             try {
-                const resp = await fetch(`${API}/health`);
+                const resp = await fetch(`${API}/healthz`);
                 if (resp.ok) {
-                    apiStatus.classList.remove('error');
-                    apiStatusText.textContent = 'API connected';
-                } else {
-                    throw new Error('API error');
-                }
+                    $('api-status').classList.remove('error');
+                    $('api-status-text').textContent = 'API connected';
+                } else { throw new Error(); }
             } catch (e) {
-                apiStatus.classList.add('error');
-                apiStatusText.textContent = 'API unavailable';
+                $('api-status').classList.add('error');
+                $('api-status-text').textContent = 'API unavailable';
             }
         }
 
@@ -561,16 +398,17 @@
             try {
                 const resp = await fetch(`${API}/matters`);
                 const matters = await resp.json();
-                matterSelect.innerHTML = matters.map(m =>
+                $('matter-select').innerHTML = matters.map(m =>
                     `<option value="${m.id}">${m.name}</option>`
                 ).join('');
                 if (matters.length > 0) {
                     currentMatter = matters[0];
-                    matterSelect.value = currentMatter.id;
-                    loadDocuments(currentMatter.id);
+                    $('matter-select').value = currentMatter.id;
+                    await loadDocuments(currentMatter.id);
+                    await loadArtifacts(currentMatter.id);
                 }
             } catch (e) {
-                matterSelect.innerHTML = '<option value="">Failed to load</option>';
+                $('matter-select').innerHTML = '<option value="">Failed to load</option>';
             }
         }
 
@@ -578,23 +416,258 @@
             try {
                 const resp = await fetch(`${API}/matters/${matterId}/documents`);
                 documents = await resp.json();
-                docList.innerHTML = documents.map(d =>
-                    `<li data-id="${d.id}" data-sha="${d.sha256}">${d.original_filename}</li>`
+                $('doc-list').innerHTML = documents.map(d =>
+                    `<li data-id="${d.id}">${d.original_filename}</li>`
                 ).join('');
-                docList.querySelectorAll('li').forEach(li => {
-                    li.addEventListener('click', () => showDocument(li.dataset.id));
+                $('doc-list').querySelectorAll('li').forEach(li =>
+                    li.addEventListener('click', () => showDocument(li.dataset.id))
+                );
+            } catch (e) {
+                $('doc-list').innerHTML = '<li>Failed to load</li>';
+            }
+        }
+
+        async function loadArtifacts(matterId) {
+            try {
+                const resp = await fetch(`${API}/matters/${matterId}/artifacts`);
+                const artifacts = await resp.json();
+                if (artifacts.length === 0) {
+                    $('artifact-list').innerHTML = '<li>No artifacts yet</li>';
+                    $('artifact-count').textContent = '0 artifacts';
+                } else {
+                    $('artifact-list').innerHTML = artifacts.map(a =>
+                        `<li data-id="${a.id}">
+                            <span class="artifact-status ${a.status}">${a.status}</span>
+                            ${a.title.substring(0, 40)}
+                         </li>`
+                    ).join('');
+                    $('artifact-list').querySelectorAll('li').forEach(li =>
+                        li.addEventListener('click', () => loadArtifact(li.dataset.id))
+                    );
+                    $('artifact-count').textContent = `${artifacts.length} artifact${artifacts.length > 1 ? 's' : ''}`;
+                }
+            } catch (e) {
+                $('artifact-list').innerHTML = '<li>Failed to load</li>';
+            }
+        }
+
+        async function loadArtifact(artifactId) {
+            try {
+                const resp = await fetch(`${API}/artifacts/${artifactId}`);
+                const artifact = await resp.json();
+                currentArtifactId = artifactId;
+
+                if (artifact.artifact_type === 'memo') {
+                    renderMemoArtifact(artifact);
+                } else if (artifact.artifact_type === 'chronology') {
+                    renderChronologyArtifact(artifact);
+                } else if (artifact.artifact_type === 'issue_table') {
+                    renderIssueTableArtifact(artifact);
+                }
+
+                await loadFeedback(artifactId);
+            } catch (e) {
+                $('answer-panel').innerHTML = `<div class="empty-state"><p>Error loading artifact</p></div>`;
+            }
+        }
+
+        async function loadFeedback(artifactId) {
+            try {
+                const resp = await fetch(`${API}/artifacts/${artifactId}/feedback`);
+                const feedback = await resp.json();
+                feedback.forEach(f => {
+                    const btn = document.querySelector(
+                        `.feedback button[data-doc="${f.citation_document_id}"][data-fb="${f.feedback}"]`
+                    );
+                    if (btn) btn.classList.add(`active-${f.feedback}`);
+                });
+            } catch (e) { /* ignore */ }
+        }
+
+        function renderMemoArtifact(artifact) {
+            const content = artifact.content;
+            let html = `<h2>${artifact.title}</h2>`;
+            html += `<div style="margin-bottom: 1rem;"><span class="artifact-status ${artifact.status}">${artifact.status}</span></div>`;
+
+            if (content.question) {
+                html += `<h3>Question</h3><p style="margin-bottom: 1rem;">${content.question}</p>`;
+            }
+
+            if (content.record && content.record.passages) {
+                html += `<h3>Record (${content.record.citation_count} citations)</h3><ul class="citations-list">`;
+                content.record.passages.forEach((p, i) => {
+                    html += `
+                        <li class="citation-card">
+                            <div class="doc-name">${p.document_name} (page ${p.page})</div>
+                            <div class="passage" data-doc="${p.document_id}" data-page="${p.page}" data-sha="${p.sha256}">${p.quoted_text ? p.quoted_text.substring(0, 500) : ''}</div>
+                            <div class="feedback">
+                                <button data-doc="${p.document_id}" data-page="${p.page}" data-sha="${p.sha256}" data-fb="supporting">✓ Supporting</button>
+                                <button data-doc="${p.document_id}" data-page="${p.page}" data-sha="${p.sha256}" data-fb="weak">~ Weak</button>
+                                <button data-doc="${p.document_id}" data-page="${p.page}" data-sha="${p.sha256}" data-fb="wrong">✗ Wrong</button>
+                                <button data-doc="${p.document_id}" data-page="${p.page}" data-sha="${p.sha256}" data-fb="inaccessible">⊘ Inaccessible</button>
+                            </div>
+                        </li>`;
+                });
+                html += `</ul>`;
+            }
+
+            if (content.analysis) {
+                html += `<h3>Analysis</h3><p style="color: var(--text-muted); font-style: italic;">${content.analysis.constraints || 'For attorney completion'}</p>`;
+            }
+
+            if (content.limits) {
+                html += `<h3>Limits</h3><p style="color: var(--text-muted); font-size: 0.85rem;">${content.limits.disclaimer}</p>`;
+            }
+
+            if (artifact.status === 'draft') {
+                html += `<div style="margin-top: 1rem;"><button class="btn btn-primary" onclick="submitForReview('${artifact.id}')">Submit for Review</button></div>`;
+            } else if (artifact.status === 'under_review') {
+                html += `<div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button class="btn btn-primary" onclick="approveArtifact('${artifact.id}')">Approve</button>
+                    <button class="artifact-btn" onclick="rejectArtifact('${artifact.id}')">Reject</button>
+                </div>`;
+            }
+
+            $('answer-panel').innerHTML = html;
+            document.querySelectorAll('.feedback button').forEach(btn => btn.addEventListener('click', () => submitFeedback(btn)));
+            document.querySelectorAll('.citation-card .passage').forEach(el => {
+                el.addEventListener('click', () => showCitationSource({
+                    document_id: el.dataset.doc,
+                    page: el.dataset.page,
+                    quoted_text: el.textContent,
+                    sha256: el.dataset.sha,
+                }));
+            });
+        }
+
+        function renderChronologyArtifact(artifact) {
+            const content = artifact.content;
+            let html = `<h2>${artifact.title}</h2>`;
+            html += `<div style="margin-bottom: 1rem;"><span class="artifact-status ${artifact.status}">${artifact.status}</span></div>`;
+            html += `<p style="color: var(--text-muted); margin-bottom: 1rem;">${content.unextracted_count} events (dates unextracted)</p>`;
+
+            if (content.events) {
+                html += `<ul class="citations-list">`;
+                content.events.forEach((e, i) => {
+                    html += `
+                        <li class="citation-card">
+                            <div class="doc-name">${e.source.document_name} (page ${e.source.page})</div>
+                            <div class="passage" data-doc="${e.source.document_id}" data-page="${e.source.page}" data-sha="${e.source.sha256}">${e.event.substring(0, 400)}</div>
+                            <div class="feedback">
+                                <button data-doc="${e.source.document_id}" data-page="${e.source.page}" data-sha="${e.source.sha256}" data-fb="supporting">✓ Supporting</button>
+                                <button data-doc="${e.source.document_id}" data-page="${e.source.page}" data-sha="${e.source.sha256}" data-fb="weak">~ Weak</button>
+                                <button data-doc="${e.source.document_id}" data-page="${e.source.page}" data-sha="${e.source.sha256}" data-fb="wrong">✗ Wrong</button>
+                                <button data-doc="${e.source.document_id}" data-page="${e.source.page}" data-sha="${e.source.sha256}" data-fb="inaccessible">⊘ Inaccessible</button>
+                            </div>
+                        </li>`;
+                });
+                html += `</ul>`;
+            }
+
+            if (artifact.status === 'draft') {
+                html += `<div style="margin-top: 1rem;"><button class="btn btn-primary" onclick="submitForReview('${artifact.id}')">Submit for Review</button></div>`;
+            }
+
+            $('answer-panel').innerHTML = html;
+            document.querySelectorAll('.feedback button').forEach(btn => btn.addEventListener('click', () => submitFeedback(btn)));
+        }
+
+        function renderIssueTableArtifact(artifact) {
+            const content = artifact.content;
+            let html = `<h2>${artifact.title}</h2>`;
+            html += `<div style="margin-bottom: 1rem;"><span class="artifact-status ${artifact.status}">${artifact.status}</span></div>`;
+            html += `<p style="color: var(--text-muted); margin-bottom: 1rem;">${content.unreviewed_count} issues (unreviewed)</p>`;
+
+            if (content.issues) {
+                html += `<ul class="citations-list">`;
+                content.issues.forEach((iss, i) => {
+                    const sup = iss.support[0] || {};
+                    html += `
+                        <li class="citation-card">
+                            <div class="doc-name">Issue ${i + 1}</div>
+                            <div class="passage" data-doc="${sup.document_id}" data-page="${sup.page}" data-sha="${sup.sha256}">${iss.issue.substring(0, 400)}</div>
+                            <div class="feedback">
+                                <button data-doc="${sup.document_id}" data-page="${sup.page}" data-sha="${sup.sha256}" data-fb="supporting">✓ Supporting</button>
+                                <button data-doc="${sup.document_id}" data-page="${sup.page}" data-sha="${sup.sha256}" data-fb="weak">~ Weak</button>
+                                <button data-doc="${sup.document_id}" data-page="${sup.page}" data-sha="${sup.sha256}" data-fb="wrong">✗ Wrong</button>
+                                <button data-doc="${sup.document_id}" data-page="${sup.page}" data-sha="${sup.sha256}" data-fb="inaccessible">⊘ Inaccessible</button>
+                            </div>
+                        </li>`;
+                });
+                html += `</ul>`;
+            }
+
+            if (artifact.status === 'draft') {
+                html += `<div style="margin-top: 1rem;"><button class="btn btn-primary" onclick="submitForReview('${artifact.id}')">Submit for Review</button></div>`;
+            }
+
+            $('answer-panel').innerHTML = html;
+            document.querySelectorAll('.feedback button').forEach(btn => btn.addEventListener('click', () => submitFeedback(btn)));
+        }
+
+        async function submitFeedback(btn) {
+            if (!currentArtifactId) return;
+            const docId = btn.dataset.doc;
+            const page = parseInt(btn.dataset.page);
+            const sha = btn.dataset.sha;
+            const feedback = btn.dataset.fb;
+
+            btn.parentElement.querySelectorAll('button').forEach(b => b.className = '');
+            btn.classList.add(`active-${feedback}`);
+
+            try {
+                await fetch(`${API}/artifacts/${currentArtifactId}/feedback`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        citation_document_id: docId,
+                        citation_page: page,
+                        citation_sha256: sha,
+                        feedback: feedback,
+                    }),
                 });
             } catch (e) {
-                docList.innerHTML = '<li>Failed to load documents</li>';
+                console.error('Feedback failed:', e);
             }
+        }
+
+        async function submitForReview(artifactId) {
+            try {
+                await fetch(`${API}/artifacts/${artifactId}/submit`, { method: 'POST' });
+                await loadArtifact(artifactId);
+                if (currentMatter) await loadArtifacts(currentMatter.id);
+            } catch (e) { console.error(e); }
+        }
+
+        async function approveArtifact(artifactId) {
+            try {
+                await fetch(`${API}/artifacts/${artifactId}/approve`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ comment: 'Approved' }),
+                });
+                await loadArtifact(artifactId);
+                if (currentMatter) await loadArtifacts(currentMatter.id);
+            } catch (e) { console.error(e); }
+        }
+
+        async function rejectArtifact(artifactId) {
+            const reason = prompt('Reason for rejection:');
+            if (!reason) return;
+            try {
+                await fetch(`${API}/artifacts/${artifactId}/reject`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reason }),
+                });
+                await loadArtifact(artifactId);
+                if (currentMatter) await loadArtifacts(currentMatter.id);
+            } catch (e) { console.error(e); }
         }
 
         function loadHistory() {
             const saved = localStorage.getItem('ganymede_history');
-            if (saved) {
-                history = JSON.parse(saved);
-                renderHistory();
-            }
+            if (saved) { history = JSON.parse(saved); renderHistory(); }
         }
 
         function saveHistory() {
@@ -604,53 +677,45 @@
 
         function renderHistory() {
             if (history.length === 0) {
-                historyList.innerHTML = '<li>No history yet</li>';
+                $('history-list').innerHTML = '<li>No history yet</li>';
                 return;
             }
-            historyList.innerHTML = history.map((h, i) =>
+            $('history-list').innerHTML = history.map((h, i) =>
                 `<li data-index="${i}">${h.question.substring(0, 60)}...</li>`
             ).join('');
-            historyList.querySelectorAll('li').forEach(li => {
+            $('history-list').querySelectorAll('li').forEach(li =>
                 li.addEventListener('click', () => {
                     const item = history[li.dataset.index];
-                    queryInput.value = item.question;
-                    renderAnswer(item);
-                });
-            });
+                    $('query-input').value = item.question;
+                    renderQueryResult(item);
+                })
+            );
         }
 
         async function askQuestion() {
-            const question = queryInput.value.trim();
+            const question = $('query-input').value.trim();
             if (!question || !currentMatter) return;
 
-            askBtn.disabled = true;
-            answerPanel.innerHTML = '<div class="loading"><div class="spinner"></div>Searching...</div>';
+            $('ask-btn').disabled = true;
+            $('answer-panel').innerHTML = '<div class="loading"><div class="spinner"></div>Searching...</div>';
 
             try {
-                // Submit async query
                 const resp = await fetch(`${API}/matters/${currentMatter.id}/ask-async`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ query_text: question, top_k: 5 }),
                 });
-
                 const data = await resp.json();
-                const queryId = data.query_id;
-
-                // Poll for results
-                await pollForResults(queryId);
+                await pollForResults(data.query_id);
             } catch (e) {
-                answerPanel.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>Error: ${e.message}</p></div>`;
+                $('answer-panel').innerHTML = `<div class="empty-state"><p>Error: ${e.message}</p></div>`;
             } finally {
-                askBtn.disabled = false;
+                $('ask-btn').disabled = false;
             }
         }
 
         async function pollForResults(queryId) {
-            const maxAttempts = 60; // 60 seconds max
-            let attempts = 0;
-
-            while (attempts < maxAttempts) {
+            for (let i = 0; i < 60; i++) {
                 const resp = await fetch(`${API}/ask/${queryId}/status`);
                 const data = await resp.json();
 
@@ -660,146 +725,129 @@
                         question: data.question,
                         citations: data.citations,
                         answer: data.result_count > 0
-                            ? `Found ${data.result_count} verified passage(s) in the matter documents.`
-                            : 'Not found in the approved matter sources.',
+                            ? `Found ${data.result_count} verified passage(s).`
+                            : 'Not found in approved matter sources.',
                         timestamp: new Date().toISOString(),
                     };
-
                     history.unshift(result);
                     if (history.length > 20) history.pop();
                     saveHistory();
-                    renderAnswer(result);
+                    renderQueryResult(result);
                     return;
                 }
 
                 if (data.status === 'error') {
-                    answerPanel.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>Error: ${data.error}</p></div>`;
+                    $('answer-panel').innerHTML = `<div class="empty-state"><p>Error: ${data.error}</p></div>`;
                     return;
                 }
 
-                // Still processing — show raw results if available
-                if (data.citations && data.citations.length > 0 && attempts === 0) {
+                if (data.citations && data.citations.length > 0 && i === 0) {
                     currentCitations = data.citations;
-                    const tempResult = {
+                    renderQueryResult({
                         question: data.question,
                         citations: data.citations,
-                        answer: `Searching... Found ${data.result_count} raw results, verifying...`,
-                        timestamp: new Date().toISOString(),
-                    };
-                    renderAnswer(tempResult);
+                        answer: `Searching... ${data.result_count} results, verifying...`,
+                    });
                 }
 
                 await new Promise(r => setTimeout(r, 1000));
-                attempts++;
             }
-
-            answerPanel.innerHTML = '<div class="empty-state"><div class="icon">⏱️</div><p>Verification is taking longer than expected. Please try again.</p></div>';
+            $('answer-panel').innerHTML = '<div class="empty-state"><p>Verification timeout.</p></div>';
         }
 
-        function generateAnswer(citations) {
-            if (citations.length === 0) {
-                return 'No relevant passages found in the matter documents.';
-            }
-            const count = citations.length;
-            return `Found ${count} relevant passage${count > 1 ? 's' : ''} in the matter documents. Click any citation to view the source.`;
-        }
-
-        function renderAnswer(result) {
+        function renderQueryResult(result) {
             const citations = result.citations;
-            let html = `<h2>Answer</h2>`;
-            html += `<div class="answer-text">${result.answer}</div>`;
+            let html = `<h2>Answer</h2><div class="answer-text">${result.answer}</div>`;
 
             if (citations.length > 0) {
-                html += `<h2 style="margin-top: 1.5rem;">Citations</h2>`;
-                html += `<ul class="citations-list">`;
+                html += `<h2 style="margin-top: 1.5rem;">Citations</h2><ul class="citations-list">`;
                 citations.forEach((c, i) => {
                     const docName = documents.find(d => d.id === c.document_id)?.original_filename || 'Unknown';
                     const scores = c.retrieval_scores || {};
                     html += `
                         <li class="citation-card">
                             <div class="doc-name">${docName} (page ${c.page})</div>
-                            <div class="passage">${c.quoted_text.substring(0, 300)}${c.quoted_text.length > 300 ? '...' : ''}</div>
+                            <div class="passage" data-doc="${c.document_id}" data-page="${c.page}" data-sha="${c.sha256}">${c.quoted_text.substring(0, 300)}${c.quoted_text.length > 300 ? '...' : ''}</div>
                             <div class="scores">
                                 <span>RRF: ${(scores.rrf_score || 0).toFixed(4)}</span>
                                 <span>Vector: ${(scores.vector_similarity || 0).toFixed(3)}</span>
-                                <span>FTS: ${scores.fts_rank ? scores.fts_rank.toFixed(3) : 'N/A'}</span>
                             </div>
-                            <div class="feedback">
-                                <button data-action="supporting" data-id="${c.document_id}">✓ Supporting</button>
-                                <button data-action="weak" data-id="${c.document_id}">~ Weak</button>
-                                <button data-action="wrong" data-id="${c.document_id}">✗ Wrong</button>
-                                <button data-action="inaccessible" data-id="${c.document_id}">⊘ Inaccessible</button>
-                            </div>
-                        </li>
-                    `;
+                        </li>`;
                 });
                 html += `</ul>`;
             }
 
-            answerPanel.innerHTML = html;
-
-            // Wire up citation clicks
-            answerPanel.querySelectorAll('.citation-card .passage').forEach(el => {
-                el.style.cursor = 'pointer';
-                el.addEventListener('click', () => {
-                    const idx = Array.from(el.parentElement.parentElement.children).indexOf(el.parentElement);
-                    showCitationSource(citations[idx]);
-                });
-            });
-
-            // Wire up feedback buttons
-            answerPanel.querySelectorAll('.feedback button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.target.classList.toggle('active');
-                });
+            $('answer-panel').innerHTML = html;
+            document.querySelectorAll('.citation-card .passage').forEach(el => {
+                el.addEventListener('click', () => showCitationSource({
+                    document_id: el.dataset.doc,
+                    page: el.dataset.page,
+                    quoted_text: el.textContent,
+                    sha256: el.dataset.sha,
+                }));
             });
         }
 
         function showCitationSource(citation) {
             const doc = documents.find(d => d.id === citation.document_id);
-            if (!doc) return;
-
-            sourceTitle.textContent = `${doc.original_filename} — Page ${citation.page}`;
-            pageText.innerHTML = `<span class="highlight">${citation.quoted_text}</span>`;
-            sourcePanel.style.display = 'flex';
+            $('source-title').textContent = `${doc?.original_filename || 'Document'} — Page ${citation.page}`;
+            $('page-text').innerHTML = `<span class="highlight">${citation.quoted_text}</span>`;
+            $('source-panel').style.display = 'flex';
         }
 
         function showDocument(docId) {
             const doc = documents.find(d => d.id === docId);
             if (!doc) return;
-            sourceTitle.textContent = doc.original_filename;
-            pageText.textContent = 'Loading page content...';
-            sourcePanel.style.display = 'flex';
+            $('source-title').textContent = doc.original_filename;
+            $('page-text').textContent = 'Loading...';
+            $('source-panel').style.display = 'flex';
 
             fetch(`${API}/documents/${docId}/pages`)
                 .then(r => r.json())
                 .then(pages => {
-                    pageText.textContent = pages.map(p => p.text).join('\n\n---\n\n');
+                    $('page-text').textContent = pages.map(p => p.text).join('\n\n---\n\n');
                 })
-                .catch(() => {
-                    pageText.textContent = 'Failed to load page content.';
-                });
+                .catch(() => { $('page-text').textContent = 'Failed to load.'; });
         }
 
-        // Event listeners
-        matterSelect.addEventListener('change', () => {
-            currentMatter = { id: matterSelect.value, name: matterSelect.options[matterSelect.selectedIndex].text };
-            loadDocuments(currentMatter.id);
-        });
+        async function createArtifact(type) {
+            if (!currentMatter) return;
+            const question = prompt(`${type === 'memo' ? 'Question' : 'Query'} for ${type}:`);
+            if (!question) return;
 
-        askBtn.addEventListener('click', askQuestion);
-        queryInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                askQuestion();
+            try {
+                const resp = await fetch(`${API}/matters/${currentMatter.id}/artifacts`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ artifact_type: type, query_text: question }),
+                });
+                const artifact = await resp.json();
+                currentArtifactId = artifact.id;
+                await loadArtifact(artifact.id);
+                await loadArtifacts(currentMatter.id);
+            } catch (e) {
+                alert(`Failed: ${e.message}`);
             }
+        }
+
+        $('matter-select').addEventListener('change', async () => {
+            const matters = await (await fetch(`${API}/matters`)).json();
+            currentMatter = matters.find(m => m.id === $('matter-select').value);
+            await loadDocuments(currentMatter.id);
+            await loadArtifacts(currentMatter.id);
         });
 
-        closeSource.addEventListener('click', () => {
-            sourcePanel.style.display = 'none';
+        $('ask-btn').addEventListener('click', askQuestion);
+        $('query-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); askQuestion(); }
         });
 
-        // Start
+        $('close-source').addEventListener('click', () => { $('source-panel').style.display = 'none'; });
+
+        $('new-chronology-btn').addEventListener('click', () => createArtifact('chronology'));
+        $('new-issue-table-btn').addEventListener('click', () => createArtifact('issue_table'));
+        $('new-memo-btn').addEventListener('click', () => createArtifact('memo'));
+
         init();
     </script>
 </body>
